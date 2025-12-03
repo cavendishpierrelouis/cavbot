@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>How CavBot Works · Event-First Instrumentation & CavCore Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="See what CavBot installs, what data is collected, and how events flow into CavBot Analytics v5 and CavCore Console — event-first instrumentation for routes, 404s, SEO, and runtime feel." />
+<meta name="robots" content="noindex, nofollow">
+  <!-- TYPEFACE -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Unified CavBot head + brain styles -->
+  <link rel="stylesheet" href="cavbotcore/head.css"/>
+  <!-- CavCore badge styles -->
+  <link rel="stylesheet" href="cavbotcore/badge.css"/>
+
+  <style>
+    :root {
+      /* === Core CavBot palette === */
+      --navy-950: #01030f;
+      --navy-900: #020616;
+      --navy-800: #050a1b;
+
+      --lime: #b9c85a;         /* Electric Lime primary */
+      --lime-soft: rgba(185, 200, 90, 0.14);
+      --lime-soft-strong: rgba(185, 200, 90, 0.22);
+
+      --violet: #8b5cff;       /* Hyper Violet secondary */
+      --violet-soft: rgba(139, 92, 255, 0.2);
+      --violet-border-soft: rgba(139, 92, 255, 0.45);
+
+      --blue: #4ea8ff;
+      --blue-soft: rgba(78, 168, 255, 0.85);
+
+      --ink: #f7fbff;
+      --ink-soft: #c5cee7;
+      --ink-subtle: #8890aa;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+
+      --panel-radius-lg: 20px;
+      --panel-radius-md: 16px;
+      --panel-radius-sm: 12px;
+
+      /* Unified typeface: Inter everywhere */
+      --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      --space-xxl: 80px;
+      --space-xl: 56px;
+      --space-lg: 40px;
+      --space-md: 28px;
+      --space-sm: 18px;
+      --space-xs: 10px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--ink-soft);
+      background:
+        radial-gradient(circle at top, #071025 0, var(--navy-900) 32%, var(--navy-950) 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Global paragraph rhythm */
+    p {
+      margin: 0 0 8px;
+    }
+
+    /* ==============================
+       PAGE SHELL
+       ============================== */
+
+    .page-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: pageFadeIn 340ms ease-out forwards;
+    }
+
+    .page-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: var(--space-xl) 20px var(--space-xxl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xxl);
+    }
+
+    @keyframes pageFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .page-shell {
+        animation: none;
+        opacity: 1;
+      }
+    }
+
+    /* ==============================
+       HEADER / NAV (unified)
+       ============================== */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(10, 11, 30, 0.98),
+          rgba(3, 6, 22, 0.94)
+        );
+      border-bottom: 1px solid rgba(139, 92, 255, 0.35);
+    }
+
+    .site-header-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      font-size: 22px;
+      color: var(--ink);
+    }
+
+    .nav-main {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      position: relative;
+      padding-bottom: 2px;
+      color: var(--ink-soft);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background: var(--violet);
+      transition: width 0.18s ease-out;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link--active {
+      color: var(--ink);
+    }
+
+    .nav-link--active::after {
+      width: 100%;
+    }
+
+    .nav-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-login {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .nav-login:hover {
+      color: var(--ink);
+    }
+
+    /* ==============================
+       BUTTONS
+       ============================== */
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 8px 18px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--ink);
+      transition:
+        background 0.16s ease-out,
+        border-color 0.16s ease-out,
+        transform 0.1s ease-out,
+        box-shadow 0.16s ease-out;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background:
+        radial-gradient(circle at top left, var(--lime-soft-strong), transparent 55%),
+        linear-gradient(135deg, #f7ffe1 0%, #dde98b 28%, var(--lime) 100%);
+      color: #050509;
+      border-color: rgba(0, 0, 0, 0.85);
+      box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-ghost {
+      border-color: rgba(185, 200, 90, 0.55);
+      background:
+        radial-gradient(circle at top left, var(--lime-soft), transparent 60%)
+        rgba(3, 7, 22, 0.98);
+      color: var(--ink-soft);
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(139, 92, 255, 0.65);
+      background:
+        radial-gradient(circle at top left, var(--violet-soft), transparent 60%)
+        rgba(5, 8, 26, 0.98);
+    }
+
+    .btn-pill {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 5px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--ink-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.16), transparent 60%)
+        rgba(3, 6, 20, 0.98);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-pill:hover {
+      border-color: rgba(185, 200, 90, 0.7);
+      color: var(--ink);
+    }
+
+    .text-link {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+      border-bottom: 1px solid rgba(139, 92, 255, 0.8);
+      padding-bottom: 1px;
+      cursor: pointer;
+    }
+
+    .text-link:hover {
+      color: var(--ink);
+      border-bottom-color: rgba(185, 200, 90, 0.9);
+    }
+
+    /* ==============================
+       SHARED SECTION / PANEL
+       ============================== */
+
+    .section {
+      width: 100%;
+      padding-top: var(--space-xxl);
+    }
+
+    .section-header {
+      margin-bottom: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 46rem;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ink-subtle);
+    }
+
+    .section-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 22px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .section-body {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      max-width: 46rem;
+    }
+
+    .panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+    }
+
+    .panel-tight {
+      padding: 20px 22px;
+    }
+
+    .panel-roomy {
+      padding: 24px 26px;
+    }
+
+    .code-block {
+      margin: 10px 0 4px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(1, 3, 15, 0.96);
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--ink);
+      white-space: pre;
+    }
+
+    .code-inline {
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(1, 3, 15, 0.9);
+      border-radius: 4px;
+      padding: 0 4px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      white-space: nowrap;
+    }
+
+    .mini-list {
+      margin: 0 0 4px;
+      padding-left: 16px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      display: grid;
+      gap: 4px;
+      line-height: 1.7;
+    }
+
+    /* ==============================
+       SECTION 1 — HERO
+       ============================== */
+
+    .how-hero {
+      padding-top: var(--space-xxl);
+      padding-bottom: var(--space-xl);
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+      gap: var(--space-lg);
+      align-items: center;
+    }
+
+    .how-hero-copy {
+      display: grid;
+      gap: 18px;
+      align-content: flex-start;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 28px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .hero-body {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.9;
+      max-width: 38rem;
+    }
+
+    .hero-q-list {
+      font-size: 12px;
+      color: var(--ink-subtle);
+      margin: 0 0 4px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+
+    .how-hero-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--violet-border-soft);
+      background:
+        radial-gradient(circle at top, rgba(139, 92, 255, 0.25), transparent 58%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 20px 20px 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .how-hero-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .how-hero-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .how-hero-chip {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 6px 10px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%)
+        rgba(3, 7, 22, 0.98);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .how-hero-chip::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(185, 200, 90, 0.9);
+      box-shadow: 0 0 8px rgba(185, 200, 90, 0.9);
+    }
+
+    .how-hero-footnote {
+      font-size: 11px;
+      color: var(--ink-subtle);
+      line-height: 1.7;
+    }
+
+    /* ==============================
+       FILTER BAR
+       ============================== */
+
+    .filter-bar {
+      margin-top: -12px;
+      margin-bottom: 4px;
+      padding-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+    }
+
+    .filter-label {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-subtle);
+      font-size: 10px;
+    }
+
+    .filter-pill {
+      cursor: pointer;
+    }
+
+    .filter-pill.is-active {
+      border-color: rgba(185, 200, 90, 0.9);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, var(--lime-soft-strong), transparent 60%)
+        rgba(3, 8, 22, 0.98);
+    }
+
+    /* ==============================
+       SECTION 2 — STEP 1: INSTALL
+       ============================== */
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .install-notes {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .install-notes-keys {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .install-meta {
+      font-size: 11px;
+      color: var(--ink-subtle);
+      margin-top: 6px;
+    }
+
+    .install-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    .code-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-subtle);
+      margin-bottom: 4px;
+    }
+
+    /* ==============================
+       SECTION 3 — WHAT CAVBOT TRACKS
+       ============================== */
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .telemetry-card {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.16), transparent 60%),
+        rgba(4, 8, 20, 0.98);
+      padding: 18px 18px 14px;
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+
+    .telemetry-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--lime);
+      margin-bottom: 2px;
+    }
+
+    .telemetry-meta {
+      font-size: 11px;
+      color: var(--ink-subtle);
+    }
+
+    .telemetry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .telemetry-tag {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 3px 8px;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    /* ==============================
+       SECTION 4 — CAVBOT BADGE
+       ============================== */
+
+    .badge-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .badge-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 22px 22px 18px;
+      display: grid;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .badge-events {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.18), transparent 60%),
+        rgba(3, 7, 22, 0.98);
+      padding: 14px 14px 12px;
+      display: grid;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    .badge-events-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-subtle);
+    }
+
+    .badge-events-list {
+      margin: 0 0 4px;
+      padding-left: 16px;
+      display: grid;
+      gap: 4px;
+    }
+
+    /* ==============================
+       SECTION 5 — 404 CONTROL ROOM
+       ============================== */
+
+    .control-room-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid rgba(139, 92, 255, 0.7);
+      background:
+        radial-gradient(circle at top, rgba(185, 200, 90, 0.22), transparent 60%),
+        radial-gradient(circle at bottom, rgba(139, 92, 255, 0.32), transparent 60%),
+        linear-gradient(160deg, #050a1d 0, #01030f 100%);
+      padding: 24px 24px 20px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      gap: 14px;
+    }
+
+    .control-room-panel::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: inherit;
+      background-image:
+        repeating-linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.08) 0,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px,
+          transparent 26px
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.08) 0,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px,
+          transparent 26px
+        );
+      opacity: 0.14;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .control-room-panel > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .control-room-meta {
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .control-room-events {
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    /* ==============================
+       SECTION 6 — DATA FLOW
+       ============================== */
+
+    .flow-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.18), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 20px;
+    }
+
+    .flow-steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 14px;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .flow-step {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%),
+        rgba(3, 7, 20, 0.98);
+      padding: 12px 14px 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .flow-step-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-subtle);
+    }
+
+    .flow-step-title {
+      font-size: 12px;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .flow-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .flow-tag {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 3px 8px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--ink-soft);
+    }
+
+    /* ==============================
+       SECTION 7 — PRIVACY & RETENTION
+       ============================== */
+
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .privacy-card {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%),
+        rgba(4, 8, 20, 0.98);
+      padding: 16px 16px 14px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      display: grid;
+      gap: 8px;
+    }
+
+    .privacy-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .privacy-list {
+      margin: 0;
+      padding-left: 16px;
+      display: grid;
+      gap: 4px;
+    }
+
+    /* ==============================
+       SECTION 8 — BENEFITS
+       ============================== */
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .benefit-card {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%),
+        rgba(4, 8, 20, 0.98);
+      padding: 16px 16px 14px;
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .benefit-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--lime);
+      margin-bottom: 2px;
+    }
+
+    /* ==============================
+       FOOTER (unified)
+       ============================== */
+
+    .site-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 20px 20px 24px;
+      margin-top: var(--space-xxl);
+      font-size: 11px;
+      color: var(--ink-subtle);
+    }
+
+    .footer-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-link {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    /* ==============================
+       INSTALLATION MODAL
+       ============================== */
+
+    .install-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .install-modal.is-open {
+      display: flex;
+    }
+
+    .install-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(9, 11, 30, 0.96), rgba(1, 3, 10, 0.98));
+      backdrop-filter: blur(10px);
+      opacity: 0.96;
+    }
+
+    .install-modal-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(520px, 94vw);
+      max-height: 80vh;
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid rgba(139, 92, 255, 0.7);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.22), transparent 60%),
+        linear-gradient(160deg, #05091a 0, #01030f 100%);
+      box-shadow:
+        0 22px 60px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      padding: 18px 18px 14px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      color: var(--ink-soft);
+    }
+
+    .install-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .install-modal-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+    }
+
+    .install-modal-close {
+      border: none;
+      background: transparent;
+      color: var(--ink-subtle);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 999px;
+    }
+
+    .install-modal-close:hover {
+      color: var(--ink);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .install-modal-body {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.18), transparent 60%),
+        rgba(2, 5, 16, 0.98);
+      padding: 12px 12px 10px;
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      white-space: pre-line;
+      overflow-y: auto;
+      max-height: 56vh;
+    }
+
+    .install-modal-footnote {
+      font-size: 10px;
+      color: var(--ink-subtle);
+      margin: 0;
+    }
+
+    /* ==============================
+       RESPONSIVE
+       ============================== */
+
+    @media (max-width: 960px) {
+      .page-inner {
+        padding-top: var(--space-lg);
+      }
+
+      .site-header-inner {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .nav-main {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .how-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .how-hero-panel {
+        order: -1;
+      }
+
+      .filter-bar {
+        margin-top: 0;
+      }
+
+      .step-grid,
+      .badge-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .telemetry-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .privacy-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .benefits-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-inner {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .privacy-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .benefits-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <!-- ===========================
+         HEADER / NAV (unified)
+         ========================== -->
+    <header class="site-header">
+      <div class="site-header-inner">
+        <div class="brand-lockup">
+          <div class="brand-name">CAVBOT</div>
+        </div>
+        <nav class="nav-main">
+          <div class="nav-links">
+            <a href="product.html" class="nav-link">Product</a>
+            <a href="how-it-works.html" class="nav-link nav-link--active">How it Works</a>
+            <a href="#pricing" class="nav-link">Pricing</a>
+            <a href="#arcade" class="nav-link">404 Arcade Lab</a>
+            <a href="cavcore-console.html" class="nav-link">Console</a>
+          </div>
+          <div class="nav-cta-row">
+            <a href="#" class="nav-login">Log in</a>
+            <button type="button" class="btn btn-primary">Start free trial</button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ===========================
+         MAIN
+         ========================== -->
+    <main class="page-inner">
+      <!-- SECTION 1 — HERO -->
+      <section class="how-hero" aria-labelledby="how-hero-title">
+        <div class="how-hero-copy">
+          <div class="eyebrow">How it works · CavBot analytics v5</div>
+          <h1 id="how-hero-title" class="hero-title">What CavBot does under the hood</h1>
+          <p class="hero-body">
+            CavBot instruments your routes, 404 control room, badge, and SEO snapshots through a single script snippet — all tied to
+            append-only events and derived tables that power CavCore Console and future assistive layers.
+          </p>
+          <p class="hero-body" style="font-size:13px;">
+            This page is for engineers, web architects, and SEOs who want to see the system, not the slogan. We’ll answer:
+          </p>
+          <ul class="hero-q-list">
+            <li><strong>What am I installing?</strong></li>
+            <li><strong>What data is collected?</strong></li>
+            <li><strong>How does it flow into CavCore Console?</strong></li>
+          </ul>
+
+          <div class="hero-cta-row">
+            <button type="button" class="btn btn-primary">Start free trial</button>
+            <button type="button" class="btn btn-ghost">Open CavCore Console</button>
+            <button type="button" class="btn-pill" data-install-trigger>Installation guide</button>
+          </div>
+        </div>
+
+        <aside class="how-hero-panel" aria-label="CavBot installation summary">
+          <div class="how-hero-panel-header">
+            <span>What comes online when you add CavBot</span>
+            <span style="font-size:10px; text-transform:uppercase; letter-spacing:0.16em; color:var(--lime);">
+              One snippet · multi-surface
+            </span>
+          </div>
+      <br>    <div class="how-hero-chip-row">
+            <div class="how-hero-chip">
+              One tracker script
+              <span class="code-inline">/v1/tracker.js</span>
+            </div>
+            <div class="how-hero-chip">
+              Project-scoped anonymous IDs
+              <span class="code-inline">anonymousId</span>
+            </div>
+            <div class="how-hero-chip">
+              Derived tables
+              <span class="code-inline">daily_page_aggregates</span>
+            </div>
+            <div class="how-hero-chip">
+              Ready for AI
+              <span class="code-inline">insights</span> · <span class="code-inline">/v1/assist</span>
+            </div>
+          </div>
+      <br>     <p class="how-hero-footnote">
+            CavBot Analytics v5 writes into a small, opinionated schema — <span class="code-inline">events</span>,
+            <span class="code-inline">sessions</span>, <span class="code-inline">pages</span>,
+            <span class="code-inline">seo_snapshots</span>, <span class="code-inline">performance_samples</span>,
+            and <span class="code-inline">insights</span>. CavCore Console is just a set of views on top.
+          </p>
+        </aside>
+      </section>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar" aria-label="Filter documentation sections">
+        <span class="filter-label">Show:</span>
+        <button type="button" class="btn-pill filter-pill is-active" data-filter="all">All</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="install">Install</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="telemetry">Telemetry</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="badge">Badge</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="404">404 Control Room</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="flow">Data Flow</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="privacy">Privacy</button>
+        <button type="button" class="btn-pill filter-pill" data-filter="benefits">Benefits</button>
+      </div>
+
+      <!-- SECTION 2 — STEP 1: INSTALL -->
+      <section class="section" aria-labelledby="step-1-install" data-section-id="install">
+        <header class="section-header">
+          <div class="eyebrow">Step 1 · Install the snippet</div>
+          <h2 id="step-1-install" class="section-title">Drop in the CavBot tracker</h2>
+          <p class="section-body">
+            CavBot starts with a single script tag. No SDK ceremony, no build step. The snippet wires up route views,
+            404 control-room events, badge telemetry, SEO snapshots, and performance sampling under one project key.
+          </p>
+        </header>
+<br> 
+        <div class="step-grid">
+          <div>
+            <div class="install-notes">
+              Place the CavBot tracker on every page you want under guard.
+              For most teams, that means the main layout or HTML template for your app or framework.
+            </div>
+<br> 
+            <div class="install-notes-keys">
+              <div>
+                <strong>Where to place it:</strong>
+                <ul class="mini-list">
+                  <li><strong>Option A:</strong> In <span class="code-inline">&lt;head&gt;</span> with <span class="code-inline">defer</span> for early instrumentation.</li>
+                  <li><strong>Option B:</strong> Right before <span class="code-inline">&lt;/body&gt;</span> if your team prefers scripts at the bottom.</li>
+            <br>     </ul>
+              </div>
+              <div>
+                <strong>Required attributes:</strong>
+                <ul class="mini-list">
+                  <li><span class="code-inline">data-project-key</span> — public key that maps to a row in <span class="code-inline">projects</span>.</li>
+                  <li><span class="code-inline">data-environment</span> — <span class="code-inline">production</span>, <span class="code-inline">staging</span>, or <span class="code-inline">preview</span>.</li>
+          <br>       </ul>
+              </div>
+              <div>
+                <strong>Optional attributes:</strong>
+                <ul class="mini-list">
+                  <li><span class="code-inline">data-badge="true"</span> — mounts the CavBot badge on your site.</li>
+          <br>       </ul>
+              </div>
+              <div>
+                <strong>ID behavior:</strong>
+                <ul class="mini-list">
+                  <li><span class="code-inline">anonymousId</span> — project-scoped UUID per visitor (no names, emails, or user IDs).</li>
+                  <li><span class="code-inline">sessionKey</span> — rolling key based on time and idle rules.</li>
+                  <li>No raw IP, email, or account data stored by default — just route-level signal.</li>
+         <br>        </ul>
+              </div>
+            </div>
+
+            <div class="install-cta-row">
+              <button type="button" class="btn-pill" data-install-trigger>
+                Installation guide
+              </button>
+              <span class="install-meta">
+                Prefer docs? You can wire this into your layout, template, or shell just like any other analytics script.
+              </span>
+            </div>
+          </div>
+
+          <aside>
+            <div class="panel panel-roomy">
+              <div class="code-label">Tracker snippet</div>
+              <pre class="code-block">&lt;script
+  src="https://cdn.cavbot.com/v1/tracker.js"
+  data-project-key="YOUR_PROJECT_KEY"
+  data-environment="production"
+  data-badge="true"
+  defer
+&gt;&lt;/script&gt;</pre>
+           <p class="install-meta">
+                The tracker listens for route changes, 404 control-room events, SEO snapshots, and performance samples. Each
+                interaction becomes a single row in <span class="code-inline">events</span> with a minimal payload:
+                <span class="code-inline">timestamp</span>, <span class="code-inline">anonymousId</span>, <span class="code-inline">sessionKey</span>,
+                <span class="code-inline">eventName</span>, <span class="code-inline">route</span>, and a compact <span class="code-inline">properties</span> object.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- SECTION 3 — STEP 2: WHAT CAVBOT TRACKS -->
+      <section class="section" aria-labelledby="step-2-telemetry" data-section-id="telemetry">
+        <header class="section-header">
+          <div class="eyebrow">Step 2 · Telemetry model</div>
+          <h2 id="step-2-telemetry" class="section-title">What CavBot tracks</h2>
+          <p class="section-body">
+            CavBot is not a generic pageview counter. It tracks the parts of your system that break journeys:
+            routes, 404s, SEO structure, performance, and how people actually move through your site.
+          </p>
+        </header>
+<br> 
+        <div class="telemetry-grid">
+          <!-- 404 & ROUTES -->
+          <article class="telemetry-card">
+            <div class="telemetry-title">404 &amp; routes</div>
+            <div class="telemetry-meta">
+              Every visit to a route — and every time someone lands in the 404 control room — becomes a typed event.
+        <br>     </div>
+            <div>
+              <strong>Core events:</strong>
+              <ul class="mini-list">
+                <li><span class="code-inline">cavbot_route_view</span> — normal route view.</li>
+                <li><span class="code-inline">cavbot_404_view</span> — session enters your 404 control room surface.</li>
+                <li><span class="code-inline">cavbot_catch</span> — player catches CavBot in the 404 game.</li>
+                <li><span class="code-inline">cavbot_miss</span> — player misses, or exits without recovery.</li>
+                <li><span class="code-inline">cavbot_idle</span> — control room open, but no interaction for N seconds.</li>
+          <br>     </ul>
+            </div>
+            <div>
+              <strong>Tables:</strong>
+              <div class="telemetry-tags">
+                <span class="telemetry-tag">events</span>
+                <span class="telemetry-tag">pages</span>
+                <span class="telemetry-tag">daily_page_aggregates</span>
+              </div>
+       <br>      </div>
+            <div>
+              <strong>Powers:</strong>
+              <ul class="mini-list">
+                <li>404 density maps by route and referrer.</li>
+                <li>Recovery rate from 404-control-room sessions.</li>
+                <li>Top failing routes and dead paths in CavCore Console.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- SEO SNAPSHOTS -->
+          <article class="telemetry-card">
+            <div class="telemetry-title">SEO snapshots</div>
+            <div class="telemetry-meta">
+              CavBot takes periodic SEO snapshots so you can tie structure and indexability to real behavior, not just audits.
+            </div>
+            <div>
+              <strong>Per-route snapshot includes:</strong>
+              <ul class="mini-list">
+                <li><span class="code-inline">title</span>, <span class="code-inline">metaDescription</span>, <span class="code-inline">canonicalUrl</span>.</li>
+                <li>Indexability flags: <span class="code-inline">noindex</span>, <span class="code-inline">nofollow</span>, robots rules.</li>
+                <li>Heading outline, word count, and key social tags (OG/Twitter).</li>
+              </ul>
+            </div>
+            <div>
+              <strong>Tables:</strong>
+              <div class="telemetry-tags">
+                <span class="telemetry-tag">seo_snapshots</span>
+              </div>
+            </div>
+            <div>
+              <strong>Derived insights:</strong>
+              <ul class="mini-list">
+                <li><span class="code-inline">missing_meta_description</span></li>
+                <li><span class="code-inline">short_title</span> / <span class="code-inline">duplicate_title</span></li>
+                <li><span class="code-inline">non_indexable_critical</span> — important pages accidentally blocked.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- PERFORMANCE & RUNTIME FEEL -->
+          <article class="telemetry-card">
+            <div class="telemetry-title">Performance &amp; feel</div>
+            <div class="telemetry-meta">
+              Light-weight performance sampling gives you Core Web Vitals and a “runtime feel” score per route.
+            </div>
+         <br>    <div>
+              <strong>Metrics:</strong>
+              <ul class="mini-list">
+                <li><span class="code-inline">LCP</span> — Largest Contentful Paint (per route, per device).</li>
+                <li><span class="code-inline">TTFB</span> — Time to first byte.</li>
+                <li><span class="code-inline">CLS</span> — Cumulative Layout Shift.</li>
+                <li>Ready for <span class="code-inline">FID</span>/<span class="code-inline">INP</span> extensions.</li>
+              </ul>
+         <br>    </div>
+            <div>
+              <strong>Tables:</strong>
+              <div class="telemetry-tags">
+                <span class="telemetry-tag">performance_samples</span>
+       <br>        </div>
+            </div>
+            <div>
+          <br>     <strong>Powers:</strong>
+              <ul class="mini-list">
+                <li>“Feel” lens in CavCore Console, per critical route.</li>
+                <li>Insights such as <span class="code-inline">slow_critical_page</span> and “runtime feel below target”.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- STRUCTURE & SITEMAP -->
+          <article class="telemetry-card">
+            <div class="telemetry-title">Structure &amp; sitemap</div>
+            <div class="telemetry-meta">
+              CavBot builds a canonical map of your routes, internal links, and sitemap entries so you can see structure issues in one place.
+            </div>
+            <div>
+              <strong>Resolves:</strong>
+              <ul class="mini-list">
+                <li>All discovered routes (including 404-prone ones).</li>
+                <li>Sitemap URLs and their status.</li>
+                <li>Internal referrers and click paths.</li>
+              </ul>
+            </div>
+            <div>
+              <strong>Tables:</strong>
+              <div class="telemetry-tags">
+                <span class="telemetry-tag">pages</span>
+                <span class="telemetry-tag">referrer_aggregates</span>
+                <span class="telemetry-tag">daily_page_aggregates</span>
+              </div>
+            </div>
+            <div>
+              <strong>Powers:</strong>
+              <ul class="mini-list">
+                <li>Orphan and weakly linked pages.</li>
+                <li>Sitemap URLs that 404 in practice.</li>
+                <li>Funnels that land visitors on thin or broken content.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECTION 4 — STEP 3: CAVBOT BADGE -->
+      <section class="section" aria-labelledby="step-3-badge" data-section-id="badge">
+        <header class="section-header">
+          <div class="eyebrow">Step 3 · CavBot presence</div>
+          <h2 id="step-3-badge" class="section-title">The CavBot badge on your site</h2>
+          <p class="section-body">
+            The CavBot badge is an optional, fixed UI element that quietly signals a session is “under guard.”
+            It reuses the same CavBot head system as the control room, scaled down and wired into its own event stream.
+          </p>
+        </header>
+<br> 
+        <div class="badge-layout">
+          <article class="badge-panel">
+            <p>
+              You can enable the badge entirely from configuration. For most teams, the snippet attribute is enough:
+            </p>
+            <ul class="mini-list">
+              <li><span class="code-inline">data-badge="true"</span> on the tracker snippet.</li>
+            </ul>
+            <p>
+              Or, if you prefer explicit configuration, wire it through your analytics init call:
+            </p>
+            <pre class="code-block">window.cavbotAnalytics.init({
+  projectKey: "YOUR_PROJECT_KEY",
+  environment: "production",
+  cavbotBadge: true
+});</pre>
+            <p>
+              The badge renders as a small, fixed element (bottom-right by default). Today it shows static project detail —
+              like project name and number of routes under guard. Tomorrow it becomes an assistive surface:
+            </p>
+            <ul class="mini-list">
+              <li>Live 404 count for this session’s journey.</li>
+              <li>Route-level health hints (“This page is slow on mobile”).</li>
+              <li>“Ask CavBot” hooks powered by the same event and insights tables.</li>
+            </ul>
+          </article>
+
+          <aside class="badge-events" aria-label="Badge event model">
+            <div class="badge-events-label">Badge events</div>
+            <p style="margin:0;">
+              The badge has its own telemetry so you can see how often people notice or interact with it.
+            </p>
+      <br>       <ul class="badge-events-list">
+              <li><span class="code-inline">cavbot_badge_impression</span> — badge rendered for a session.</li>
+              <li><span class="code-inline">cavbot_badge_hover</span> — hover or focus interaction.</li>
+              <li><span class="code-inline">cavbot_badge_click</span> — badge clicked; opens the mini panel.</li>
+       <br>      </ul>
+            <p style="margin:0; font-size:10px; color:var(--ink-subtle); margin-top:6px;">
+              These rows land in <span class="code-inline">events</span> and roll up into badge-specific views in CavCore Console,
+              so you can keep the surface helpful but unobtrusive.
+            </p>
+          </aside>
+        </div>
+      </section>
+
+      <!-- SECTION 5 — STEP 4: 404 CONTROL ROOM -->
+      <section class="section" aria-labelledby="step-4-control-room" data-section-id="404">
+        <header class="section-header">
+          <div class="eyebrow">Step 4 · 404 control room</div>
+          <h2 id="step-4-control-room" class="section-title">404 Control Room: turning dead routes into signal</h2>
+          <p class="section-body">
+            CavBot’s 404 Control Room is a designed surface, not a default error. When you wire 404s into the control-room component,
+            every play session becomes a rich source of routing signal.
+          </p>
+        </header>
+<br> 
+        <article class="control-room-panel">
+          <div class="control-room-meta">
+            The implementation depends on your framework, but the pattern is the same: send users into a CavBot-powered 404 component,
+            and track interactions as structured events.
+          </div>
+
+          <div>
+            <div class="code-label">Example · Next.js 404 page</div>
+            <pre class="code-block">// pages/404.js
+import CavBotControlRoom from "../components/CavBotControlRoom";
+
+export default function NotFoundPage() {
+  if (typeof window !== "undefined" &amp;&amp; window.cavbotAnalytics) {
+    window.cavbotAnalytics.track("cavbot_404_view", {
+      route: window.location.pathname,
+      pageType: "404-control-room"
+    });
+  }
+
+  return (
+    &lt;CavBotControlRoom
+      difficulty="standard"
+      theme="grid-lab"
+    /&gt;
+  );
+}</pre>
+          </div>
+<br> 
+          <div class="control-room-events">
+            <strong>Configurable options:</strong>
+            <ul class="mini-list">
+          <br>     <li><span class="code-inline">difficulty</span> — e.g. <span class="code-inline">standard</span>, <span class="code-inline">strict</span>.</li>
+              <li><span class="code-inline">theme</span> — e.g. <span class="code-inline">grid</span>, <span class="code-inline">signal</span>, <span class="code-inline">imposter</span>.</li>
+         <br>    </ul>
+            <strong>Every 404 play session logs:</strong>
+            <ul class="mini-list">
+         <br>      <li><span class="code-inline">cavbot_404_view</span> — session enters the control room.</li>
+              <li><span class="code-inline">cavbot_catch</span> — player successfully “catches” CavBot.</li>
+              <li><span class="code-inline">cavbot_miss</span> — player fails or exits without recovery.</li>
+              <li><span class="code-inline">cavbot_idle</span> — control room open, no input for N seconds.</li>
+        <br>     </ul>
+            <p style="font-size:11px; color:var(--ink-subtle); margin-top:6px;">
+              These events feed 404 recovery rate, game interaction metrics, and idle levels in CavCore Console —
+              giving you a live sense of how often broken routes are rescued versus abandoned.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <!-- SECTION 6 — STEP 5: DATA FLOW -->
+      <section class="section" aria-labelledby="step-5-flow" data-section-id="flow">
+        <header class="section-header">
+          <div class="eyebrow">Step 5 · Data path</div>
+          <h2 id="step-5-flow" class="section-title">From raw events to CavCore Console &amp; AI</h2>
+          <p class="section-body">
+            CavBot’s data model is intentionally small. Everything moves from append-only events, into a set of aggregates,
+            and finally into insight rows that CavCore Console — and future AI endpoints — can read.
+          </p>
+        </header>
+<br> 
+        <article class="flow-panel">
+          <ol class="flow-steps">
+            <li class="flow-step">
+              <div class="flow-step-label">Layer 1 · Events</div>
+              <div class="flow-step-title">Raw event stream</div>
+              <div>
+                Every interaction becomes a single row in <span class="code-inline">events</span>, keyed by
+                <span class="code-inline">anonymousId</span>, <span class="code-inline">sessionKey</span>,
+                <span class="code-inline">eventName</span>, <span class="code-inline">route</span>, and time.
+              </div>
+              <div class="flow-tags">
+                <span class="flow-tag">events</span>
+                <span class="flow-tag">sessions</span>
+                <span class="flow-tag">deploy_markers</span>
+              </div>
+            </li>
+
+            <li class="flow-step">
+              <div class="flow-step-label">Layer 2 · Aggregates</div>
+              <div class="flow-step-title">Daily and route-level tables</div>
+              <div>
+                Nightly jobs roll raw events into compact aggregates: per-route counts, referrer breakdowns, SEO and performance stats.
+              </div>
+              <div class="flow-tags">
+                <span class="flow-tag">daily_page_aggregates</span>
+                <span class="flow-tag">referrer_aggregates</span>
+                <span class="flow-tag">seo_snapshots</span>
+                <span class="flow-tag">performance_samples</span>
+              </div>
+            </li>
+
+            <li class="flow-step">
+              <div class="flow-step-label">Layer 3 · Insights</div>
+              <div class="flow-step-title">Typed findings</div>
+              <div>
+                Aggregates are scanned for conditions that matter: 404 spikes, SEO regressions, slow critical pages,
+                and campaigns sending traffic into thin content.
+              </div>
+              <div class="flow-tags">
+                <span class="flow-tag">404_spike</span>
+                <span class="flow-tag">seo_missing_meta</span>
+                <span class="flow-tag">slow_critical_page</span>
+                <span class="flow-tag">campaign_lands_on_thin_page</span>
+              </div>
+            </li>
+
+            <li class="flow-step">
+              <div class="flow-step-label">Layer 4 · Surfaces</div>
+              <div class="flow-step-title">Console &amp; future AI</div>
+              <div>
+                CavCore Console pulls from the same tables you do:
+              </div>
+              <ul class="mini-list">
+                <li>Project overview and health.</li>
+                <li>404 summary and control room analytics.</li>
+                <li>Page &amp; SEO detail, referrers, campaigns, and performance slices.</li>
+              </ul>
+              <div style="margin-top:6px;">
+                Future endpoints sit on top of this same schema:
+              </div>
+              <div class="flow-tags">
+                <span class="flow-tag">/v1/assist</span>
+                <span class="flow-tag">/v1/insights/summarize</span>
+              </div>
+            </li>
+          </ol>
+        </article>
+      </section>
+
+      <!-- SECTION 7 — PRIVACY & RETENTION -->
+      <section class="section" aria-labelledby="privacy-retention" data-section-id="privacy">
+        <header class="section-header">
+          <div class="eyebrow">Privacy &amp; retention</div>
+          <h2 id="privacy-retention" class="section-title">Privacy, IDs, and retention windows</h2>
+          <p class="section-body">
+            CavBot is designed to be safe for production sites by default. IDs are anonymous, payloads are lean, and retention
+            is tuned for operational signal — not long-term user tracking.
+          </p>
+        </header>
+<br> 
+        <div class="privacy-grid">
+          <article class="privacy-card">
+            <div class="privacy-title">IDs &amp; identifiers</div>
+            <ul class="privacy-list">
+              <li><strong>Anonymous per project:</strong> each visitor gets a project-scoped <span class="code-inline">anonymousId</span> (UUID).</li>
+              <li><span class="code-inline">sessionKey</span> groups events by activity window and idle rules.</li>
+              <li>No emails, names, or customer IDs are required or stored by default.</li>
+              <li>Custom identifiers can be passed, but CavBot encourages route-level analysis instead of user-level profiling.</li>
+            </ul>
+          </article>
+
+          <article class="privacy-card">
+            <div class="privacy-title">IP &amp; location</div>
+            <ul class="privacy-list">
+              <li><strong>IP handling is optional.</strong> When enabled, addresses are truncated before any storage.</li>
+              <li>Coarse geography only (e.g., country/region) for routing and abuse detection.</li>
+              <li>No long-term storage of raw IPs; data is aggregated as quickly as possible.</li>
+              <li>Abuse or anomaly patterns can be detected without tying back to identifiable persons.</li>
+            </ul>
+          </article>
+
+          <article class="privacy-card">
+            <div class="privacy-title">Retention &amp; controls</div>
+            <ul class="privacy-list">
+              <li><strong>Raw events:</strong> kept for a short operational window (e.g., 90 days).</li>
+              <li><strong>Aggregates:</strong> daily rollups and SEO/perf snapshots retained longer for historical trends.</li>
+              <li><strong>Project-level toggles:</strong> disable certain event types or turn off performance sampling entirely.</li>
+              <li><strong>Retention policies:</strong> configured per project so you can align CavBot with your data posture.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECTION 8 — BENEFITS STRIP -->
+      <section class="section" aria-labelledby="benefits-teams" data-section-id="benefits">
+        <header class="section-header">
+          <div class="eyebrow">Why teams install CavBot</div>
+          <h2 id="benefits-teams" class="section-title">What engineers &amp; SEOs get back</h2>
+          <p class="section-body">
+            CavBot is built for teams who want fewer guesses and more structure. The goal is simple: turn broken routes,
+            SEO gaps, and runtime feel into a navigable system you can actually improve.
+          </p>
+        </header>
+<br> 
+        <div class="benefits-grid">
+          <article class="benefit-card">
+            <div class="benefit-title">Less guesswork</div>
+            <p class="section-body" style="font-size:12px; max-width:none;">
+              See exactly where routes and 404s are hurting journeys. Density maps, recovery rates, and control-room metrics
+              replace scattered “I think this is broken” reports.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-title">SEO with context</div>
+            <p class="section-body" style="font-size:12px; max-width:none;">
+              SEO snapshots are tied to real sessions, referrers, and funnels — not just static crawls.
+              When CavBot flags a meta issue, you know how much traffic it actually touches.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-title">Runtime feel</div>
+            <p class="section-body" style="font-size:12px; max-width:none;">
+              Core Web Vitals and a “runtime feel” lens turn slow-feeling routes into concrete issues, with enough structure
+              for engineers to prioritize them.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <div class="benefit-title">AI-ready schema</div>
+            <p class="section-body" style="font-size:12px; max-width:none;">
+              Because everything lands in a small, typed schema, future CavBot assistants can sit on top of
+              <span class="code-inline">events</span>, <span class="code-inline">seo_snapshots</span>,
+              <span class="code-inline">performance_samples</span>, and <span class="code-inline">insights</span>
+              without ever needing user-level data.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===========================
+         FOOTER (unified)
+         ========================== -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>© 2025 CavBot / CavCore. All rights reserved.</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Use</a>
+          <a href="#" class="footer-link">Data &amp; Security</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- INSTALLATION MODAL -->
+  <div class="install-modal" id="install-modal" aria-hidden="true" aria-label="CavBot installation guide">
+    <div class="install-modal-backdrop" data-install-close></div>
+    <div class="install-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="install-modal-title">
+      <div class="install-modal-header">
+        <div id="install-modal-title" class="install-modal-title">
+          Installation guide · CavBot tracker
+        </div>
+        <button type="button" class="install-modal-close" aria-label="Close installation guide" data-install-close>&times;</button>
+      </div>
+      <div class="install-modal-body">
+Step 1 · Add the CavBot script snippet to your layout.
+
+  &lt;script
+    src="https://cdn.cavbot.com/v1/tracker.js"
+    data-project-key="YOUR_PROJECT_KEY"
+    data-environment="production"
+    data-badge="true"
+    defer
+  &gt;&lt;/script&gt;
+
+Place it in &lt;head&gt; with defer for early instrumentation,
+or just before &lt;/body&gt; if your team prefers.
+
+Step 2 · Set your keys.
+
+  - data-project-key  → maps to a row in projects.
+  - data-environment  → "production", "staging", or "preview".
+
+Step 3 · (Optional) Enable the CavBot badge.
+
+  - Keep data-badge="true" on the script, or
+  - call cavbotAnalytics.init({ cavbotBadge: true }).
+
+Step 4 · Wire 404s into the CavBot control room.
+
+  - Next.js: route /404 to a &lt;CavBotControlRoom /&gt; component.
+  - SPA / React Router: use a catch-all "*" route that renders the control room.
+  - Track events like "cavbot_404_view", "cavbot_catch", "cavbot_miss", "cavbot_idle".
+
+Step 5 · Log into CavCore Console.
+
+  - Confirm events are flowing into "events" and "sessions".
+  - Explore 404 density, SEO snapshots, and performance samples.
+  - Use the console views as the single source of truth for routes, faults, and runtime feel.
+      </div>
+      <p class="install-modal-footnote">
+        Close with <span class="code-inline">Esc</span> or click outside the panel. This guide mirrors the same event model CavBot uses internally.
+      </p>
+    </div>
+  </div>
+
+  <!-- Unified brain script -->
+  <script src="cavbotcore/cavbotbrain.js" defer></script>
+
+  <!-- Modal logic -->
+  <script>
+    (function () {
+      var modal = document.getElementById('install-modal');
+      if (!modal) return;
+
+      var openers = document.querySelectorAll('[data-install-trigger]');
+      var closers = modal.querySelectorAll('[data-install-close]');
+      var backdrop = modal.querySelector('.install-modal-backdrop');
+
+      function openModal() {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      openers.forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+          event.preventDefault();
+          openModal();
+        });
+      });
+
+      closers.forEach(function (btn) {
+        btn.addEventListener('click', function (event) {
+          event.preventDefault();
+          closeModal();
+        });
+      });
+
+      if (backdrop) {
+        backdrop.addEventListener('click', function () {
+          closeModal();
+        });
+      }
+
+      window.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
+    })();
+
+    // Filter logic
+    (function () {
+      var filterBar = document.querySelector('.filter-bar');
+      if (!filterBar) return;
+
+      var pills = filterBar.querySelectorAll('.filter-pill');
+      var sections = document.querySelectorAll('.section');
+
+      function applyFilter(value) {
+        sections.forEach(function (sec) {
+          var id = sec.getAttribute('data-section-id');
+          if (!value || value === 'all' || value === id) {
+            sec.style.display = '';
+          } else {
+            sec.style.display = 'none';
+          }
+        });
+      }
+
+      pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          var value = pill.getAttribute('data-filter');
+
+          pills.forEach(function (p) {
+            p.classList.remove('is-active');
+          });
+          pill.classList.add('is-active');
+
+          applyFilter(value);
+
+          // Pull the doc slightly up so the hero / filters remain in view
+          var pageInner = document.querySelector('.page-inner');
+          if (pageInner) {
+            window.scrollTo({
+              top: pageInner.offsetTop - 12,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
