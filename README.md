@@ -108,7 +108,7 @@ You’ll want:
 	•	Any modern browser (Chrome, Firefox, Safari, Edge).
 	•	Optional: Node.js ≥ 18 if you want a local dev server via npx.
 
-⸻
+---
 
 Local Development
 	1.	Clone the repository
@@ -136,7 +136,7 @@ http://localhost:4173/404.html
 	•	Interact with the 404 Control Room.
 	•	You should see CavBot logging events (e.g. cavbot_catch, cavbot_miss, etc.) through the cavbotbrain.js script.
 
-⸻
+---
 
 Static Hosting
 
@@ -154,7 +154,7 @@ Basic steps (Cloudflare-style):
 	4.	Set the output directory to / (root).
 	5.	Configure your custom domain (e.g. cavbot.com) and point DNS via Cloudflare.
 
-⸻
+---
 
 CavBot Analytics Events
 
@@ -234,7 +234,7 @@ Content-Type: application/json
 
 with a JSON body containing project, visitor, session, and events[].
 
-⸻
+---
 
 Backend Roadmap
 
@@ -252,7 +252,7 @@ CavBot Analytics backend (spec defined, implementation WIP):
 
 The frontend in this repo is already structured to plug directly into that backend — no API schema changes required.
 
-⸻
+---
 
 Contributing
 
@@ -268,7 +268,7 @@ you can open an issue or submit a pull request. Please keep changes small, focus
 	•	Privacy-respectful
 	•	Minimal, production-ready UX
 
-⸻
+---
 
 License
 
