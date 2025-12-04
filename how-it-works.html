@@ -1104,8 +1104,9 @@
     }
   </style>
 </head>
-<body>
-  <div class="page-shell">
+<body class="page-shell"
+      data-cavbot-page-type="how-it-works-page"
+      data-cavbot-component="how-it-works-shell">
     <!-- ===========================
          HEADER / NAV (unified)
          ========================== -->
@@ -1781,7 +1782,8 @@ Step 5 · Log into CavCore Console.
       </p>
     </div>
   </div>
-
+<!-- Analytics bridge (window.cavbotAnalytics.track) -->
+<script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script -->
   <script src="cavbotcore/cavbotbrain.js" defer></script>
 
