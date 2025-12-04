@@ -10,7 +10,7 @@
   <!-- Game styles -->
   <link rel="stylesheet" href="/cavbotcore/badge.css">
   <link rel="stylesheet" href="/cavbotcore/head.css">
-  <link rel="stylesheet" href="/cavbotcore/games/catchcavbot.css">
+  <link rel="stylesheet" href="/cavbotcore/games/catchcavbot/catchcavbot.css">
 
   <!-- Make only the HEAD visible / moving in the grid -->
   <style>
@@ -20,7 +20,10 @@
     }
   </style>
 </head>
-<body class="error-page">
+<!-- LABELED FOR CAVBOT -->
+<body class="error-page"
+      data-cavbot-page-type="404-control-room"
+      data-cavbot-component="404-game">
 <main>
   <section class="error-hero" aria-labelledby="error-heading">
     <div class="error-shell" role="document">
@@ -230,5 +233,7 @@
 <script src="/cavbotcore/cavbot-analytics.js"></script>
 <!-- Game logic -->
 <script src="/cavbotcore/cavbotbrain.js"></script>
+<!-- Brain logic -->
+<script src="/cavbotcore/games/catchcavbot/catchcavbot.js"></script>
 </body>
 </html>
