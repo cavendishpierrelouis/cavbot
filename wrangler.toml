@@ -1,0 +1,10 @@
+# cavbot-analytics / wrangler.toml
+name = "cavbot-analytics"
+main = "worker.js"
+compatibility_date = "2024-12-03"
+
+# We'll add routes later via dashboard or here.
+# For now this just tells Wrangler how to build/deploy.
+
+[observability]
+enabled = true
