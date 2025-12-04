@@ -956,8 +956,9 @@
     }
   </style>
 </head>
-<body>
-  <div class="page-shell">
+<body class="page-shell"
+      data-cavbot-page-type="product-page"
+      data-cavbot-component="product-shell">
     <!-- HEADER / NAV (unified) -->
     <header class="site-header">
       <div class="site-header-inner">
@@ -1293,7 +1294,8 @@
       </div>
     </footer>
   </div>
-
+ <!-- Analytics bridge (window.cavbotAnalytics.track) -->
+<script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script -->
   <script src="cavbotcore/cavbotbrain.js" defer></script>
   <!-- Page filter smooth scroll -->
