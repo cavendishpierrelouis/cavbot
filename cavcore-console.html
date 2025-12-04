@@ -1353,8 +1353,9 @@
 
   </style>
 </head>
-<body>
-  <div class="page-shell">
+<body class="page-shell"
+      data-cavbot-page-type="cavcore-console"
+      data-cavbot-component="cavcore-console-shell">
     <!-- ===========================
          HEADER / NAV (unified)
          ========================== -->
@@ -2102,7 +2103,8 @@
       </div>
     </footer>
   </div>
-
+<!-- Analytics bridge (window.cavbotAnalytics.track) -->
+<script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script -->
   <script src="cavbotcore/cavbotbrain.js" defer></script>
 
