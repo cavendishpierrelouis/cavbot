@@ -2180,8 +2180,10 @@
   </style>
 
 </head>
-<body>
-  <div class="page-shell">
+ <!-- LABELED FOR CAVBOT -->
+<body class="page-shell"
+      data-cavbot-page-type="home-page"
+      data-cavbot-component="home-shell">
     <!-- ===========================
          HEADER / NAV
          =========================== -->
@@ -2365,7 +2367,7 @@
       </article>
 
       <article class="brain-card">
-        <div class="brain-gen">Fieldline IV · Control-Plane Core</div>
+        <div class="brain-gen">CavCore (Gen 1.0) · Control-Plane Core</div>
         <div class="brain-era">Production brain</div>
         <p class="brain-text">
           Today’s CavBot runs on CavBot Analytics v5. Every 404, edge, and fragile route
@@ -3410,6 +3412,8 @@
   </div>
 </footer>
   </div>
+  <!-- Analytics bridge (window.cavbotAnalytics.track) -->
+<script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script: wobble/eyes/arcade logic lives here -->
   <script src="cavbotcore/cavbotbrain.js" defer></script>
   <!-- Local eye-tracking logic so CavBot always watches the page -->
