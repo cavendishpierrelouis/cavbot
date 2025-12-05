@@ -14,6 +14,10 @@
   const ANON_KEY = "cavbotAnonId";
   const SESSION_KEY = "cavbotSessionKey";
 
+  // SDK + environment markers (for backend segmentation / debugging)
+  const SDK_VERSION = "cavbot-web-js-v2";
+  const ENV = window.CAVBOT_ENV || "production";
+
   // ---- ID HELPERS ---------------------------------------------------------
 
   function getAnonymousId() {
@@ -106,8 +110,9 @@
     return {
       anonymousId: getAnonymousId(),
       sessionKey: getSessionKey(),
-      pageUrl: location.href,
-      routePath: location.pathname,
+      // Allow SPAs / routers to override URL + route
+      pageUrl: o.pageUrl || location.href,
+      routePath: o.routePath || location.pathname,
       pageType,
       component,
       referrer: document.referrer || "",
@@ -119,6 +124,9 @@
     const ctx = getBaseContext(overrides);
     return {
       ...ctx,
+      // Version + environment tagging for the backend
+      sdkVersion: SDK_VERSION,
+      env: ENV,
       events: [
         {
           name: eventName,
@@ -133,8 +141,7 @@
 
   function postEnvelope(envelope) {
     try {
-      // Prefer sendBeacon on unload-style moments (handled by caller).
-      // Normal path: standard fetch.
+      // Normal path: standard fetch with keepalive to survive navigations.
       return fetch(API_URL, {
         method: "POST",
         headers: {
@@ -160,13 +167,42 @@
   // Backwards compatible:
   //   cavbotAnalytics.track(name, payload)
   // Extended:
-  //   cavbotAnalytics.track(name, payload, { pageType, component })
+  //   cavbotAnalytics.track(name, payload, { pageType, component, pageUrl, routePath })
   function track(eventName, payload, overrides) {
     return sendEvent(eventName, payload, overrides);
   }
 
+  // Convenience helpers with opinionated pageType/component defaults
+  function track404(eventName, payload, overrides) {
+    const o = overrides || {};
+    return track(
+      eventName,
+      payload,
+      {
+        ...o,
+        pageType: o.pageType || "404-control-room",
+        component: o.component || "404-game"
+      }
+    );
+  }
+
+  function trackConsole(eventName, payload, overrides) {
+    const o = overrides || {};
+    return track(
+      eventName,
+      payload,
+      {
+        ...o,
+        pageType: o.pageType || "cavcore-console",
+        component: o.component || "cavcore-console-shell"
+      }
+    );
+  }
+
   window.cavbotAnalytics = {
     track,
+    track404,
+    trackConsole,
     getBaseContext // handy if you ever want to inspect from console
   };
 
