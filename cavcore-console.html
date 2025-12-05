@@ -141,20 +141,17 @@
       gap: 24px;
     }
 
-    .brand-lockup {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      white-space: nowrap;
-    }
+ .brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .brand-name {
-      font-family: var(--font-display);
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      font-size: 22px;
-      color: var(--ink);
-    }
+.brand-logo-img {
+  display: block;
+  height: 32px; /* 32–36px = that Apple / Google nav vibe */
+  width: auto;
+}
 
     .nav-main {
       display: flex;
@@ -347,8 +344,11 @@
 
     .nav-overlay-panel {
       position: relative;
-      margin: 12px auto;
-      max-width: 480px;
+      margin: 32px auto;
+      max-width: 380px;
+      width: calc(100% - 48px);
+      max-height: 80vh;
+      overflow-y: auto;
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.14);
       background:
@@ -363,7 +363,7 @@
     .nav-overlay-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 12px;
     }
 
@@ -1517,69 +1517,70 @@
        RESPONSIVE
        ============================== */
 
-    @media (max-width: 960px) {
-      .page-inner {
-        padding-top: var(--space-lg);
-      }
+  @media (max-width: 960px) {
+  .page-inner {
+    padding-top: var(--space-lg);
+  }
 
-      .console-top-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
+  /* Phones + tablets: hide text nav, show 3x3 icon */
+  .nav-main {
+    display: none;
+  }
 
-      .console-hero-panel {
-        order: -1;
-      }
+  .nav-menu-toggle {
+    display: block;
+  }
 
-      .console-filters-panel-inner {
-        grid-template-columns: minmax(0, 1fr);
-        align-items: flex-start;
-      }
+  .console-top-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-      .console-filters-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+  .console-hero-panel {
+    order: -1;
+  }
 
-      .console-overview {
-        grid-template-columns: minmax(0, 1fr);
-      }
+  .console-filters-panel-inner {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: flex-start;
+  }
 
-      .console-middle-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
+  .console-filters-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-      .console-bottom-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
+  .console-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-      .deploy-row {
-        grid-template-columns: minmax(0, 1fr);
-      }
+  .console-middle-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-      .metric-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+  .console-bottom-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-      .guardian-health-card {
-        grid-template-columns: minmax(0, 1fr);
-      }
+  .deploy-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-      .guardian-score-shell {
-        justify-self: center;
-      }
-    }
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .guardian-health-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guardian-score-shell {
+    justify-self: center;
+  }
+}
 
     @media (max-width: 720px) {
       .site-header-inner {
         flex-wrap: nowrap;
         gap: 14px;
-      }
-
-      .nav-main {
-        display: none;
-      }
-
-      .nav-menu-toggle {
-        display: block;
       }
 
       .metric-grid {
@@ -1610,7 +1611,7 @@
       }
     }
 
-    @media (min-width: 721px) {
+    @media (min-width: 961px) {
       .nav-overlay {
         display: none !important;
       }
@@ -1625,9 +1626,12 @@
          ========================== -->
     <header class="site-header">
       <div class="site-header-inner">
-        <div class="brand-lockup">
-          <div class="brand-name">CAVBOT</div>
-        </div>
+       <div class="brand-lockup">
+  <a href="index.html" class="brand-logo">
+    <img src="assets/cavbotwordmark.svg" alt="CavBot" class="brand-logo-img">
+  </a>
+</div>
+
         <nav class="nav-main">
           <div class="nav-links">
             <a href="product.html" class="nav-link">Product</a>
@@ -1663,7 +1667,6 @@
       <div class="nav-overlay-backdrop"></div>
       <div class="nav-overlay-panel">
         <div class="nav-overlay-header">
-          <div class="brand-name">CAVBOT</div>
           <button
             type="button"
             class="nav-overlay-close"
@@ -2444,7 +2447,7 @@
          ========================== -->
     <footer class="site-footer">
       <div class="footer-inner">
-        <div>© 2025 CavBot / CavCore. All rights reserved.</div>
+        <div>© 2025 CavBot · CavCore Console</div>
         <div class="footer-links">
           <a href="#" class="footer-link">Privacy Policy</a>
           <a href="#" class="footer-link">Terms of Use</a>
