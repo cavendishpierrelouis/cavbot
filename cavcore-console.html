@@ -9,11 +9,12 @@
   <!-- TYPEFACE (unified with index) -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+ <!-- CavCore header-footer styles -->
+   <link rel="stylesheet" href="header-footer.css" />
   <!-- Unified CavBot head + brain styles -->
   <link rel="stylesheet" href="cavbotcore/head.css"/>
   <!-- CavCore badge styles (same bundle as index, harmless even if unused here) -->
-  <link rel="stylesheet" href="cavcore/badge.css"/>
+  <link rel="stylesheet" href="cavbotcore/badge.css"/>
 
   <style>
     :root {
@@ -113,110 +114,6 @@
       gap: var(--space-xxl); /* unified with index so sections breathe the same */
     }
 
-    /* ==============================
-       HEADER / NAV (unified with index)
-       ============================== */
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      backdrop-filter: blur(18px);
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(10, 11, 30, 0.98),
-          rgba(3, 6, 22, 0.94)
-        );
-      border-bottom: 1px solid rgba(139, 92, 255, 0.35);
-    }
-
-    .site-header-inner {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
- .brand-lockup {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.brand-logo-img {
-  display: block;
-  height: 32px; /* 32–36px = that Apple / Google nav vibe */
-  width: auto;
-}
-
-    .nav-main {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-size: 12px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .nav-link {
-      position: relative;
-      padding-bottom: 2px;
-      color: var(--ink-soft);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-size: 11px;
-    }
-
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 1px;
-      background: var(--violet);
-      transition: width 0.18s ease-out;
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .nav-link--active {
-      color: var(--ink);
-    }
-
-    .nav-link--active::after {
-      width: 100%;
-    }
-
-    .nav-cta-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .nav-login {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-subtle);
-    }
-
-    .nav-login:hover {
-      color: var(--ink);
-    }
-
     .btn {
       border-radius: 999px;
       border: 1px solid transparent;
@@ -289,124 +186,6 @@
     .btn-pill:hover {
       border-color: rgba(185, 200, 90, 0.7);
       color: var(--ink);
-    }
-
-    /* ==============================
-       MOBILE NAV TOGGLE + OVERLAY
-       ============================== */
-
-    .nav-menu-toggle {
-      display: none; /* shown only on small screens */
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      padding: 4px;
-      margin-left: auto;
-    }
-
-    .nav-menu-icon {
-      display: grid;
-      grid-template-columns: repeat(3, 3px);
-      grid-auto-rows: 3px;
-      gap: 3px;
-    }
-
-    .nav-menu-icon span {
-      width: 3px;
-      height: 3px;
-      border-radius: 999px;
-      background: rgba(247, 251, 255, 0.9);
-    }
-
-    .nav-menu-toggle:focus-visible {
-      outline: 1px solid rgba(247,251,255,0.6);
-      outline-offset: 3px;
-    }
-
-    .nav-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      display: none;
-    }
-
-    .nav-overlay.is-open {
-      display: block;
-    }
-
-    .nav-overlay-backdrop {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at top, rgba(139,92,255,0.28), transparent 60%),
-        rgba(1,3,12,0.92);
-    }
-
-    .nav-overlay-panel {
-      position: relative;
-      margin: 32px auto;
-      max-width: 380px;
-      width: calc(100% - 48px);
-      max-height: 80vh;
-      overflow-y: auto;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background:
-        radial-gradient(circle at top left, rgba(185,200,90,0.18), transparent 60%),
-        rgba(3,6,20,0.98);
-      padding: 16px 18px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .nav-overlay-header {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-
-    .nav-overlay-close {
-      border: none;
-      background: transparent;
-      color: var(--ink-soft);
-      font-size: 20px;
-      cursor: pointer;
-      line-height: 1;
-    }
-
-    .nav-overlay-body {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      font-size: 13px;
-    }
-
-    .nav-overlay-link {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-soft);
-      font-size: 11px;
-    }
-
-    .nav-overlay-link--active {
-      color: var(--ink);
-    }
-
-    .nav-overlay-cta {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .nav-overlay-login {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-subtle);
     }
 
     /* ==============================
@@ -1480,39 +1259,6 @@
       font-size: 10px;
       color: var(--ink-subtle);
     }
-
-    /* ==============================
-       FOOTER (unified with index)
-       ============================== */
-
-    .site-footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 20px 20px 24px;
-      margin-top: var(--space-xxl);
-      font-size: 11px;
-      color: var(--ink-subtle);
-    }
-
-    .footer-inner {
-      max-width: 1160px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .footer-link {
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
     /* ==============================
        RESPONSIVE
        ============================== */
@@ -1520,15 +1266,6 @@
   @media (max-width: 960px) {
   .page-inner {
     padding-top: var(--space-lg);
-  }
-
-  /* Phones + tablets: hide text nav, show 3x3 icon */
-  .nav-main {
-    display: none;
-  }
-
-  .nav-menu-toggle {
-    display: block;
   }
 
   .console-top-row {
@@ -2445,16 +2182,67 @@
     <!-- ===========================
          FOOTER (unified)
          ========================== -->
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <div>© 2025 CavBot · CavCore Console</div>
-        <div class="footer-links">
-          <a href="#" class="footer-link">Privacy Policy</a>
-          <a href="#" class="footer-link">Terms of Use</a>
-          <a href="#" class="footer-link">Data &amp; Security</a>
-        </div>
+    <!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-grid">
+      <!-- RESOURCES -->
+      <section class="footer-column">
+        <h2 class="footer-column-title">Resources</h2>
+        <button class="footer-column-toggle" type="button">
+          <span>Resources</span>
+          <span class="footer-toggle-icon">▾</span>
+        </button>
+        <ul class="footer-column-list">
+          <li><a href="cavcore-console.html" class="footer-link">Dashboard</a></li>
+          <li><a href="mailto:support@cavbot.io" class="footer-link">Help Center</a></li>
+          <li><a href="https://cavendishpierrelouis.io/blog" class="footer-link">Founders Insight</a></li>
+        </ul>
+      </section>
+
+      <!-- COMPANY -->
+      <section class="footer-column">
+        <h2 class="footer-column-title">Company</h2>
+        <button class="footer-column-toggle" type="button">
+          <span>Company</span>
+          <span class="footer-toggle-icon">▾</span>
+        </button>
+        <ul class="footer-column-list">
+          <li><a href="about.html" class="footer-link">About</a></li>
+          <li><a href="#" class="footer-link">Code of Ethics</a></li>
+          <li><a href="#" class="footer-link">Careers</a></li>
+          <li><a href="#" class="footer-link">Media Kit</a></li>
+          <li><a href="#" class="footer-link">News &amp; Press</a></li>
+        </ul>
+      </section>
+
+      <!-- LEGAL -->
+      <section class="footer-column">
+        <h2 class="footer-column-title">Legal Notices</h2>
+        <button class="footer-column-toggle" type="button">
+          <span>Legal</span>
+          <span class="footer-toggle-icon">▾</span>
+        </button>
+        <ul class="footer-column-list">
+          <li><a href="#" class="footer-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer-link">Terms of Use</a></li>
+          <li><a href="#" class="footer-link">Data &amp; Security</a></li>
+        </ul>
+      </section>
+    </div>
+<br>
+<br>
+<br>
+<br>
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        &copy; 2025 CavBot · CavCore Console
       </div>
-    </footer>
+    </div>
+
+  </div>
+</footer>
   </div>
 <!-- Analytics bridge (window.cavbotAnalytics.track) -->
 <script src="/cavbotcore/cavbot-analytics.js"></script>
@@ -2541,6 +2329,19 @@
         }
       }, { passive: true });
     })();
+      // FOOTER ACCORDION (mobile)
+  (function () {
+    var toggles = document.querySelectorAll('.footer-column-toggle');
+    if (!toggles.length) return;
+
+    toggles.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var col = btn.closest('.footer-column');
+        if (!col) return;
+        col.classList.toggle('is-open');
+      });
+    });
+  })();
   </script>
 </body>
 </html>
