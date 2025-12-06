@@ -2,6 +2,7 @@
 (function () {
   "use strict";
 
+  // ---- CavBot API config ----
   const SUMMARY_URL = "https://api.cavbot.io/v1/projects/1/summary";
   const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
 
@@ -101,7 +102,7 @@
 
       const barSessions = document.createElement("div");
       barSessions.className = "trend-bar trend-bar--sessions";
-      const sessionsRatio = Math.max(0, Math.min(1, p.sessions / maxSessions));
+      const sessionsRatio = Math.max(0, Math.min(1, (p.sessions || 0) / maxSessions));
       const sessionsHeight = 25 + Math.round(sessionsRatio * 55); // 25–80%
       barSessions.style.height = sessionsHeight + "%";
 
@@ -141,6 +142,8 @@
     }
   }
 
+  // ---------- fetch + poll ----------
+
   function fetchSummary() {
     fetch(SUMMARY_URL, {
       method: "GET",
@@ -160,9 +163,16 @@
       });
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", fetchSummary);
-  } else {
+  function startConsole() {
+    // initial load
     fetchSummary();
+    // refresh every 60s so it never feels frozen
+    setInterval(fetchSummary, 60_000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startConsole);
+  } else {
+    startConsole();
   }
 })();
