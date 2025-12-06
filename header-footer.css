@@ -287,6 +287,11 @@
   color: var(--ink-subtle);
 }
 
+/* Lock page scroll when mobile nav is open */
+body.nav-open {
+  overflow: hidden;
+}
+
 /* ==============================
   FOOTER
   ============================== */
