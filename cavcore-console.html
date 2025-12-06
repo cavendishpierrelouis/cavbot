@@ -1,3 +1,6 @@
+Console 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -643,14 +646,16 @@
     .trend-bar {
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(139,92,255,0.8), rgba(139,92,255,0.2));
+      height: 0;
+      transform-origin: bottom;
+      transition: height 0.5s ease-out;
     }
 
     .trend-bar--404 {
-      height: 40%;
+      background: linear-gradient(180deg, rgba(139,92,255,0.9), rgba(139,92,255,0.2));
     }
 
     .trend-bar--sessions {
-      height: 65%;
       background: linear-gradient(180deg, rgba(185,200,90,0.9), rgba(185,200,90,0.2));
     }
 
@@ -1070,10 +1075,11 @@
     .campaign-bar-fill {
       position: absolute;
       inset: 0;
-      width: var(--percent, 50%);
+      width: 0;
       border-radius: inherit;
       background: linear-gradient(90deg, var(--violet), var(--lime));
       box-shadow: 0 0 18px rgba(139, 92, 255, 0.8);
+      transition: width 0.7s ease-out;
     }
 
     .campaign-footnote {
@@ -1249,10 +1255,11 @@
     .data-health-bar-fill {
       position: absolute;
       inset: 0;
-      width: var(--percent, 50%);
+      width: 0;
       border-radius: inherit;
       background: linear-gradient(90deg, var(--violet), var(--lime));
       box-shadow: 0 0 14px rgba(139, 92, 255, 0.7);
+      transition: width 0.7s ease-out;
     }
 
     .data-health-caption {
@@ -1569,7 +1576,7 @@
               <div class="console-filter-group">
                 <label for="filter-project" class="filter-label">Project</label>
                 <select id="filter-project" class="filter-select">
-                  <option>cavendishpierrelouis.com</option>
+                  <option selected>cavendishpierrelouis.com</option>
                   <option>mireliano.com</option>
                   <option>demo.cavbot.dev</option>
                 </select>
@@ -1622,7 +1629,7 @@
           <br>
           <div class="metric-grid" aria-label="Key summary metrics">
             <article class="metric-card">
-              <div class="metric-label">Total events</div>
+              <div class="metric-label">Total events (24h)</div>
               <div class="metric-value" data-metric="pageViews24h" data-format="number">284,930</div>
               <div class="metric-subtext">All components · last 24h.</div>
             </article>
@@ -1634,7 +1641,7 @@
             <article class="metric-card">
               <div class="metric-label">404 sessions</div>
               <div class="metric-value" data-metric="sessions40430d" data-format="number">1,042</div>
-              <div class="metric-subtext">Sessions containing 404-control-room events.</div>
+              <div class="metric-subtext">Events with cavbot_404_view in last 30 days.</div>
             </article>
             <article class="metric-card">
               <div class="metric-label">Badge interactions</div>
@@ -1645,14 +1652,14 @@
 
           <div class="trend-panel" aria-label="404 vs sessions trend">
             <div class="trend-header-row">
-              <div class="trend-title">30-day route &amp; 404 trend</div>
+              <div class="trend-title">7-day route &amp; 404 trend</div>
               <div class="trend-legend">
                 <span><span class="trend-dot trend-dot--sessions"></span> Sessions</span>
                 <span><span class="trend-dot trend-dot--404"></span> 404 views</span>
               </div>
             </div>
 
-            <!-- Trend chart is hydrated by cavcore-console.js using metrics.trend7d -->
+            <!-- Trend chart is hydrated by inline console script using metrics.trend7d -->
             <div class="trend-chart" id="trend-chart"></div>
 
             <p class="trend-footnote">
@@ -1775,19 +1782,19 @@
           <div class="seo-badges">
             <span class="seo-badge">
               Total pages ·
-              <span data-metric="totalPages" data-format="number">143</span>
+              <span data-metric="totalPages" data-format="integer">143</span>
             </span>
             <span class="seo-badge">
               Indexed pages ·
-              <span data-metric="indexedPages" data-format="number">127</span>
+              <span data-metric="indexedPages" data-format="integer">127</span>
             </span>
             <span class="seo-badge seo-badge--critical">
               Pages with critical SEO issues ·
-              <span data-metric="criticalSeoPages" data-format="number">9</span>
+              <span data-metric="criticalSeoPages" data-format="integer">9</span>
             </span>
             <span class="seo-badge">
               Pages with minor issues ·
-              <span data-metric="minorSeoPages" data-format="number">24</span>
+              <span data-metric="minorSeoPages" data-format="integer">24</span>
             </span>
           </div>
           <br>
@@ -2110,7 +2117,7 @@
           </ul>
           <br>
           <div class="data-health-metrics" aria-label="Data health meters">
-            <div class="data-health-metric" data-metric="piiRiskPercent" data-format="percent-bar" style="--percent:12%;">
+            <div class="data-health-metric" data-metric="piiRiskPercent" data-format="percent-bar">
               <div class="data-health-label">PII risk</div>
               <div class="data-health-bar-track">
                 <div class="data-health-bar-fill"></div>
@@ -2119,7 +2126,7 @@
                 Low — payload schema excludes names, emails, and raw IPs by design.
               </div>
             </div>
-            <div class="data-health-metric" data-metric="aggregationCoveragePercent" data-format="percent-bar" style="--percent:86%;">
+            <div class="data-health-metric" data-metric="aggregationCoveragePercent" data-format="percent-bar">
               <div class="data-health-label">Aggregation coverage</div>
               <div class="data-health-bar-track">
                 <div class="data-health-bar-fill"></div>
@@ -2128,7 +2135,7 @@
                 Most metrics come from <code>daily_page_aggregates</code> and <code>referrer_aggregates</code>, not raw events.
               </div>
             </div>
-            <div class="data-health-metric" data-metric="retentionHorizonPercent" data-format="percent-bar" style="--percent:64%;">
+            <div class="data-health-metric" data-metric="retentionHorizonPercent" data-format="percent-bar">
               <div class="data-health-label">Retention horizon</div>
               <div class="data-health-bar-track">
                 <div class="data-health-bar-fill"></div>
@@ -2218,7 +2225,202 @@
   <script src="cavbotcore/cavbotbrain.js" defer></script>
   <!-- CavBot header-footer + nav toggle -->
   <script src="headerfooter.js"></script>
-  <!-- CavCore Console live metrics -->
-  <script src="cavcore-console.js" defer></script>
+
+  <!-- CavCore Console live metrics (inline, calls api.cavbot.io directly) -->
+  <script>
+    (function () {
+      "use strict";
+
+      const SUMMARY_URL = "https://api.cavbot.io/v1/projects/1/summary";
+      const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
+
+      function formatNumber(value) {
+        if (value == null || isNaN(value)) return "—";
+        return Number(value).toLocaleString();
+      }
+
+      function formatInteger(value) {
+        if (value == null || isNaN(value)) return "—";
+        return String(Math.round(Number(value)));
+      }
+
+      function formatPercent(value) {
+        if (value == null || isNaN(value)) return "—";
+        const num = Number(value);
+        if (num % 1 === 0) {
+          return num.toFixed(0) + "%";
+        }
+        return num.toFixed(1) + "%";
+      }
+
+      function formatMs(value) {
+        if (value == null || isNaN(value)) return "—";
+        const num = Number(value);
+        return Math.round(num).toLocaleString() + " ms";
+      }
+
+      function applyMetricToElement(el, key, value, format) {
+        if (value == null || isNaN(value)) return;
+        if (format === "percent-bar") return;
+
+        let text;
+        switch (format) {
+          case "percent":
+            text = formatPercent(value);
+            break;
+          case "ms":
+            text = formatMs(value);
+            break;
+          case "integer":
+            text = formatInteger(value);
+            break;
+          case "number":
+          default:
+            text = formatNumber(value);
+            break;
+        }
+
+        el.textContent = text;
+      }
+
+      function hydrateSimpleMetrics(metrics) {
+        const nodes = document.querySelectorAll("[data-metric]");
+        nodes.forEach((el) => {
+          const key = el.getAttribute("data-metric");
+          const format = el.getAttribute("data-format") || "number";
+          if (!key || !(key in metrics)) return;
+          if (format === "percent-bar") return;
+          applyMetricToElement(el, key, metrics[key], format);
+        });
+      }
+
+      function hydratePercentBars(metrics) {
+        const bars = document.querySelectorAll('[data-format="percent-bar"]');
+        bars.forEach((wrap) => {
+          const key = wrap.getAttribute("data-metric");
+          if (!key || !(key in metrics)) return;
+          const raw = Number(metrics[key]);
+          if (isNaN(raw)) return;
+          const percent = Math.max(0, Math.min(100, raw));
+
+          const fill = wrap.querySelector(".data-health-bar-fill");
+          if (!fill) return;
+
+          requestAnimationFrame(() => {
+            fill.style.width = percent + "%";
+          });
+        });
+      }
+
+      function hydrateCampaignBars() {
+        const rows = document.querySelectorAll(".campaign-row");
+        rows.forEach((row, idx) => {
+          const fill = row.querySelector(".campaign-bar-fill");
+          if (!fill) return;
+          const style = row.getAttribute("style") || "";
+          const match = style.match(/--percent:\s*([0-9.]+)%/);
+          let target = 50;
+          if (match) {
+            target = parseFloat(match[1]);
+          }
+          fill.style.width = "0%";
+          const delay = 80 * idx;
+          setTimeout(() => {
+            fill.style.width = target + "%";
+          }, delay);
+        });
+      }
+
+      function buildTrendChart(trend7d) {
+        const chart = document.getElementById("trend-chart");
+        if (!chart || !Array.isArray(trend7d) || trend7d.length === 0) {
+          return;
+        }
+
+        chart.innerHTML = "";
+
+        let maxSessions = 0;
+        let max404 = 0;
+
+        trend7d.forEach((p) => {
+          if (p.sessions && p.sessions > maxSessions) maxSessions = p.sessions;
+          if (p.views404 && p.views404 > max404) max404 = p.views404;
+        });
+
+        const overallMax = Math.max(maxSessions, max404, 1);
+
+        trend7d.forEach((point) => {
+          const group = document.createElement("div");
+          group.className = "trend-bar-group";
+
+          const barSessions = document.createElement("div");
+          barSessions.className = "trend-bar trend-bar--sessions";
+
+          const bar404 = document.createElement("div");
+          bar404.className = "trend-bar trend-bar--404";
+
+          const label = document.createElement("div");
+          label.className = "trend-day-label";
+
+          if (point.day && typeof point.day === "string" && point.day.length >= 10) {
+            label.textContent = point.day.slice(5); // "MM-DD"
+          } else {
+            label.textContent = "—";
+          }
+
+          group.appendChild(barSessions);
+          group.appendChild(bar404);
+          group.appendChild(label);
+          chart.appendChild(group);
+
+          const sessionsHeight = overallMax > 0 ? (Number(point.sessions) || 0) / overallMax * 100 : 0;
+          const viewsHeight = overallMax > 0 ? (Number(point.views404) || 0) / overallMax * 100 : 0;
+
+          requestAnimationFrame(() => {
+            barSessions.style.height = sessionsHeight + "%";
+            bar404.style.height = viewsHeight + "%";
+          });
+        });
+      }
+
+      async function fetchMetrics() {
+        const res = await fetch(SUMMARY_URL, {
+          method: "GET",
+          headers: {
+            "X-Project-Key": PROJECT_KEY
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to load console metrics: " + res.status);
+        }
+
+        return res.json();
+      }
+
+      async function initConsole() {
+        try {
+          const payload = await fetchMetrics();
+          if (!payload || !payload.metrics) return;
+
+          const metrics = payload.metrics;
+
+          hydrateSimpleMetrics(metrics);
+          hydratePercentBars(metrics);
+          buildTrendChart(metrics.trend7d || []);
+          hydrateCampaignBars();
+        } catch (err) {
+          console.error("[CavCore Console] Metrics load failed:", err);
+          // Leave static demo defaults in place on failure.
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initConsole);
+      } else {
+        initConsole();
+      }
+    })();
+  </script>
 </body>
 </html>
