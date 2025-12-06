@@ -2,19 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CavCore Console — CavBot Analytics Dashboard</title>
+  <title>CavBot · Reliability Copilot & Analytics Control-Plane</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="CavCore Console is CavBot’s analytics brain — mapping 404s, routes, SEO, referrers, and runtime feel for every project under guard." />
+  <meta name="description" content="CavBot is a reliability copilot and control-plane for modern SaaS teams — built on CavBot Analytics v5 and CavCore Console to turn routes, 404s, SEO, and runtime feel into a structured, monitored system." />
   <meta name="robots" content="noindex, nofollow">
-  <!-- TYPEFACE (unified with index) -->
+
+  <!-- TYPEFACE -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
  <!-- CavCore header-footer styles -->
    <link rel="stylesheet" href="header-footer.css" />
   <!-- Unified CavBot head + brain styles -->
   <link rel="stylesheet" href="cavbotcore/head.css"/>
-  <!-- CavCore badge styles (same bundle as index, harmless even if unused here) -->
+  <!-- CavCore badge styles -->
   <link rel="stylesheet" href="cavbotcore/badge.css"/>
+ 
 
   <style>
     :root {
@@ -87,6 +89,15 @@
       animation: pageFadeIn 340ms ease-out forwards;
     }
 
+    .page-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: var(--space-xl) 20px var(--space-xxl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xxl);
+    }
+
     @keyframes pageFadeIn {
       0% {
         opacity: 0;
@@ -105,92 +116,14 @@
       }
     }
 
-    .page-inner {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: var(--space-xl) 20px var(--space-xxl);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-xxl); /* unified with index so sections breathe the same */
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: 1px solid transparent;
-      padding: 8px 18px;
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: transparent;
-      color: var(--ink);
-      transition:
-        background 0.16s ease-out,
-        border-color 0.16s ease-out,
-        transform 0.1s ease-out,
-        box-shadow 0.16s ease-out;
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background:
-        radial-gradient(circle at top left, var(--lime-soft-strong), transparent 55%),
-        linear-gradient(135deg, #f7ffe1 0%, #dde98b 28%, var(--lime) 100%);
-      color: #050509;
-      border-color: rgba(0, 0, 0, 0.85);
-      box-shadow:
-        0 12px 28px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(255, 255, 255, 0.04);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 16px 36px rgba(0, 0, 0, 0.8),
-        0 0 0 1px rgba(255, 255, 255, 0.08);
-    }
-
-    .btn-ghost {
-      border-color: rgba(185, 200, 90, 0.55);
-      background:
-        radial-gradient(circle at top left, var(--lime-soft), transparent 60%)
-        rgba(3, 7, 22, 0.98);
-      color: var(--ink-soft);
-    }
-
-    .btn-ghost:hover {
-      border-color: rgba(139, 92, 255, 0.65);
-      background:
-        radial-gradient(circle at top left, var(--violet-soft), transparent 60%)
-        rgba(5, 8, 26, 0.98);
-    }
-
-    .btn-pill {
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 5px 10px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-subtle);
-      background:
-        radial-gradient(circle at top left, rgba(139, 92, 255, 0.16), transparent 60%)
-        rgba(3, 6, 20, 0.98);
-    }
-
-    .btn-pill:hover {
-      border-color: rgba(185, 200, 90, 0.7);
-      color: var(--ink);
-    }
-
     /* ==============================
-       SHARED SECTION / PANEL
+       SHARED PANEL STYLES
        ============================== */
+
+    .section {
+      width: 100%;
+      padding-top: var(--space-xxl);
+    }
 
     .section-header {
       margin-bottom: var(--space-md);
@@ -210,16 +143,17 @@
     .section-title {
       margin: 0;
       font-family: var(--font-display);
-      font-size: 22px; /* match index */
+      font-size: 22px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--ink);
     }
 
     .section-body {
-      font-size: 14px; /* match index */
+      font-size: 14px;
       color: var(--ink-soft);
       line-height: 1.8;
+      max-width: 46rem;
       margin: 0;
     }
 
@@ -232,1113 +166,1602 @@
     }
 
     .panel-tight {
-      padding: 18px 20px;
+      padding: 20px 22px;
     }
 
     .panel-roomy {
       padding: 24px 26px;
     }
 
+    .code-block {
+      margin: 10px 0 4px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(1, 3, 15, 0.96);
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.7;
+      overflow-x: auto;
+      color: var(--ink);
+    }
+
+    .code-inline {
+      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(1, 3, 15, 0.9);
+      border-radius: 4px;
+      padding: 0 4px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
     /* ==============================
-       CONSOLE HERO / TOP ROW
+       HERO LAYOUT
        ============================== */
 
-    .console-shell {
-      display: grid;
-      gap: var(--space-lg);
-    }
-
-    .console-top-row {
+    .hero {
+      padding-top: var(--space-xxl);
+      padding-bottom: var(--space-xl);
       display: grid;
       grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
-      gap: var(--space-md);
-      align-items: stretch;
+      gap: var(--space-lg);
+      align-items: center;
     }
 
-    .console-hero-copy {
+    .hero-copy-block {
       display: grid;
-      gap: 12px;
+      gap: 22px;
       align-content: flex-start;
     }
 
-    .console-hero-kicker {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--ink-subtle);
-    }
-
-    .console-hero-title {
+    .hero-title {
       margin: 0;
       font-family: var(--font-display);
-      font-size: 22px;
-      letter-spacing: 0.18em;
+      font-size: 32px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink);
     }
 
-    .console-hero-subtitle {
-      font-size: 14px;
+    .hero-lede {
+      font-size: 15px;
       color: var(--ink-soft);
-      line-height: 1.8;
-      max-width: 38rem;
+      max-width: 36rem;
+      line-height: 1.9;
+      margin: 0;
     }
 
-    .console-hero-meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 11px;
-      color: var(--ink-subtle);
-      margin-top: 6px;
-    }
-
-    .console-filter-row {
+    .hero-cta-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 4px;
     }
 
-    .console-filter-chip {
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.16);
-      padding: 6px 12px;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-subtle);
-      background:
-        radial-gradient(circle at top left, rgba(185, 200, 90, 0.14), transparent 60%)
-        rgba(3,7,20,0.98);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .console-filter-chip strong {
-      color: var(--ink);
-      font-weight: 500;
-    }
-
-    .console-hero-panel {
+    /* === Hero CavBot panel (robot + live metrics) === */
+    .hero-robot-panel {
       border-radius: var(--panel-radius-lg);
       border: 1px solid var(--violet-border-soft);
       background:
         radial-gradient(circle at top, rgba(139, 92, 255, 0.25), transparent 58%),
         linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
-      padding: 18px 18px 16px;
+      padding: 22px 20px 20px;
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
-    .console-hero-panel-top {
+    .hero-robot-header {
       display: flex;
       justify-content: space-between;
+      gap: 10px;
       align-items: baseline;
-      gap: 12px;
-      font-size: 9px;
+      min-height: 12px;
+    }
+
+    .hero-robot-title {
+      font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ink-subtle);
     }
 
-    .console-hero-live {
+    .aaero-robot-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 9px;
-      letter-spacing: 0.18em;
+      font-size: 10px;
       text-transform: uppercase;
+      letter-spacing: 0.16em;
       color: var(--lime);
     }
 
-    .console-live-dot {
+    .hero-robot-live-dot {
       width: 7px;
       height: 7px;
       border-radius: 999px;
       background: var(--lime);
       box-shadow: 0 0 10px rgba(185, 200, 90, 0.9);
-      animation: consoleLivePulse 1.6s ease-in-out infinite;
+      animation: heroLivePulse 1.6s ease-in-out infinite;
     }
 
-    @keyframes consoleLivePulse {
+    @keyframes heroLivePulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50%      { transform: scale(1.4); opacity: 0.6; }
     }
 
-    .console-hero-main {
+    .hero-robot-shell {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background:
+        radial-gradient(circle at top, rgba(139, 92, 255, 0.22), transparent 60%),
+        linear-gradient(160deg, #05091a 0, #01030e 100%);
+      padding: 18px 16px 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-robot-main {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr);
       gap: 18px;
       align-items: center;
     }
 
-    .console-hero-bot-wrap {
+    .hero-robot-avatar-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 4px;
     }
 
-    .console-hero-bot-wrap [data-cavbot-head] {
-      transform: scale(0.9);
+    .hero-robot-avatar-wrap [data-cavbot-head] {
+      transform: scale(0.92);
       transform-origin: center;
     }
 
-    .console-hero-metrics {
+    .hero-robot-metrics {
       display: grid;
-      gap: 8px;
+      gap: 10px;
       font-size: 11px;
+      color: var(--ink-soft);
     }
 
-    .console-hero-metrics-label {
+    .hero-robot-metrics-label {
       font-size: 10px;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ink-subtle);
     }
 
-    .console-hero-metrics-grid {
+    .hero-robot-metrics-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 10px;
     }
 
-    .console-hero-metric {
+    .hero-metric {
       border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.14);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       background:
-        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%)
-        rgba(3,7,20,0.98);
-      padding: 7px 9px;
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%),
+        rgba(3, 6, 18, 0.96);
+      padding: 8px 9px;
       display: grid;
-      gap: 2px;
+      gap: 3px;
     }
 
-    .console-hero-metric-label {
+    .hero-metric-label {
       font-size: 9px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ink-subtle);
     }
 
-    .console-hero-metric-value {
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    .hero-metric-value {
+      font-family: var(--font-mono, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
       font-size: 13px;
       color: var(--ink);
     }
 
-    .console-hero-metric-footnote {
-      font-size: 10px;
-      color: var(--ink-subtle);
+    .hero-robot-primary-role {
+      font-size: 11px;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 8px;
+      margin-top: 4px;
     }
 
     /* ==============================
-       FILTERS PANEL
+       BRAIN EVOLUTION MUSEUM STRIP
        ============================== */
 
-    .console-filters-panel {
-      margin-top: -6px;
+    .brain-museum {
+      margin-top: var(--space-xxl);
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--violet-border-soft);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.18), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 26px 24px 22px;
+      display: grid;
+      gap: 20px;
     }
 
-    .console-filters-panel-inner {
+    .brain-header {
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.6fr);
-      gap: 16px;
-      align-items: center;
+      gap: 8px;
+      max-width: 44rem;
     }
 
-    .console-filters-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .console-filter-group {
-      display: grid;
-      gap: 4px;
+    .brain-label {
       font-size: 11px;
-    }
-
-    .filter-label {
-      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.2em;
       color: var(--ink-subtle);
     }
 
-    .filter-select {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      padding: 6px 10px;
-      font-size: 11px;
-      font-family: var(--font-sans);
-      background:
-        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%)
-        rgba(3,6,20,0.98);
-      color: var(--ink-soft);
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-image:
-        linear-gradient(45deg, rgba(255,255,255,0.8) 0, rgba(255,255,255,0.8) 0),
-        linear-gradient(135deg, rgba(255,255,255,0.8) 0, rgba(255,255,255,0.8) 0);
-      background-position:
-        calc(100% - 16px) 50%,
-        calc(100% - 12px) 50%;
-      background-size: 5px 5px, 5px 5px;
-      background-repeat: no-repeat;
-      padding-right: 28px;
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: rgba(185,200,90,0.9);
-      box-shadow: 0 0 0 1px rgba(185,200,90,0.4);
+    .brain-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
       color: var(--ink);
     }
 
-    .filter-toggle-row {
-      margin-top: 8px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
+    .brain-copy {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      margin: 0;
     }
 
-    .filter-toggle-label {
+    .brain-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .brain-card {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(139, 92, 255, 0.55);
+      background:
+        radial-gradient(circle at top, rgba(139, 92, 255, 0.18), transparent 65%),
+        rgba(3, 7, 24, 0.98);
+      padding: 14px 12px 12px;
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .brain-gen {
       font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-subtle);
-      margin-right: 4px;
+      letter-spacing: 0.2em;
+      color: var(--lime);
+    }
+
+    .brain-era {
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .brain-text {
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      margin: 0;
     }
 
     /* ==============================
-       OVERVIEW METRICS + TREND
+       PATH / FAULT / FEEL MUSEUM
        ============================== */
 
-    .console-overview {
+    .pff-museum {
+      margin-top: var(--space-xxl);
+    }
+
+    .pff-grid {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: var(--space-md);
-      align-items: flex-start;
     }
 
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: var(--space-sm);
-    }
-
-    .metric-card {
-      border-radius: var(--panel-radius-md);
-      border: 1px solid rgba(255,255,255,0.14);
+    .pff-card {
+      position: relative;
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       background:
-        radial-gradient(circle at top left, rgba(185, 200, 90, 0.14), transparent 60%)
-        rgba(3,7,20,0.98);
-      padding: 12px 12px 10px;
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(139, 92, 255, 0.22), transparent 60%),
+        rgba(3, 6, 20, 0.98);
+      padding: 20px 18px 18px;
       display: grid;
-      gap: 4px;
-      font-size: 11px;
+      gap: 12px;
+      overflow: hidden;
     }
 
-    .metric-label {
-      font-size: 9px;
+    .pff-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        radial-gradient(circle at top, rgba(185, 200, 90, 0.18), transparent 60%),
+        radial-gradient(circle at bottom, rgba(139, 92, 255, 0.22), transparent 65%);
+      opacity: 0.22;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .pff-card-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 12px;
+    }
+
+    .pff-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .pff-mode-label {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pff-mode-label::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--lime), var(--violet));
+      box-shadow: 0 0 10px rgba(185, 200, 90, 0.9);
+    }
+
+    .pff-mode-tag {
+      font-size: 10px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ink-subtle);
+      white-space: nowrap;
     }
 
-    .metric-value {
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    .pff-card-title {
+      margin: 0;
+      font-family: var(--font-display);
       font-size: 15px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: var(--ink);
     }
 
-    .metric-subtext {
-      font-size: 10px;
-      color: var(--ink-subtle);
+    .pff-card-body {
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      margin: 0;
     }
 
-    .trend-panel {
+    .pff-glyph {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pff-glyph::before,
+    .pff-glyph::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+    }
+
+    .pff-card--path .pff-glyph::before {
+      width: 70%;
+      height: 2px;
+      background: var(--lime);
+      top: 40%;
+      left: 15%;
+    }
+
+    .pff-card--path .pff-glyph::after {
+      width: 8px;
+      height: 8px;
+      border: 2px solid var(--lime);
+      right: 14%;
+      bottom: 18%;
+    }
+
+    .pff-card--fault .pff-glyph::before {
+      width: 0;
+      height: 0;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+      border-bottom: 14px solid var(--violet);
+    }
+
+    .pff-card--fault .pff-glyph::after {
+      width: 2px;
+      height: 9px;
+      background: rgba(0, 0, 0, 0.9);
+      top: 47%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .pff-card--feel .pff-glyph::before {
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--lime));
+      top: 45%;
+      left: 10%;
+    }
+
+    .pff-card--feel .pff-glyph::after {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid var(--blue);
+      right: 16%;
+      bottom: 20%;
+    }
+
+    .pff-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .pff-chip {
+      border-radius: 999px;
+      padding: 5px 12px;
+      border: 1px solid rgba(185, 200, 90, 0.75);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background:
+        radial-gradient(circle at top left, var(--lime-soft), transparent 60%)
+        rgba(3, 8, 18, 0.98);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pff-chip::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(185, 200, 90, 0.9);
+      box-shadow: 0 0 8px rgba(185, 200, 90, 0.9);
+    }
+
+    /* ==============================
+       SYSTEM ROLE / ARCHITECTURE
+       ============================== */
+
+    .system-role {
+      margin-top: var(--space-xxl);
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: var(--space-md);
+      align-items: stretch;
+    }
+
+    .system-left,
+    .system-right {
       border-radius: var(--panel-radius-lg);
       border: 1px solid var(--border-subtle);
       background:
         radial-gradient(circle at top left, rgba(139, 92, 255, 0.18), transparent 60%),
         linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
-      padding: 16px 18px 14px;
+      padding: 22px 22px 20px;
       display: grid;
-      gap: 10px;
+      gap: 14px;
     }
 
-    .trend-header-row {
+    .system-left-copy {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      max-width: 32rem;
+      margin: 0;
+    }
+
+    .system-pill-row {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
     }
 
-    .trend-title {
-      font-size: 11px;
+    .system-pill {
+      border-radius: 999px;
+      padding: 6px 14px;
+      border: 1px solid rgba(185, 200, 90, 0.75);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background:
+        radial-gradient(circle at top left, var(--lime-soft), transparent 60%)
+        rgba(3, 8, 18, 0.96);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .system-right {
+      position: relative;
+      overflow: hidden;
+      align-content: flex-start;
+    }
+
+    .system-right::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at center, rgba(139, 92, 255, 0.18), transparent 60%);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .spec-stack {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      z-index: 1;
+    }
+
+    .spec-row-label {
+      font-size: 10px;
       letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 4px;
+    }
+
+    .spec-row-body {
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* ==============================
+       ANALYTICS / EVENT MODEL
+       ============================== */
+
+    .analytics-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .analytics-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.3fr);
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .analytics-left {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+
+    .analytics-right {
+      display: grid;
+      gap: 18px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .analytics-pill-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+      margin-bottom: 4px;
+    }
+
+    .analytics-list,
+    .analytics-list-plain {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .analytics-list li,
+    .analytics-list-plain li {
+      margin-bottom: 4px;
+    }
+
+    .analytics-list-plain {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .analytics-list-plain li + li {
+      margin-top: 3px;
+    }
+
+    .analytics-graphs {
+      margin-top: 4px;
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        radial-gradient(circle at top left, rgba(185, 200, 90, 0.18), transparent 60%),
+        rgba(3, 7, 20, 0.98);
+      padding: 14px 14px 12px;
+      display: grid;
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .analytics-graphs-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--ink-subtle);
     }
 
-    .trend-legend {
-      display: flex;
-      gap: 10px;
-      font-size: 10px;
-      color: var(--ink-subtle);
-    }
-
-    .trend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-
-    .trend-dot--404 {
-      background: var(--violet);
-    }
-
-    .trend-dot--sessions {
-      background: var(--lime);
-    }
-
-    .trend-chart {
-      height: 120px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(1,3,12,0.9)),
-        repeating-linear-gradient(
-          to right,
-          rgba(255,255,255,0.05) 0,
-          rgba(255,255,255,0.05) 1px,
-          transparent 1px,
-          transparent 24px
-        );
-      padding: 8px 10px;
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      overflow: hidden;
-    }
-
-    .trend-bar-group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 2px;
+    .analytics-graphs-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.1fr);
+      gap: 16px;
       align-items: stretch;
     }
 
-    .trend-bar {
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(139,92,255,0.8), rgba(139,92,255,0.2));
-    }
-
-    .trend-bar--404 {
-      height: 40%;
-    }
-
-    .trend-bar--sessions {
-      height: 65%;
-      background: linear-gradient(180deg, rgba(185,200,90,0.9), rgba(185,200,90,0.2));
-    }
-
-    .trend-day-label {
-      font-size: 9px;
-      color: var(--ink-subtle);
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    .trend-footnote {
-      font-size: 10px;
-      color: var(--ink-subtle);
-      margin-top: 4px;
-    }
-
-    /* ==============================
-       RIGHT: 404 SUMMARY + GUARDIAN HEALTH
-       ============================== */
-
-    .panel-subtitle {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--ink-subtle);
-      margin-bottom: 6px;
-    }
-
-    .key-stat-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .key-stat {
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background:
-        radial-gradient(circle at top left, rgba(185,200,90,0.14), transparent 60%),
-        rgba(3,7,20,0.98);
-      padding: 10px 11px;
-      display: grid;
-      gap: 4px;
-      font-size: 11px;
-    }
-
-    .key-stat-label {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-subtle);
-    }
-
-    .key-stat-value {
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-      color: var(--ink);
-    }
-
-    .key-stat-note {
-      font-size: 10px;
-      color: var(--ink-subtle);
-    }
-
-    /* Guardian health card inside the 404 panel */
-    .guardian-health-card {
-      margin-top: 18px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background:
-        radial-gradient(circle at top left, rgba(139,92,255,0.2), transparent 60%),
-        radial-gradient(circle at bottom right, rgba(185,200,90,0.16), transparent 60%),
-        rgba(3,7,22,0.98);
-      padding: 14px 16px 12px;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: 16px;
-      align-items: center;
-    }
-
-    .guardian-score-shell {
-      padding: 4px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at top, rgba(139,92,255,0.45), transparent 65%);
-    }
-
-    .guardian-score-ring {
-      border-radius: 999px;
-      padding: 4px;
-      background:
-        conic-gradient(from 230deg, var(--violet), var(--lime), var(--violet));
-      box-shadow:
-        0 0 18px rgba(139,92,255,0.7),
-        0 0 22px rgba(2,4,18,0.9);
-    }
-
-    .guardian-score-bubble {
-      width: 96px;
-      height: 96px;
-      border-radius: 999px;
-      border: 1px solid rgba(247,251,255,0.16);
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 55%),
-        repeating-linear-gradient(
-          to right,
-          rgba(255,255,255,0.06) 0,
-          rgba(255,255,255,0.06) 1px,
-          transparent 1px,
-          transparent 6px
-        ),
-        rgba(1,3,14,0.98);
+    .analytics-graph-donut {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .analytics-graph-donut-ring {
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at center, rgba(1,3,12,0.9) 38%, transparent 40%),
+        conic-gradient(
+          var(--lime) 0deg 240deg,
+          rgba(255,255,255,0.12) 240deg 360deg
+        );
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      box-shadow:
-        inset 0 0 18px rgba(139,92,255,0.55);
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      text-align: center;
     }
 
-    .guardian-score-label {
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--ink-subtle);
-    }
-
-    .guardian-score-value {
-      font-size: 28px;
-      color: var(--ink);
-      line-height: 1.1;
-    }
-
-    .guardian-score-scale {
-      font-size: 10px;
-      color: var(--ink-subtle);
-    }
-
-    .guardian-health-body {
-      display: grid;
-      gap: 8px;
-    }
-
-    .guardian-pill-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .guardian-pill {
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      padding: 8px 9px;
-      font-size: 11px;
-      display: grid;
-      gap: 2px;
-      background:
-        radial-gradient(circle at top left, rgba(139,92,255,0.14), transparent 60%)
-        rgba(3,7,20,0.98);
-    }
-
-    .guardian-pill--strong {
-      border-color: rgba(185,200,90,0.75);
-      box-shadow: 0 0 12px rgba(185,200,90,0.35);
-    }
-
-    .guardian-pill-label {
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-subtle);
-    }
-
-    .guardian-pill-value {
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-      color: var(--ink);
-    }
-
-    .guardian-pill-note {
-      font-size: 10px;
-      color: var(--ink-subtle);
-    }
-
-    .guardian-health-copy {
-      font-size: 11px;
-      color: var(--ink-subtle);
-      margin: 4px 0 0;
-    }
-
-    /* ==============================
-       SEO / PERFORMANCE / STRUCTURE STRIP
-       ============================== */
-
-    .console-middle-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) minmax(0, 1.1fr);
-      gap: var(--space-md);
-      align-items: flex-start;
-    }
-
-    .seo-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-      margin-bottom: 6px;
-    }
-
-    .seo-badge {
+    .analytics-graph-donut-center {
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.18);
-      color: var(--ink-soft);
-      background:
-        radial-gradient(circle at top left, rgba(139,92,255,0.14), transparent 60%)
-        rgba(3,7,20,0.98);
-    }
-
-    .seo-badge--critical {
-      border-color: rgba(255, 115, 115, 0.9);
-      color: #ffd1d1;
-    }
-
-    .mini-list {
-      margin: 0;
-      padding-left: 16px;
-      font-size: 11px;
-      color: var(--ink-soft);
-      display: grid;
-      gap: 4px;
-    }
-
-    .perf-metric-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .perf-pill {
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.18);
-      padding: 8px 10px;
-      font-size: 11px;
-      display: grid;
-      gap: 3px;
-      background:
-        radial-gradient(circle at top left, rgba(78,168,255,0.2), transparent 60%)
-        rgba(3,7,22,0.98);
-    }
-
-    .perf-label {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-subtle);
-    }
-
-    .perf-value {
-      font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-      color: var(--ink);
-    }
-
-    .perf-status {
-      font-size: 10px;
-      color: var(--ink-subtle);
-    }
-
-    .structure-pill-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .structure-pill {
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background:
-        radial-gradient(circle at top left, rgba(185,200,90,0.16), transparent 60%)
-        rgba(3,7,20,0.98);
-      padding: 8px 9px;
-      font-size: 11px;
-      display: grid;
-      gap: 3px;
-    }
-
-    /* ==============================
-       REFERRERS / CAMPAIGNS & INSIGHTS
-       ============================== */
-
-    .console-bottom-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.3fr);
-      gap: var(--space-md);
-      align-items: flex-start;
-    }
-
-    .ref-table {
-      margin-top: 8px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background:
-        radial-gradient(circle at top left, rgba(139, 92, 255, 0.16), transparent 60%),
-        rgba(3,7,20,0.98);
-      overflow: hidden;
-      font-size: 11px;
-    }
-
-    .ref-table-header,
-    .ref-table-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) 0.9fr 0.9fr 0.8fr;
-      gap: 10px;
-      padding: 7px 11px;
+      background: rgba(0,0,0,0.9);
+      display: flex;
       align-items: center;
-    }
-
-    .ref-table-header {
-      background: rgba(1,5,20,0.9);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 9px;
-      color: var(--ink-subtle);
-    }
-
-    .ref-table-row:nth-child(odd) {
-      background: rgba(255,255,255,0.02);
-    }
-
-    .ref-domain {
-      font-size: 11px;
-      color: var(--ink-soft);
-    }
-
-    .ref-rate-bad {
-      color: #ffd1d1;
-    }
-
-    .ref-rate-ok {
-      color: var(--lime);
-    }
-
-    .campaign-graph {
-      margin-top: 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background:
-        radial-gradient(circle at top left, rgba(78,168,255,0.2), transparent 60%),
-        rgba(3,7,22,0.98);
-      padding: 12px 14px 12px;
-      display: grid;
-      gap: 10px;
-      font-size: 11px;
-    }
-
-    .campaign-graph-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .campaign-graph-title {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--ink-subtle);
-    }
-
-    .campaign-graph-window {
-      font-size: 10px;
-      color: var(--ink-subtle);
-    }
-
-    .campaign-row {
-      display: grid;
-      gap: 4px;
-    }
-
-    .campaign-row-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .campaign-name {
-      font-size: 11px;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
       color: var(--ink);
     }
 
-    .campaign-meta {
+    .analytics-graph-donut-caption {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .analytics-graph-bars {
+      display: grid;
+      gap: 6px;
+    }
+
+    .analytics-bar-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
       font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: var(--ink-subtle);
-      text-align: right;
+    }
+
+    .analytics-bar-label {
       white-space: nowrap;
     }
 
-    .campaign-bar-track {
-      position: relative;
+    .analytics-bar-track {
       height: 6px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
       overflow: hidden;
     }
 
-    .campaign-bar-fill {
-      position: absolute;
-      inset: 0;
-      width: var(--percent, 50%);
+    .analytics-bar-fill {
+      height: 100%;
+      width: var(--percent);
       border-radius: inherit;
       background: linear-gradient(90deg, var(--violet), var(--lime));
-      box-shadow: 0 0 18px rgba(139, 92, 255, 0.8);
+      box-shadow: 0 0 10px rgba(139,92,255,0.7);
     }
 
-    .campaign-footnote {
+    .analytics-bar-value {
       font-size: 10px;
+      color: var(--ink-soft);
+    }
+
+    /* ==============================
+       SEO & STRUCTURE
+       ============================== */
+
+    .seo-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 255, 0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .seo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .seo-card {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        radial-gradient(circle at top, rgba(185,200,90,0.16), transparent 60%),
+        rgba(3, 7, 20, 0.98);
+      padding: 14px 14px 12px;
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .seo-title {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .seo-body {
+      margin: 0;
+    }
+
+    .seo-metrics {
+      margin-top: 8px;
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.16), transparent 60%),
+        rgba(3, 6, 20, 0.98);
+      padding: 16px 16px 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .seo-metrics-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: var(--ink-subtle);
     }
 
-    .insights-list {
+    .seo-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .seo-metric-card {
+      border-radius: var(--panel-radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background:
+        radial-gradient(circle at top, rgba(185,200,90,0.14), transparent 60%),
+        rgba(1, 3, 15, 0.98);
+      padding: 10px 11px 10px;
+      display: grid;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .seo-metric-label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .seo-metric-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .seo-metric-bar-track {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+
+    .seo-metric-bar-fill {
+      height: 100%;
+      width: var(--percent);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--violet), var(--lime));
+    }
+
+    .seo-metric-caption {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    /* ==============================
+       PRICING + DOCS
+       ============================== */
+
+    .pricing-docs {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .pricing-card,
+    .docs-card {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 22px 22px 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .pricing-title {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .pricing-headline {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .pricing-note {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+
+    .pricing-meta {
       margin-top: 8px;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--ink-subtle);
+    }
+
+    .docs-title {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .badge-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 12px;
+      border: 1px solid rgba(185,200,90,0.75);
+      background:
+        radial-gradient(circle at top left, var(--lime-soft), transparent 60%)
+        rgba(3, 8, 18, 0.98);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .docs-list {
+      margin: 10px 0 0;
+      padding-left: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .docs-item-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    /* ==============================
+       WHY CAVBOT MATTERS
+       ============================== */
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .why-card {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(185,200,90,0.16), transparent 60%),
+        rgba(3, 7, 20, 0.98);
+      padding: 18px 16px 14px;
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .why-title {
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .why-text {
+      margin: 0;
+    }
+
+    /* ==============================
+       CAVBOT 404 ARCADE
+       ============================== */
+
+    .arcade-header {
+      display: grid;
+      gap: 8px;
+      max-width: 46rem;
+    }
+
+    .arcade-tag {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .arcade-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .arcade-copy {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+
+    .arcade-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .arcade-card {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%),
+        rgba(3, 7, 22, 0.98);
+      padding: 18px 16px 16px;
+      display: grid;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .arcade-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .arcade-illustration {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at top, rgba(139,92,255,0.22), transparent 60%),
+        rgba(1,3,15,0.98);
+      padding: 10px 10px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+    }
+
+    .arcade-bot {
+      transform: scale(0.85);
+      transform-origin: center;
+    }
+
+    .arcade-text {
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .arcade-cta-row {
+      margin-top: 4px;
+    }
+
+    /* ==============================
+       404 EXPLAINER
+       ============================== */
+
+    .section-404-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(185,200,90,0.18), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-404-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .section-404-subtitle {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .section-404-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .section-404-list li {
+      margin-bottom: 4px;
+    }
+
+    .section-404-cta-row {
+      margin-top: 8px;
+    }
+
+    .section-404-metric-box {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%),
+        rgba(1,3,15,0.98);
+      padding: 12px 12px 10px;
       display: grid;
       gap: 8px;
       font-size: 11px;
     }
 
-    .insight-row {
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background:
-        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%),
-        rgba(3,7,22,0.98);
-      padding: 9px 11px;
-      display: grid;
-      gap: 4px;
-    }
-
-    .insight-row-header {
+    .section-404-metric-row {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .insight-type {
-      font-size: 9px;
-      letter-spacing: 0.18em;
+    .section-404-metric-label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--ink-subtle);
     }
 
-    .insight-severity {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(0,0,0,0.6);
-    }
-
-    .insight-severity--high {
-      border-color: rgba(255, 130, 130, 0.9);
-      color: #ffd1d1;
-    }
-
-    .insight-severity--medium {
-      border-color: rgba(255, 204, 128, 0.9);
-      color: #ffe1b3;
-    }
-
-    .insight-title {
-      font-size: 11px;
+    .section-404-metric-value {
+      font-size: 13px;
       color: var(--ink);
     }
 
-    .insight-meta {
-      font-size: 10px;
+    .section-404-metric-footnote {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.7;
       color: var(--ink-subtle);
     }
 
-    .insight-tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
+    /* ==============================
+       BADGE SECTION
+       ============================== */
+
+    .badge-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 20px;
     }
 
-    .insight-tag {
+    .badge-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+      gap: var(--space-md);
+      align-items: center;
+    }
+
+    .badge-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-orbit {
+      width: 160px;
+      height: 160px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 3px 8px;
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
+      background:
+        radial-gradient(circle at center, rgba(0,0,0,0.95) 40%, transparent 42%),
+        radial-gradient(circle at top, rgba(139,92,255,0.28), transparent 65%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cavbot-badge-frame {
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.28);
+      background:
+        radial-gradient(circle at top, rgba(185,200,90,0.2), transparent 60%),
+        rgba(5,8,22,0.98);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .badge-state-list {
+      margin: 12px 0 0;
+      padding-left: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.7;
       color: var(--ink-soft);
     }
 
+    .badge-state-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--lime), var(--violet));
+      box-shadow: 0 0 8px rgba(185,200,90,0.9);
+    }
+
+    .badge-state-list li {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: flex-start;
+    }
+
     /* ==============================
-       DEPLOY MARKERS / DATA HEALTH
+       RUNTIME IMPACT
        ============================== */
 
-    .deploy-row {
+    .section-impact-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(185,200,90,0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.3fr);
+      gap: 20px;
+    }
+
+    .impact-graph-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .impact-graph {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at top, rgba(139,92,255,0.2), transparent 60%),
+        rgba(3,7,22,0.98);
+      padding: 14px 12px 12px;
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .impact-graph-circle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .impact-graph-ring {
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at center, rgba(0,0,0,0.9) 38%, transparent 40%),
+        conic-gradient(
+          var(--accent, var(--lime)) 0deg calc(var(--percent) * 1deg),
+          rgba(255,255,255,0.12) calc(var(--percent) * 1deg) 360deg
+        );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .impact-graph-center {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .impact-graph-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .impact-graph-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-subtle);
+    }
+
+    .impact-graph-caption {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .impact-dashboard {
+      border-radius: var(--panel-radius-md);
+      border: 1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.18), transparent 60%),
+        rgba(1,3,15,0.98);
+      padding: 14px 14px 12px;
+      display: grid;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .impact-dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
       gap: var(--space-md);
       align-items: flex-start;
     }
 
-    .deploy-timeline {
-      margin-top: 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background:
-        radial-gradient(circle at top left, rgba(185,200,90,0.18), transparent 60%),
-        rgba(3,7,20,0.98);
-      padding: 10px 12px;
+    .impact-dashboard-note {
+      margin: 6px 0 0;
       font-size: 11px;
-      display: grid;
-      gap: 6px;
-    }
-
-    .deploy-item {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .deploy-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: var(--violet);
-      box-shadow: 0 0 8px rgba(139,92,255,0.7);
-      flex-shrink: 0;
-    }
-
-    .deploy-meta {
-      font-size: 10px;
+      line-height: 1.7;
       color: var(--ink-subtle);
     }
 
-    .data-health-list {
-      margin: 0;
-      padding-left: 16px;
-      font-size: 11px;
+    /* ==============================
+       CAVCORE CONSOLE
+       ============================== */
+
+    .console-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .console-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr);
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .console-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      font-size: 12px;
+      line-height: 1.7;
       color: var(--ink-soft);
-      display: grid;
-      gap: 4px;
     }
 
-    .data-health-metrics {
-      margin-top: 10px;
-      border-radius: var(--panel-radius-md);
-      border: 1px solid rgba(255,255,255,0.18);
-      background:
-        radial-gradient(circle at top left, rgba(185, 200, 90, 0.16), transparent 60%),
-        rgba(3,7,20,0.98);
-      padding: 12px 14px 10px;
-      display: grid;
-      gap: 10px;
-      font-size: 11px;
+    .console-list li {
+      margin-bottom: 4px;
     }
 
-    .data-health-metric {
-      display: grid;
-      gap: 4px;
-    }
-
-    .data-health-label {
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--ink-subtle);
-    }
-
-    .data-health-bar-track {
-      position: relative;
-      height: 4px;
+    .console-pill {
+      display: inline-flex;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      padding: 5px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-    }
-
-    .data-health-bar-fill {
-      position: absolute;
-      inset: 0;
-      width: var(--percent, 50%);
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--violet), var(--lime));
-      box-shadow: 0 0 14px rgba(139, 92, 255, 0.7);
-    }
-
-    .data-health-caption {
+      border: 1px solid rgba(255,255,255,0.24);
       font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background:
+        radial-gradient(circle at top left, rgba(185,200,90,0.14), transparent 60%)
+        rgba(3,8,18,0.96);
+    }
+
+    /* ==============================
+       BRAND TRUST STRIP
+       ============================== */
+
+    .brand-trust-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(139,92,255,0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .brand-trust-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       color: var(--ink-subtle);
     }
+
+    .brand-trust-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .brand-trust-copy {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+      max-width: 40rem;
+    }
+
+    /* === Brand trust slider === */
+.brand-gallery {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
+/* horizontal slider */
+.brand-gallery-track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.brand-gallery-card {
+  flex: 0 0 200px;          /* card width in the slider */
+  scroll-snap-align: start;
+  border-radius: var(--panel-radius-md);
+  border: 1px solid rgba(255,255,255,0.18);
+  background:
+    radial-gradient(circle at top, rgba(185,200,90,0.16), transparent 65%),
+    rgba(1,3,15,0.98);
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.brand-gallery-name {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.brand-gallery-meta {
+  font-size: 11px;
+}
+
+    .brand-gallery-nav {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.28);
+      background: rgba(3,6,18,0.95);
+      color: var(--ink-soft);
+      display: flex-start;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .brand-gallery-nav:hover {
+      background: rgba(5,8,24,0.98);
+    }
+
+    /* ==============================
+       CAVBOT STATUS
+       ============================== */
+
+    .cavbot-status-panel {
+      border-radius: var(--panel-radius-lg);
+      border: 1px solid var(--border-subtle);
+      background:
+        radial-gradient(circle at top left, rgba(185,200,90,0.2), transparent 60%),
+        linear-gradient(160deg, var(--navy-800) 0, var(--navy-950) 100%);
+      padding: 24px 24px 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .cavbot-status-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
     /* ==============================
        RESPONSIVE
        ============================== */
 
-  @media (max-width: 960px) {
-  .page-inner {
-    padding-top: var(--space-lg);
-  }
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-robot-panel {
+        order: -1;
+      }
+      .hero-robot-main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .system-role {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .console-top-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .brain-grid,
+      .pff-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-  .console-hero-panel {
-    order: -1;
-  }
+      .seo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-  .console-filters-panel-inner {
-    grid-template-columns: minmax(0, 1fr);
-    align-items: flex-start;
-  }
+      .seo-metrics-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .console-filters-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+      .pricing-docs,
+      .console-layout,
+      .section-404-layout,
+      .impact-dashboard-grid,
+      .badge-layout,
+      .analytics-layout,
+      .cavbot-status-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .console-overview {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .console-middle-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .console-bottom-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .deploy-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .metric-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .guardian-health-card {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .guardian-score-shell {
-    justify-self: center;
-  }
-}
+      .why-grid,
+      .arcade-grid,
+      .impact-graph-grid,
+      .seo-metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
 
     @media (max-width: 720px) {
-      .site-header-inner {
-        flex-wrap: nowrap;
-        gap: 14px;
+      .hero {
+        padding-top: var(--space-lg);
       }
 
-      .metric-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .ref-table-header,
-      .ref-table-row {
-        grid-template-columns: minmax(0, 1.4fr) 0.9fr 0.9fr;
-      }
-
-      .ref-table-row > div:last-child,
-      .ref-table-header > div:last-child {
-        display: none;
-      }
-
-      .console-filters-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      .guardian-pill-row {
+      .brain-grid,
+      .pff-grid,
+      .seo-grid,
+      .why-grid,
+      .arcade-grid,
+      .impact-graph-grid {
         grid-template-columns: minmax(0, 1fr);
       }
 
@@ -1348,841 +1771,1289 @@
       }
     }
 
-    @media (min-width: 961px) {
-      .nav-overlay {
-        display: none !important;
+    @media (max-width: 520px) {
+      .hero-title {
+        font-size: 26px;
+        letter-spacing: 0.1em;
       }
     }
   </style>
 </head>
+
 <body class="page-shell"
-      data-cavbot-page-type="cavcore-console"
-      data-cavbot-component="cavcore-console-shell">
-    <!-- ===========================
-         HEADER / NAV (unified)
-         ========================== -->
-    <header class="site-header">
-      <div class="site-header-inner">
+      data-cavbot-page-type="home-page"
+      data-cavbot-component="home-shell">
+
+  <!-- ===========================
+       HEADER / NAV
+       =========================== -->
+  <header class="site-header">
+    <div class="site-header-inner">
        <div class="brand-lockup">
   <a href="index.html" class="brand-logo">
     <img src="assets/cavbotwordmark.svg" alt="CavBot" class="brand-logo-img">
   </a>
 </div>
 
-        <nav class="nav-main">
-          <div class="nav-links">
-            <a href="product.html" class="nav-link">Product</a>
-            <a href="how-it-works.html" class="nav-link">How it Works</a>
-            <a href="#pricing" class="nav-link">Pricing</a>
-            <a href="#arcade" class="nav-link">404 Arcade Lab</a>
-            <a href="cavcore-console.html" class="nav-link nav-link--active">Console</a>
-          </div>
-          <div class="nav-cta-row">
-            <a href="#" class="nav-login">Log in</a>
-            <button type="button" class="btn btn-primary">Start free trial</button>
-          </div>
-        </nav>
-        <!-- Mobile menu toggle (3x3 dot icon, no background circle) -->
-        <button
-          type="button"
-          class="nav-menu-toggle"
-          aria-label="Open CavBot menu"
-          aria-expanded="false"
-          aria-controls="nav-overlay"
-        >
-          <span class="nav-menu-icon" aria-hidden="true">
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-          </span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Mobile lightbox menu -->
-    <div class="nav-overlay" id="nav-overlay" hidden>
-      <div class="nav-overlay-backdrop"></div>
-      <div class="nav-overlay-panel">
-        <div class="nav-overlay-header">
-          <button
-            type="button"
-            class="nav-overlay-close"
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
+      <!-- Mobile / tablet menu toggle (console-style dot grid) -->
+      <button
+        type="button"
+        class="nav-menu-toggle"
+        aria-label="Open navigation"
+        aria-expanded="false">
+        <div class="nav-menu-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
         </div>
-        <nav class="nav-overlay-body">
-          <a href="product.html" class="nav-overlay-link">Product</a>
-          <a href="how-it-works.html" class="nav-overlay-link">How it Works</a>
-          <a href="#pricing" class="nav-overlay-link">Pricing</a>
-          <a href="#arcade" class="nav-overlay-link">404 Arcade Lab</a>
-          <a href="cavcore-console.html" class="nav-overlay-link nav-overlay-link--active">Console</a>
-          <div class="nav-overlay-cta">
-            <a href="#" class="nav-overlay-login">Log in</a>
-            <button type="button" class="btn btn-primary">Start free trial</button>
-          </div>
-        </nav>
+      </button>
+
+      <nav class="nav-main">
+        <div class="nav-links">
+          <a href="product.html" class="nav-link">Product</a>
+          <a href="how-it-works.html" class="nav-link">How it Works</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+          <a href="#arcade" class="nav-link">404 Arcade Lab</a>
+          <a href="cavcore-console.html" class="nav-link">Console</a>
+        </div>
+        <div class="nav-cta-row">
+          <a href="#" class="nav-login">Log in</a>
+          <button type="button" class="btn btn-primary">Start free trial</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile / tablet nav overlay -->
+  <div class="nav-overlay" aria-hidden="true">
+    <div class="nav-overlay-backdrop"></div>
+    <div class="nav-overlay-panel" role="dialog" aria-modal="true" aria-label="Navigation">
+      <div class="nav-overlay-header">
+        <button class="nav-overlay-close" aria-label="Close navigation">&times;</button>
+      </div>
+      <div class="nav-overlay-body">
+        <a href="product.html" class="nav-overlay-link nav-overlay-link--active">Product</a>
+        <a href="how-it-works.html" class="nav-overlay-link">How it Works</a>
+        <a href="#pricing" class="nav-overlay-link">Pricing</a>
+        <a href="#arcade" class="nav-overlay-link">404 Arcade Lab</a>
+        <a href="cavcore-console.html" class="nav-overlay-link">Console</a>
+      </div>
+      <div class="nav-overlay-cta">
+        <span class="nav-overlay-login">Log in</span>
+        <button type="button" class="btn btn-primary">Start free trial</button>
       </div>
     </div>
+  </div>
 
-    <!-- ===========================
-         MAIN
-         ========================== -->
-    <main class="page-inner">
-      <section class="console-shell" aria-label="CavCore Console overview">
+  <!-- ===========================
+       MAIN
+       =========================== -->
+  <main class="page-inner">
+    <!-- HERO -->
+    <section id="product" class="hero">
+      <div class="hero-copy-block">
+        <div class="eyebrow">Reliability copilot &amp; control-plane</div>
+        <h1 class="hero-title">One brain for routes, 404s, SEO &amp; runtime feel</h1>
+        <p class="hero-lede">
+          CavBot runs as a reliability layer on top of CavBot Analytics v5 and CavCore Console.
+          It watches routes, 404s, SEO structure, campaigns, and Core Web Vitals in real time,
+          treating fragile edges as designed surfaces so every session stays deliberate, not accidental.
+          <br><br>
+        </p>
 
-        <!-- =======================
-             TOP: HERO + LIVE BOT PANEL
-             ======================= -->
-        <div class="console-top-row">
-          <div class="console-hero-copy">
-            <div class="console-hero-kicker">CavCore console · CavBot analytics</div>
-            <h1 class="console-hero-title">Guardian view of your routes &amp; SEO</h1>
-            <p class="console-hero-subtitle">
-              CavCore Console is the dashboard behind CavBot — an event-first map of
-              pageviews, 404 recoveries, SEO structure, referrers, and runtime feel.
-              Every card on this screen is backed by append-only events and derived
-              tables ready for a future AI layer.
-            </p>
+        <div class="hero-cta-row">
+          <a href="#" class="btn btn-primary">Start free trial</a>
+<a href="cavcore-console.html" class="btn btn-ghost">Explore CavCore console</a>
+        </div>
+      </div>
 
-            <div class="console-hero-meta-row">
-              <span>Backing tables: <strong>events</strong>, <strong>daily_page_aggregates</strong>, <strong>seo_snapshots</strong>, <strong>performance_samples</strong>, <strong>insights</strong>.</span>
-            </div>
-
-            <div class="console-filter-row">
-              <div class="console-filter-chip">
-                Project
-                <strong>cavendishpierrelouis.com</strong>
-              </div>
-              <div class="console-filter-chip">
-                Window
-                <strong>Last 30 days</strong>
-              </div>
-              <div class="console-filter-chip">
-                Focus
-                <strong>All components</strong>
-              </div>
-            </div>
+      <aside class="hero-robot-panel" aria-label="CavBot reliability control-room">
+        <div class="hero-robot-header">
+          <div class="hero-robot-title">CavBot · Fieldline IV</div>
+          <div class="aaero-robot-tag">
+            <span class="hero-robot-live-dot"></span>
+            <span>LIVE SESSIONS</span>
           </div>
+        </div>
 
-          <!-- Hero Bot + key stats -->
-          <aside class="console-hero-panel" aria-label="Live CavBot project signal">
-            <div class="console-hero-panel-top">
-              <div>Project scope: multi-tenant · event-first</div>
-              <div class="console-hero-live">
-                <span class="console-live-dot"></span>
-                <span>Guard active</span>
-              </div>
-            </div>
-            <div class="console-hero-main">
-              <div class="console-hero-bot-wrap">
-                <!-- CavBot head instance -->
-                <div class="cavbot-head-avatar" data-cavbot-head data-variant="core">
-                  <div class="cavbot-head-avatar-inner">
-                    <div class="cavbot-antenna">
-                      <div class="cavbot-antenna-tip"></div>
-                    </div>
-
-                    <div class="cavbot-head">
-                      <div class="cavbot-face">
-                        <div class="cavbot-eyes-row">
-                          <div class="cavbot-eye">
-                            <div class="cavbot-eye-inner">
-                              <div class="cavbot-eye-track">
-                                <div class="cavbot-eye-pupil" data-eye="left"></div>
-                              </div>
+        <div class="hero-robot-shell">
+          <div class="hero-robot-main">
+            <div class="hero-robot-avatar-wrap">
+              <div class="cavbot-head-avatar" data-cavbot-head data-variant="core">
+                <div class="cavbot-head-avatar-inner">
+                  <div class="cavbot-antenna">
+                    <div class="cavbot-antenna-tip"></div>
+                  </div>
+                  <div class="cavbot-head">
+                    <div class="cavbot-face">
+                      <div class="cavbot-eyes-row">
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="left"></div>
                             </div>
-                            <div class="cavbot-eye-glow"></div>
-                            <div class="cavbot-blink"></div>
                           </div>
-                          <div class="cavbot-eye">
-                            <div class="cavbot-eye-inner">
-                              <div class="cavbot-eye-track">
-                                <div class="cavbot-eye-pupil" data-eye="right"></div>
-                              </div>
-                            </div>
-                            <div class="cavbot-eye-glow"></div>
-                            <div class="cavbot-blink"></div>
-                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
                         </div>
-
-                        <div class="cavbot-scan" aria-hidden="true">
-                          <div class="cavbot-scan-bar"></div>
-                          <div class="cavbot-scan-dots">
-                            <span>CAV</span>
-                            <span>BOT</span>
-                            <span>404</span>
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="right"></div>
+                            </div>
                           </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                      </div>
+                      <div class="cavbot-scan" aria-hidden="true">
+                        <div class="cavbot-scan-bar"></div>
+                        <div class="cavbot-scan-dots">
+                          <span>CAV</span>
+                          <span>BOT</span>
+                          <span>404</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="console-hero-metrics">
-                <div class="console-hero-metrics-label">Event-first project health</div>
-                <div class="console-hero-metrics-grid">
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">404 recovery rate</div>
-                    <div class="console-hero-metric-value">92.4%</div>
-                    <div class="console-hero-metric-footnote">From events where page_type = 404-control-room.</div>
-                  </div>
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">unique visitors</div>
-                    <div class="console-hero-metric-value">8,104</div>
-                    <div class="console-hero-metric-footnote">Distinct anonymousId per project.</div>
-                  </div>
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">sessions under guard</div>
-                    <div class="console-hero-metric-value"><span data-metric="page-views">19,286</span></div>
-                    <div class="console-hero-metric-footnote">From sessions table, last 30 days.</div>
-                  </div>
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">routes monitored</div>
-                    <div class="console-hero-metric-value">143</div>
-                    <div class="console-hero-metric-footnote">From pages table, is_active = true.</div>
-                  </div>
+            <div class="hero-robot-metrics">
+              <div class="hero-robot-metrics-label">Live control-room signal</div>
+              <div class="hero-robot-metrics-grid">
+                <div class="hero-metric">
+                  <div class="hero-metric-label">404 recovery rate</div>
+                  <div class="hero-metric-value">92.4%</div>
+                </div>
+                <div class="hero-metric">
+                  <div class="hero-metric-label">sessions under guard</div>
+                  <div class="hero-metric-value">18,392</div>
+                </div>
+                <div class="hero-metric">
+                  <div class="hero-metric-label">routes with clean seo</div>
+                  <div class="hero-metric-value">78%</div>
+                </div>
+                <div class="hero-metric">
+                  <div class="hero-metric-label">active insights</div>
+                  <div class="hero-metric-value">34</div>
                 </div>
               </div>
             </div>
-          </aside>
+          </div>
+
+          <p class="hero-robot-primary-role">
+            Every interaction lands as a structured event — project, visitor, session, route, and component —
+            ready for CavCore Console to analyse and for future AI to sit on top.
+          </p>
         </div>
-<br>
-<br>
-<br>
-<br>
+      </aside>
+    </section>
 
-        <!-- =======================
-             FILTERS PANEL
-             ======================= -->
-        <section class="console-filters-panel" aria-label="Project filters">
-          <div class="panel panel-tight console-filters-panel-inner">
-            <div>
-              <div class="eyebrow">Filters</div>
-              <p class="section-body" style="font-size:12px; margin-top:6px; max-width:32rem;">
-                Choose which project, window, and signal CavBot should show here. These knobs
-                drive every card on the console — from 404 density and SEO to referrers and deploy markers.
-              </p>
+    <!-- BRAIN EVOLUTION STRIP -->
+    <section class="brain-museum" aria-label="CavBot brain evolution">
+      <div class="brain-header">
+        <div class="brain-label">CavBot brainline</div>
+        <h2 class="brain-title">From 404 toy to field-grade control-plane</h2>
+        <p class="brain-copy">
+          CavBot started as a small character living on a single 404 screen. Over time it
+          became a structured brainline, folding more signal, journey context, and console
+          views into CavCore — until it was ready to sit in full production.
+        </p>
+      </div>
+      <br>
+      <div class="brain-grid">
+        <article class="brain-card">
+          <div class="brain-gen">Fieldline I · Arcade Origin</div>
+          <div class="brain-era">404 playground</div>
+          <p class="brain-text">
+            The first CavBot lived only on error pages — a playful arcade on top of
+            a dead screen. No metrics, no console, just proof that a failure surface
+            could still feel designed.
+          </p>
+        </article>
+
+        <article class="brain-card">
+          <div class="brain-gen">Fieldline II · Signal Capture</div>
+          <div class="brain-era">Pattern curious</div>
+          <p class="brain-text">
+            Signal came next. CavBot began counting <strong>404 density</strong>,
+            route classes, and timestamps to understand which edges real users
+            actually touched.
+          </p>
+        </article>
+
+        <article class="brain-card">
+          <div class="brain-gen">Fieldline III · Journey Model</div>
+          <div class="brain-era">Structured observer</div>
+          <p class="brain-text">
+            CavBot stopped thinking in single errors and started thinking in
+            journeys — flow completion, repeat attempts, and quiet drop-offs
+            across entire funnels.
+          </p>
+        </article>
+
+        <article class="brain-card">
+          <div class="brain-gen">CavCore (Gen 1.0) · Control-Plane Core</div>
+          <div class="brain-era">Production brain</div>
+          <p class="brain-text">
+            Today’s CavBot runs on CavBot Analytics v5. Every 404, edge, and fragile route
+            becomes structured telemetry that lands directly in CavCore Console —
+            the same view your team uses to steer production.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PATH / FAULT / FEEL -->
+    <section class="section pff-museum" aria-label="Path, Fault, and Feel modes">
+      <header class="section-header">
+        <div class="eyebrow">Modes CavBot watches in the lab</div>
+        <h2 class="section-title" style="font-size:18px;">Path · Fault · Feel — CavBot lab modes</h2>
+        <p class="section-body">
+          CavBot frames each session through three lenses — how people move through the
+          product, where systems break, and how the experience actually feels in the
+          browser while it’s happening.
+          <br><br>
+        </p>
+        <div class="pff-chips-row">
+          <div class="pff-chip">Path telemetry</div>
+          <div class="pff-chip">Fault lab</div>
+          <div class="pff-chip">Feel scoring</div>
+          <div class="pff-chip">CavBot still in the lab</div>
+        </div>
+      </header>
+      <br><br>
+      <div class="pff-grid">
+        <article class="pff-card pff-card--path">
+          <div class="pff-card-inner">
+            <div class="pff-card-header">
+              <div class="pff-mode-label">Path</div>
+              <div class="pff-mode-tag">Journey map</div>
             </div>
-            <div>
-              <div class="console-filters-grid">
-                <div class="console-filter-group">
-                  <label for="filter-project" class="filter-label">Project</label>
-                  <select id="filter-project" class="filter-select">
-                    <option>cavendishpierrelouis.com</option>
-                    <option>mireliano.com</option>
-                    <option>demo.cavbot.dev</option>
-                  </select>
-                </div>
-                <div class="console-filter-group">
-                  <label for="filter-window" class="filter-label">Window</label>
-                  <select id="filter-window" class="filter-select">
-                    <option>Last 7 days</option>
-                    <option selected>Last 30 days</option>
-                    <option>Last 90 days</option>
-                  </select>
-                </div>
-                <div class="console-filter-group">
-                  <label for="filter-focus" class="filter-label">View</label>
-                  <select id="filter-focus" class="filter-select">
-                    <option selected>All components</option>
-                    <option>404 &amp; routing</option>
-                    <option>SEO &amp; structure</option>
-                    <option>Performance</option>
-                    <option>Referrers &amp; campaigns</option>
-                  </select>
-                </div>
-              </div>
-           <br>   <div class="filter-toggle-row">
-                <span class="filter-toggle-label">Quick focus</span>
-                <button type="button" class="btn-pill">404 density</button>
-                <button type="button" class="btn-pill">SEO issues</button>
-                <button type="button" class="btn-pill">Slow pages</button>
-              </div>
-            </div>
+            <div class="pff-glyph" aria-hidden="true"></div>
+            <h3 class="pff-card-title">Canonical product map</h3>
+            <p class="pff-card-body">
+              Every URL, deep link, and edge route is treated as part of a canonical map.
+              CavBot maintains this map so your team always knows where traffic is meant
+              to land, not just where it accidentally lands.
+            </p>
           </div>
-        </section>
-<br>
-<br>
-<br>
-<br>
-        <!-- =======================
-             OVERVIEW: METRICS + TREND
-             ======================= -->
-        <section class="console-overview" aria-label="CavBot overview metrics">
+        </article>
+
+        <article class="pff-card pff-card--fault">
+          <div class="pff-card-inner">
+            <div class="pff-card-header">
+              <div class="pff-mode-label">Fault</div>
+              <div class="pff-mode-tag">404 &amp; edge control</div>
+            </div>
+            <div class="pff-glyph" aria-hidden="true"></div>
+            <h3 class="pff-card-title">Classified breakpoints</h3>
+            <p class="pff-card-body">
+              Faults are categorised as navigational, network, or behavioural breaks.
+              Instead of one generic error page, CavBot enables the right recovery
+              pattern for each class of failure.
+            </p>
+          </div>
+        </article>
+
+        <article class="pff-card pff-card--feel">
+          <div class="pff-card-inner">
+            <div class="pff-card-header">
+              <div class="pff-mode-label">Feel</div>
+              <div class="pff-mode-tag">Experience telemetry</div>
+            </div>
+            <div class="pff-glyph" aria-hidden="true"></div>
+            <h3 class="pff-card-title">Runtime feel scoring</h3>
+            <p class="pff-card-body">
+              Reliability is experienced, not just graphed. CavBot measures recovery
+              time, reload storms, hesitation, and quiet churn — surfacing where the
+              product feels brittle so journeys can be tightened at the edges.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SYSTEM ROLE / ARCHITECTURE -->
+    <section id="architecture" class="system-role section">
+      <article class="system-left">
+        <div class="eyebrow">Where CavBot sits in your stack</div>
+        <h2 class="section-title" style="font-size:18px;">From mascot to reliability layer</h2>
+        <p class="system-left-copy">
+          CavBot runs as a dedicated layer alongside your existing observability.
+          It doesn’t replace logs or APM; it turns them into <em>runtime behaviour</em>:
+          shielding high-value flows, steering users away from broken edges, and making
+          error moments feel like part of the product, not an escape hatch.
+        </p>
+        <br>
+        <div class="system-pill-row">
+          <div class="system-pill">Autonomous 404 &amp; route control</div>
+          <div class="system-pill">Session feel scoring</div>
+          <div class="system-pill">CavCore console views</div>
+          <div class="system-pill">Event-first analytics &amp; SEO</div>
+        </div>
+      </article>
+
+      <aside class="system-right" aria-label="CavBot specification overview">
+        <div class="spec-stack">
           <div>
-            <header class="section-header" style="margin-bottom: var(--space-sm);">
-              <div class="eyebrow">Overview</div>
-              <h2 class="section-title">Sessions, events, and 404 density</h2>
-              <p class="section-body">
-                A clean roll-up of CavBot’s event stream for this project — every
-                number on this row comes directly from <strong>events</strong>,
-                <strong>sessions</strong>, and <strong>daily_page_aggregates</strong>.
-              </p>
-            </header>
-<br> 
-            <div class="metric-grid" aria-label="Key summary metrics">
-              <article class="metric-card">
-                <div class="metric-label">Total events</div>
-                <div class="metric-value">284,930</div>
-                <div class="metric-subtext">All components · last 30d.</div>
-              </article>
-              <article class="metric-card">
-                <div class="metric-label">Sessions</div>
-                <div class="metric-value">19,286</div>
-                <div class="metric-subtext">Distinct session_key per project.</div>
-              </article>
-              <article class="metric-card">
-                <div class="metric-label">404 sessions</div>
-                <div class="metric-value">1,042</div>
-                <div class="metric-subtext">Sessions containing 404-control-room events.</div>
-              </article>
-              <article class="metric-card">
-                <div class="metric-label">Badge interactions</div>
-                <div class="metric-value">3,117</div>
-                <div class="metric-subtext">cavbot_badge_click / hover events.</div>
-              </article>
+            <div class="spec-row-label">Scope</div>
+            <div class="spec-row-body">
+              Critical routes, edges, and revenue paths where dead ends, timeouts, or
+              confusion silently damage activation, trust, or retention.
+            </div>
+          </div>
+          <div>
+            <div class="spec-row-label">Signal</div>
+            <div class="spec-row-body">
+              404 density, flow completion, rage refresh, retry bursts, and session
+              feel — normalised and streamed into CavCore Console.
+            </div>
+          </div>
+          <div>
+            <div class="spec-row-label">Temper</div>
+            <div class="spec-row-body">
+              Quiet by default. CavBot appears only when sessions enter fragile
+              territory, providing guidance without crowding your UI.
+            </div>
+          </div>
+          <div>
+            <div class="spec-row-label">Origin</div>
+            <div class="spec-row-body">
+              Born as a 404 arcade experiment, refined into a control-plane that can
+              be wired into production the way you’d deploy any other core service.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- =======================
+         ANALYTICS / EVENT MODEL
+         ======================= -->
+    <section id="analytics" class="section" aria-label="CavBot Analytics v5 event model">
+      <div class="analytics-panel">
+        <header class="section-header" style="margin-bottom:12px;">
+          <div class="eyebrow">CavBot Analytics v5</div>
+          <h2 class="section-title" style="font-size:18px;">Event-first, component-aware analytics</h2>
+          <p class="section-body">
+            CavBot Analytics v5 is a multi-tenant backend that treats every interaction as
+            an append-only event. Projects, visitors, sessions, pages, and components are
+            normalised into PostgreSQL so CavCore Console can reason about the health of
+            your site without guesswork.
+          </p>
+          <br><br>
+        </header>
+
+        <div class="analytics-layout">
+          <div class="analytics-left">
+            <p>
+              The front-end contract is intentionally small. One call — the same across
+              projects — sends structured events for pageviews, 404-game moves, badge
+              interactions, assistant usage, and SEO hints.
+            </p>
+            <pre class="code-block"><code>window.cavbotAnalytics.track("pageview", {
+  route: window.location.pathname,
+  pageType: "marketing",
+  referrer: document.referrer || null,
+  meta: {
+    campaign: "launch",
+    source: "landing"
+  }
+});</code></pre>
+          </div>
+
+          <div class="analytics-right">
+            <div>
+              <div class="analytics-pill-label">What lands per event</div>
+              <br>
+              <ul class="analytics-list">
+                <li>Project, anonymous visitor, and logical session identifiers.</li>
+                <li>Route and <span class="code-inline">pageType</span> (marketing, blog, docs, 404-control-room, etc.).</li>
+                <li>Referrer URL, referrer domain, and UTM tags for campaigns.</li>
+                <li>Device type and optional Core Web Vitals samples (LCP, TTFB, CLS).</li>
+                <br>
+              </ul>
+            </div>
+            <div>
+              <div class="analytics-pill-label">Core tables in CavBot Analytics</div>
+              <br>
+              <ul class="analytics-list-plain">
+                <li><strong>projects</strong> — CavBot-enabled sites/apps.</li>
+                <li><strong>visitors</strong> &amp; <strong>sessions</strong> — anonymous IDs scoped per project.</li>
+                <li><strong>pages</strong> &amp; <strong>events</strong> — append-only event log per route.</li>
+                <li><strong>performance_samples</strong> — Core Web Vitals by page.</li>
+                <li><strong>daily_page_aggregates</strong> &amp; <strong>referrer_aggregates</strong> — fast dashboards.</li>
+                <li><strong>insights</strong>, <strong>alerts</strong>, and <strong>deploy_markers</strong> — guardian-angel layer.</li>
+                <li><strong>project_settings</strong> — per-site controls for tracking and privacy.</li>
+                <br>
+              </ul>
+            </div>
+            <div>
+              <div class="analytics-pill-label">Privacy stance</div>
+              <br>
+              <ul class="analytics-list">
+                <li>Anonymous, project-scoped IDs — no names, emails, or long-term IPs stored.</li>
+                <li>Only coarse metadata (device, referrer domain, campaign tags).</li>
+                <li>IP-derived data is aggregated or discarded quickly — no creepy tracking.</li>
+                <br>
+              </ul>
             </div>
 
-            <div class="trend-panel" aria-label="404 vs sessions trend">
-              <div class="trend-header-row">
-                <div class="trend-title">30-day route &amp; 404 trend</div>
-                <div class="trend-legend">
-                  <span><span class="trend-dot trend-dot--sessions"></span> Sessions</span>
-                  <span><span class="trend-dot trend-dot--404"></span> 404 views</span>
+            <!-- Modern analytics graphs strip -->
+            <div class="analytics-graphs" aria-label="Analytics event mix overview">
+              <div class="analytics-graphs-label">Event mix in a typical CavBot project</div>
+              <div class="analytics-graphs-grid">
+                <div>
+                  <div class="analytics-graph-donut">
+                    <div class="analytics-graph-donut-ring" aria-hidden="true"></div>
+                    <div class="analytics-graph-donut-center">
+                      68%
+                    </div>
+                  </div>
+                  <p class="analytics-graph-donut-caption">
+                    Pageview events by default. The rest is 404 control-room moves,
+                    badge interactions, assistant usage, and SEO hints — all on the same rail.
+                  </p>
+                </div>
+                <div class="analytics-graph-bars">
+                  <div class="analytics-bar-row" style="--percent:72%;">
+                    <div class="analytics-bar-label">PAGEVIEWS</div>
+                    <div class="analytics-bar-track">
+                      <div class="analytics-bar-fill"></div>
+                    </div>
+                    <div class="analytics-bar-value">72%</div>
+                  </div>
+                  <div class="analytics-bar-row" style="--percent:14%;">
+                    <div class="analytics-bar-label">404 CONTROL</div>
+                    <div class="analytics-bar-track">
+                      <div class="analytics-bar-fill"></div>
+                    </div>
+                    <div class="analytics-bar-value">14%</div>
+                  </div>
+                  <div class="analytics-bar-row" style="--percent:8%;">
+                    <div class="analytics-bar-label">BADGE / STATE</div>
+                    <div class="analytics-bar-track">
+                      <div class="analytics-bar-fill"></div>
+                    </div>
+                    <div class="analytics-bar-value">8%</div>
+                  </div>
+                  <div class="analytics-bar-row" style="--percent:6%;">
+                    <div class="analytics-bar-label">SEO / PERF</div>
+                    <div class="analytics-bar-track">
+                      <div class="analytics-bar-fill"></div>
+                    </div>
+                    <div class="analytics-bar-value">6%</div>
+                  </div>
                 </div>
               </div>
+            </div>
+            <!-- /analytics graphs -->
+          </div>
+        </div>
+      </div>
+    </section>
 
-              <div class="trend-chart">
-                <!-- Dummy bars – wire up later with real heights -->
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions"></div>
-                  <div class="trend-bar trend-bar--404"></div>
-                  <div class="trend-day-label">D1</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:70%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:32%;"></div>
-                  <div class="trend-day-label">D2</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:60%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:22%;"></div>
-                  <div class="trend-day-label">D3</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:78%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:45%;"></div>
-                  <div class="trend-day-label">D4</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:66%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:28%;"></div>
-                  <div class="trend-day-label">D5</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:72%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:36%;"></div>
-                  <div class="trend-day-label">D6</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:59%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:21%;"></div>
-                  <div class="trend-day-label">D7</div>
-                </div>
+    <!-- =======================
+         SEO & STRUCTURE SECTION
+         ======================= -->
+    <section class="section" aria-label="SEO snapshots and structure">
+      <div class="seo-panel">
+        <header class="section-header" style="margin-bottom:12px;">
+          <div class="eyebrow">SEO &amp; structure</div>
+          <h2 class="section-title" style="font-size:18px;">A structural view of every route</h2>
+          <p class="section-body">
+            CavBot doesn’t just watch traffic — it watches the structure traffic lands on.
+            SEO snapshots are stored per route so your team can connect metadata, indexability,
+            and performance to real behaviour.
+          </p>
+          <br>
+        </header>
+
+        <div class="seo-grid">
+          <article class="seo-card">
+            <div class="seo-title">Per-route seo_snapshots</div>
+            <p class="seo-body">
+              Each crawl writes into <span class="code-inline">seo_snapshots</span>:
+              title, meta description, canonical URL, indexability flags, heading outline,
+              word count, and social tags. CavCore shows the latest and how it has changed.
+            </p>
+          </article>
+
+          <article class="seo-card">
+            <div class="seo-title">Issues over time</div>
+            <p class="seo-body">
+              Derived issue codes — for example
+              <span class="code-inline">missing_meta_description</span>,
+              <span class="code-inline">short_title</span>,
+              <span class="code-inline">duplicate_title</span>, and
+              <span class="code-inline">non_indexable_critical</span> — are tracked over time,
+              not just as a one-off audit.
+            </p>
+          </article>
+
+          <article class="seo-card">
+            <div class="seo-title">Behaviour + SEO</div>
+            <p class="seo-body">
+              CavBot links SEO issues with behaviour. 404 spikes tied to missing redirects,
+              campaigns landing on thin or broken pages, and slow but important routes
+              are surfaced as insights, not buried in separate tools.
+            </p>
+          </article>
+        </div>
+
+        <!-- Modern SEO metrics strip -->
+        <div class="seo-metrics" aria-label="SEO health metrics">
+          <div class="seo-metrics-label">Live SEO health snapshot</div>
+          <div class="seo-metrics-grid">
+            <article class="seo-metric-card" style="--percent:82%;">
+              <div class="seo-metric-label">Routes with clean seo</div>
+              <div class="seo-metric-value">82%</div>
+              <div class="seo-metric-bar-track">
+                <div class="seo-metric-bar-fill"></div>
               </div>
-
-              <p class="trend-footnote">
-                CavBot never stores PII — trends are built from anonymousId, sessionKey,
-                route, and component, not from user accounts. <span data-metric="top-route">/</span> is currently the most-viewed route in the last 24h.
+              <p class="seo-metric-caption">
+                Canonical tags, indexability, and social metadata in a healthy state across most
+                of your canonical map.
               </p>
+            </article>
+            <article class="seo-metric-card" style="--percent:38%;">
+              <div class="seo-metric-label">Critical non-indexable</div>
+              <div class="seo-metric-value">9</div>
+              <div class="seo-metric-bar-track">
+                <div class="seo-metric-bar-fill"></div>
+              </div>
+              <p class="seo-metric-caption">
+                High-value routes that cannot be indexed — surfaced as first-class issues
+                with deploy and campaign context.
+              </p>
+            </article>
+            <article class="seo-metric-card" style="--percent:61%;">
+              <div class="seo-metric-label">Thin or missing meta</div>
+              <div class="seo-metric-value">27</div>
+              <div class="seo-metric-bar-track">
+                <div class="seo-metric-bar-fill"></div>
+              </div>
+              <p class="seo-metric-caption">
+                Pages where titles or descriptions underperform. CavBot links them directly to
+                the behaviour they generate.
+              </p>
+            </article>
+          </div>
+        </div>
+        <!-- /SEO metrics -->
+      </div>
+    </section>
+
+    <!-- =======================
+         PRICING + DOCS
+         ======================= -->
+    <section id="pricing" class="pricing-docs section">
+      <!-- Pricing panel -->
+      <article class="pricing-card">
+        <div class="pricing-title">Access</div>
+        <h2 class="pricing-headline">Start with a focused pilot</h2>
+        <p class="pricing-note">
+          CavBot is rolling out through tightly scoped pilots for teams that care
+          about the quiet layers of their web experience: routes, edges, SEO, and how
+          the runtime feels during real incidents.
+        </p>
+        <p class="pricing-note">
+          Begin with one or two critical flows, measure the signal in CavCore Console,
+          and then expand into the rest of your product once CavBot proves its value
+          inside your own environment.
+        </p>
+        <br>
+       <div class="hero-cta-row" style="margin-top: 8px;">
+  <a
+    href="mailto:pilots@cavbot.io?subject=CavBot%20Pilot%20Request"
+    class="btn btn-primary"
+  >
+    Request a pilot
+  </a>
+
+  <a
+    href="mailto:engineering@cavbot.io?subject=Talk%20to%20CavBot%20Engineering"
+    class="btn btn-ghost"
+  >
+    Talk to engineering
+  </a>
+</div>
+        <div class="pricing-meta">
+          Self-serve plans are not public yet. Early pilots are tuned in close
+          partnership with a small set of teams before CavBot becomes a standard
+          SaaS tier.
+        </div>
+      </article>
+
+      <!-- Docs / developer notes -->
+      <aside id="docs" class="docs-card">
+        <div class="docs-title">Developer notes</div>
+        <div class="badge-chip">Event-first ingestion · JSON over HTTPS</div>
+        <ul class="docs-list">
+          <li>
+            <div class="docs-item-label">Single front-end contract</div>
+            <div>
+              One call — <span class="code-inline">window.cavbotAnalytics.track(eventName, payload)</span> —
+              sends pageviews, 404-game events, badge impressions, assistant activity, and SEO hints.
+              The schema is versioned and documented per SDK.
+            </div>
+          </li>
+          <li>
+            <div class="docs-item-label">REST endpoints</div>
+            <div>
+              Batched events land at <span class="code-inline">/v1/events</span>, with dedicated endpoints
+              for SEO snapshots, performance samples, project overviews, 404 summaries, page summaries,
+              referrer breakdowns, and insight feeds. Public project keys are hashed server-side and
+              ingestion is rate-limited per project.
+            </div>
+          </li>
+          <li>
+            <div class="docs-item-label">Works without the badge</div>
+            <div>
+              CavBot’s analytics and insights run regardless of whether you mount the CavCore badge or
+              404 arcade. The badge is a presence indicator; the control-plane is the event stream and
+              the tables behind CavCore Console.
+            </div>
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- =======================
+         WHY CAVBOT MATTERS
+         ======================= -->
+    <section class="why-cavbot section">
+      <header class="section-header">
+        <div class="eyebrow">Impact</div>
+        <h2 class="section-title" style="font-size:18px;">Why CavBot matters</h2>
+        <p class="section-body">
+          CavBot and CavCore are built for outcomes your team already tracks —
+          fewer dead ends, calmer incident windows, healthier journeys, and less
+          operational noise around simple broken links.
+        </p>
+        <br>
+      </header>
+
+      <div class="why-grid">
+        <article class="why-card">
+          <div class="why-title">Fewer dead ends</div>
+          <p class="why-text">
+            404s stop being a final state. CavBot turns them into guided recovery
+            moments — suggesting the next best route instead of dropping users
+            into a static apology screen.
+          </p>
+        </article>
+        <article class="why-card">
+          <div class="why-title">Calmer incidents</div>
+          <p class="why-text">
+            During outages, CavBot smooths the visible edges: exposing retries,
+            alternates, and expectations so “bad days” feel more controlled in
+            the browser.
+          </p>
+        </article>
+        <article class="why-card">
+          <div class="why-title">Tighter journeys</div>
+          <p class="why-text">
+            CavBot tracks how journeys feel in production — where people hesitate,
+            rage-refresh, or quietly exit — and feeds those patterns into CavCore
+            Console for product and SRE teams.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- =======================
+         CAVBOT 404 ARCADE
+         ======================= -->
+    <section id="arcade" class="arcade section" aria-label="CavBot 404 Arcade demos">
+      <div class="arcade-header">
+        <div class="arcade-tag">CavBot 404 Arcade</div>
+        <h2 class="arcade-title">Playable recovery surfaces</h2>
+        <p class="arcade-copy">
+          The 404 Arcade is a small lab where your team can try interactive error-state
+          patterns before they ship. Each micro-game shows a different way CavBot can
+          turn a dead-end route into a guided return to intent — with every move logged
+          as an event in CavBot Analytics v5.
+        </p>
+      </div>
+
+      <div class="arcade-grid">
+        <!-- Grid Escape -->
+        <article class="arcade-card">
+          <div class="arcade-label">Grid Escape</div>
+          <div class="arcade-illustration">
+            <div class="arcade-bot">
+              <div class="cavbot-head-avatar" data-cavbot-head data-variant="blue">
+                <div class="cavbot-head-avatar-inner">
+                  <div class="cavbot-antenna">
+                    <div class="cavbot-antenna-tip"></div>
+                  </div>
+
+                  <div class="cavbot-head">
+                    <div class="cavbot-face">
+                      <div class="cavbot-eyes-row">
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="left"></div>
+                            </div>
+                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="right"></div>
+                            </div>
+                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                      </div>
+
+                      <div class="cavbot-scan" aria-hidden="true">
+                        <div class="cavbot-scan-bar"></div>
+                        <div class="cavbot-scan-dots">
+                          <span>CAV</span>
+                          <span>BOT</span>
+                          <span>404</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="arcade-text">
+            CavBot moves inside a dynamic grid. Users chase the bot with their cursor
+            to “lock in” the correct route and restore the session path from inside
+            the control-room.
+          </p>
+          <div class="arcade-cta-row">
+            <a href="/arcade" class="btn btn-live">Live demo</a>
+          </div>
+        </article>
+
+        <!-- Pick the Imposter -->
+        <article class="arcade-card">
+          <div class="arcade-label">Pick the Imposter</div>
+          <div class="arcade-illustration">
+            <div class="arcade-bot">
+              <div class="cavbot-head-avatar" data-cavbot-head data-variant="lime">
+                <div class="cavbot-head-avatar-inner">
+                  <div class="cavbot-antenna">
+                    <div class="cavbot-antenna-tip"></div>
+                  </div>
+
+                  <div class="cavbot-head">
+                    <div class="cavbot-face">
+                      <div class="cavbot-eyes-row">
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="left"></div>
+                            </div>
+                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="right"></div>
+                            </div>
+                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                      </div>
+
+                      <div class="cavbot-scan" aria-hidden="true">
+                        <div class="cavbot-scan-bar"></div>
+                        <div class="cavbot-scan-dots">
+                          <span>CAV</span>
+                          <span>BOT</span>
+                          <span>404</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="arcade-text">
+            Multiple CavBots orbit on the screen — only one wears the lime field
+            helmet. Tapping the imposter repairs the route and sends the user
+            back to a verified destination.
+          </p>
+          <div class="arcade-cta-row">
+            <a href="/arcade" class="btn btn-live">Live demo</a>
+          </div>
+        </article>
+
+        <!-- Signal Chase -->
+        <article class="arcade-card">
+          <div class="arcade-label">Signal Chase</div>
+          <div class="arcade-illustration">
+            <div class="arcade-bot">
+              <div class="cavbot-head-avatar" data-cavbot-head data-variant="orange">
+                <div class="cavbot-head-avatar-inner">
+                  <div class="cavbot-antenna">
+                    <div class="cavbot-antenna-tip"></div>
+                  </div>
+
+                  <div class="cavbot-head">
+                    <div class="cavbot-face">
+                      <div class="cavbot-eyes-row">
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="left"></div>
+                            </div>
+                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="right"></div>
+                            </div>
+                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                      </div>
+
+                      <div class="cavbot-scan" aria-hidden="true">
+                        <div class="cavbot-scan-bar"></div>
+                        <div class="cavbot-scan-dots">
+                          <span>CAV</span>
+                          <span>BOT</span>
+                          <span>404</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="arcade-text">
+            CavBot sweeps through a dark 404 field, chasing unstable beacons.
+            Each stabilised signal reveals part of the correct journey and
+            gradually unlocks the path back into your product.
+          </p>
+          <div class="arcade-cta-row">
+            <a href="/arcade" class="btn btn-live">Live demo</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =======================
+         404 EXPLAINER / SAAS NARRATIVE
+         ======================= -->
+    <section class="section section-404-why" aria-label="Why 404s matter for product reliability">
+      <div class="section-404-panel">
+        <header class="section-header" style="margin-bottom:14px;">
+          <div class="eyebrow">404s as product surfaces</div>
+          <h2 class="section-title" style="font-size:18px;">404s that behave like product, not accidents</h2>
+          <p class="section-body">
+            A traditional 404 says “page not found” and ends the journey. CavBot treats
+            the same surface as a continuation — keeping users oriented, protecting
+            trust, and turning failure states into deliberate experiences.
+          </p>
+          <br>
+        </header>
+
+        <div class="section-404-layout">
+          <div>
+            <div class="section-404-subtitle">What changes when 404s are instrumented</div>
+            <ul class="section-404-list">
+              <li>Visitors remain inside your product instead of bouncing out to a cold error screen.</li>
+              <li>Support sees where sessions actually break, not just that “something went wrong”.</li>
+              <li>Product can test alternate routes, offers, and guidance at the exact moment of failure.</li>
+              <li>Every 404 event is tied to campaigns, referrers, and deploys for real root-cause analysis.</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="section-404-subtitle">Why teams start CavBot on 404s</div>
+            <p class="section-body" style="font-size:12px;">
+              404s are where reliability is most visible. CavBot turns them into a live,
+              guided surface and streams structured signal back into CavCore Console via
+              the same <span class="code-inline">/v1/events</span> ingestion pipeline as the rest of your app.
+              For many teams, that’s the first, cleanest place to begin a control-plane pilot.
+            </p>
+            <br><br>
+            <div class="section-404-cta-row">
+            <a href="#"  class="btn btn-ghost">Learn more about 404 design</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================
+         BADGE SECTION
+         ======================= -->
+    <section class="section badge-section" aria-label="CavCore presence badge">
+      <div class="badge-panel">
+        <header class="section-header" style="margin-bottom:12px;">
+          <div class="eyebrow">CavCore presence badge</div>
+          <h2 class="section-title" style="font-size:18px;">A small badge with the full brain behind it</h2>
+          <p class="section-body">
+            The CavCore badge is a compact CavBot that lives in the corner of your product —
+            a quiet indicator that the session is under guard. It uses the same head and eye
+            system as the main bot, scaled down into a subtle, always-on presence.
+          </p>
+        </header>
+        <br><br>
+
+        <div class="badge-layout">
+          <!-- Badge visual -->
+          <div class="badge-visual" aria-label="CavCore active session badge">
+            <div class="badge-orbit">
+              <div class="cavbot-badge-frame">
+                <!-- CavCore badge avatar (visual is in cavcore/badge.css) -->
+                <div class="cavbot-dm-avatar">
+                  <div class="cavbot-dm-avatar-core">
+                    <div class="cavbot-dm-face">
+                      <div class="cavbot-dm-eyes-row">
+                        <div class="cavbot-dm-eye">
+                          <div class="cavbot-dm-eye-inner">
+                            <div class="cavbot-dm-eye-pupil"></div>
+                          </div>
+                          <div class="cavbot-dm-eye-glow"></div>
+                          <div class="cavbot-dm-blink"></div>
+                        </div>
+                        <div class="cavbot-dm-eye">
+                          <div class="cavbot-dm-eye-inner">
+                            <div class="cavbot-dm-eye-pupil"></div>
+                          </div>
+                          <div class="cavbot-dm-eye-glow"></div>
+                          <div class="cavbot-dm-blink"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /badge avatar -->
+              </div>
             </div>
           </div>
 
-          <!-- 404 CONTROL ROOM SUMMARY -->
-          <aside class="panel panel-roomy" aria-label="404 control room summary">
-            <div class="panel-subtitle">404 control room · Guardian slice</div>
-            <h2 class="section-title">How CavBot handles broken routes</h2>
-           <br>  <p class="section-body">
-              This block is driven by events where <strong>page_type = 404-control-room</strong>
-              and <strong>component = "404-game"</strong>. It shows where dead ends were
-              caught, missed, or left idle.
+          <div>
+            <p class="section-body" style="font-size:13px;">
+              When the badge appears, CavBot is actively watching the route, 404 state,
+              SEO snapshot, and runtime feel for that view. The avatar shifts posture —
+              calm, observing, or recovering — without distracting from your interface.
             </p>
- <br> 
-            <div class="key-stat-row">
-              <div class="key-stat">
-                <div class="key-stat-label">404 views</div>
-                <div class="key-stat-value">3,987</div>
-                <div class="key-stat-note">events.event_name = cavbot_404_view</div>
-              </div>
-              <div class="key-stat">
-                <div class="key-stat-label">Game interactions</div>
-                <div class="key-stat-value">6,214</div>
-                <div class="key-stat-note">cavbot_catch + cavbot_miss</div>
-              </div>
-              <div class="key-stat">
-                <div class="key-stat-label">Catches / Misses</div>
-                <div class="key-stat-value">4,112 / 2,102</div>
-                <div class="key-stat-note">Catch rate: 66.3%</div>
-              </div>
-              <div class="key-stat">
-                <div class="key-stat-label">Idle events (L1 / L2)</div>
-                <div class="key-stat-value">389 / 84</div>
-                <div class="key-stat-note">Sessions that stall in the control room.</div>
+            <p class="section-body" style="font-size:12px;">
+              The badge mounts through <strong>cavcore/badge.css</strong> and a small
+              script hook, so you can drop it into any layout without rethinking your
+              design. Analytics and insights are still collected even if you choose not
+              to show the badge; it is a visual presence indicator, not a requirement
+              for CavBot Analytics v5.
+            </p>
+            <ul class="badge-state-list" aria-label="Badge state behaviours">
+              <li>
+                <div class="badge-state-bullet" aria-hidden="true"></div>
+                <div><strong>Calm</strong> — session is healthy; CavBot is observing quietly in the corner.</div>
+              </li>
+              <li>
+                <div class="badge-state-bullet" aria-hidden="true"></div>
+                <div><strong>Guarded</strong> — the route is fragile or critical, so CavBot tracks feel more closely.</div>
+              </li>
+              <li>
+                <div class="badge-state-bullet" aria-hidden="true"></div>
+                <div><strong>Recovering</strong> — the user has hit a 404 or edge; CavBot guides them back into the product.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================
+         RUNTIME IMPACT — METRIC CARDS
+         ======================= -->
+    <section class="section section-impact" aria-label="Runtime impact">
+      <div class="section-impact-panel">
+        <header class="section-header" style="margin-bottom:14px;">
+          <div class="eyebrow">Runtime impact</div>
+          <h2 class="section-title" style="font-size:18px;">How CavBot shifts the numbers</h2>
+          <p class="section-body">
+            Once 404s, routes, SEO, and fragile edges are under CavBot, the runtime starts to
+            behave differently — fewer exits, more recovered journeys, and less noise
+            created by simple broken paths.
+          </p>
+        </header>
+        <br>
+
+        <div class="impact-graph-grid" aria-label="CavBot runtime impact metrics">
+          <article class="impact-graph" style="--percent:37; --accent: var(--lime);">
+            <div class="impact-graph-circle">
+              <div class="impact-graph-ring" aria-hidden="true">
+                <div class="impact-graph-center">
+                  <span class="impact-graph-value">-37%</span>
+                </div>
               </div>
             </div>
-<br> 
-            <p class="section-body" style="font-size:11px; margin-top:10px;">
-              Under the hood: this summary composes
-              <strong>daily_page_aggregates</strong>,
-              <strong>referrer_aggregates</strong>, and
-              insight types like <em>404_spike</em> and
-              <em>campaign_lands_on_404</em> — all derived from the append-only
-              <code>events</code> table.
+            <div class="impact-graph-label">404 exits reduced</div>
+            <p class="impact-graph-caption">
+              Fewer visitors abandon your product when they encounter a broken route.
             </p>
+          </article>
 
-            <!-- Guardian Health block -->
-            <div class="guardian-health-card" aria-label="Guardian health summary">
-              <div class="guardian-score-shell">
-                <div class="guardian-score-ring">
-                  <div class="guardian-score-bubble">
-                    <div class="guardian-score-label">Guardian score</div>
-                    <div class="guardian-score-value">92</div>
-                    <div class="guardian-score-scale">/ 100</div>
-                  </div>
+          <article class="impact-graph" style="--percent:24; --accent: var(--violet);">
+            <div class="impact-graph-circle">
+              <div class="impact-graph-ring" aria-hidden="true">
+                <div class="impact-graph-center">
+                  <span class="impact-graph-value">+24%</span>
                 </div>
               </div>
-              <div class="guardian-health-body">
-                <div class="guardian-pill-row">
-                  <div class="guardian-pill guardian-pill--strong">
-                    <div class="guardian-pill-label">Routes &amp; 404s</div>
-                    <div class="guardian-pill-value">A</div>
-                    <div class="guardian-pill-note">Dead ends are caught quickly and recovered cleanly.</div>
+            </div>
+            <div class="impact-graph-label">Recovered journeys</div>
+            <p class="impact-graph-caption">
+              More sessions are rescued from dead links and steered back into
+              revenue or activation flows.
+            </p>
+          </article>
+
+          <article class="impact-graph" style="--percent:19; --accent: var(--blue-soft);">
+            <div class="impact-graph-circle">
+              <div class="impact-graph-ring" aria-hidden="true">
+                <div class="impact-graph-center">
+                  <span class="impact-graph-value">-19%</span>
+                </div>
+              </div>
+            </div>
+            <div class="impact-graph-label">Support tickets</div>
+            <p class="impact-graph-caption">
+              Users who hit a dead route are quietly guided back into the product,
+              instead of opening “link not working” tickets.
+            </p>
+          </article>
+        </div>
+        <br>
+
+        <!-- New analytics / SEO dashboard overview under the circles -->
+        <div class="impact-dashboard" aria-label="Analytics and SEO overview">
+          <div class="impact-dashboard-grid">
+            <div>
+              <div class="section-404-subtitle">Analytics snapshot</div>
+              <ul class="analytics-list">
+                <li>Top failing routes ranked by 404 density and exit rate.</li>
+                <li>Sessions tagged with poor runtime feel and reload storms.</li>
+                <li>Campaigns landing on fragile or thin SEO pages.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="section-404-subtitle">SEO overview</div>
+              <div class="section-404-metric-box">
+                <div class="section-404-metric-row">
+                  <div>
+                    <div class="section-404-metric-label">Routes with clean seo</div>
+                    <div class="section-404-metric-value">78%</div>
                   </div>
-                  <div class="guardian-pill">
-                    <div class="guardian-pill-label">SEO surface</div>
-                    <div class="guardian-pill-value">B+</div>
-                    <div class="guardian-pill-note">A few critical pages still need meta and canonical fixes.</div>
+                  <div>
+                    <div class="section-404-metric-label">Critical non-indexable</div>
+                    <div class="section-404-metric-value">12</div>
                   </div>
                 </div>
-                <div class="guardian-pill-row">
-                  <div class="guardian-pill">
-                    <div class="guardian-pill-label">Performance</div>
-                    <div class="guardian-pill-value">A-</div>
-                    <div class="guardian-pill-note">Most routes land inside LCP budget with room to tighten.</div>
+                <div class="section-404-metric-row">
+                  <div>
+                    <div class="section-404-metric-label">Missing meta description</div>
+                    <div class="section-404-metric-value">31</div>
                   </div>
-                  <div class="guardian-pill">
-                    <div class="guardian-pill-label">Experience</div>
-                    <div class="guardian-pill-value">B</div>
-                    <div class="guardian-pill-note">Badge engagement is healthy; onboarding flow can be smoother.</div>
+                  <div>
+                    <div class="section-404-metric-label">Duplicate titles</div>
+                    <div class="section-404-metric-value">7</div>
                   </div>
                 </div>
-                <p class="guardian-health-copy">
-                  This score is designed to come straight from <strong>seo_snapshots</strong>,
-                  <strong>performance_samples</strong>, <strong>insights</strong>, and a future
-                  CavBot brain that reads your event stream in real time.
+                <p class="impact-dashboard-note">
+                  Values here are illustrative. In production, this panel mirrors live data from
+                  CavBot Analytics v5 and your latest <span class="code-inline">seo_snapshots</span>.
                 </p>
               </div>
             </div>
-          </aside>
-        </section>
-<br> 
-<br> 
-<br> 
-<br> 
-        <!-- =======================
-             MIDDLE: SEO / PERFORMANCE / STRUCTURE
-             ======================= -->
-        <section class="console-middle-row" aria-label="SEO, performance, and structure overview">
-          <!-- SEO SNAPSHOTS -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">SEO &amp; indexability</div>
-            <h2 class="section-title">Route-level SEO snapshots</h2>
-            <p class="section-body">
-              CavBot takes periodic <strong>seo_snapshots</strong> per page — title,
-              description, canonical, indexable flags, headings, word count, and social tags.
+          </div>
+        </div>
+
+        <p class="section-404-metric-footnote">
+          CavBot turns “I hit a dead link” into “I was guided back into the product” —
+          a small shift that compounds across thousands of sessions.
+        </p>
+      </div>
+    </section>
+
+    <!-- =======================
+         CAVCORE CONSOLE
+         ======================= -->
+    <section class="section" aria-label="CavCore Console analytics UI">
+      <div class="console-panel">
+        <header class="section-header" style="margin-bottom:12px;">
+          <div class="eyebrow">CavCore Console</div>
+          <h2 class="section-title" style="font-size:18px;">The inside of CavBot’s brain</h2>
+          <p class="section-body">
+            CavCore Console is the analytics and control-plane UI that sits on top of CavBot
+            Analytics v5. It shares the same palette, typography, and card geometry as this
+            page — but every panel is wired directly to projects, pages, events, and insights.
+          </p>
+        </header>
+        <br>
+
+        <div class="console-layout">
+          <div>
+            <p class="section-body" style="font-size:13px;">
+              Console views are built from a small, disciplined set of tables —
+              <span class="code-inline">projects</span>,
+              <span class="code-inline">pages</span>,
+              <span class="code-inline">events</span>,
+              <span class="code-inline">seo_snapshots</span>,
+              <span class="code-inline">performance_samples</span>,
+              <span class="code-inline">daily_page_aggregates</span>,
+              <span class="code-inline">referrer_aggregates</span>,
+              <span class="code-inline">insights</span>,
+              <span class="code-inline">alerts</span>, and
+              <span class="code-inline">deploy_markers</span>.
             </p>
-<br> 
-            <div class="seo-badges">
-              <span class="seo-badge">Total pages · 143</span>
-              <span class="seo-badge">Indexed pages · 127</span>
-              <span class="seo-badge seo-badge--critical">Pages with critical SEO issues · 9</span>
-              <span class="seo-badge">Pages with minor issues · 24</span>
-            </div>
-<br> 
-            <ul class="mini-list" aria-label="Common SEO issues">
-              <li>Duplicate titles detected on 3 blog posts.</li>
-              <li>Missing or thin meta descriptions on 6 marketing pages.</li>
-              <li>Canonical mismatch on <code>/404</code> variant — points to outdated route.</li>
-              <li>2 high-traffic pages marked <code>noindex</code> unintentionally.</li>
+            <br>
+            <p class="section-body" style="font-size:13px;">
+              This structure makes it easy to correlate a spike in 404s with a specific deploy,
+              a slow but critical page with missing meta tags, or a noisy campaign with fragile
+              landing routes — all from one control-room view.
+            </p>
+            <br>
+            <p class="section-body" style="font-size:12px;">
+              The same schema also lays the foundation for future endpoints like
+              <span class="code-inline">/v1/assist</span> and
+              <span class="code-inline">/v1/insights/summarize</span>, so an AI layer can
+              eventually talk about your site’s health using real, structured data.
+            </p>
+          </div>
+
+          <div>
+            <div class="section-404-subtitle">Key console views</div>
+            <ul class="console-list">
+              <li><strong>Project overview</strong> — traffic, 404s, performance, and journey feel at a glance.</li>
+              <li><strong>404 summary</strong> — which routes fail, how often, and how many journeys are recovered.</li>
+              <li><strong>Page &amp; SEO detail</strong> — snapshots, issues, Core Web Vitals, and behaviour on each route.</li>
+              <li><strong>Referrers &amp; campaigns</strong> — UTM and domain aggregates tied to real outcomes.</li>
+              <li><strong>Insights &amp; alerts</strong> — typed guardian-angel insights with severity and context.</li>
+              <br>
             </ul>
-<br> 
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              These rows feed insight types like <em>seo_missing_meta</em>,
-              <em>duplicate_title</em>, and <em>non_indexable_critical_page</em>.
-            </p>
-          </article>
-
-          <!-- PERFORMANCE -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Runtime feel</div>
-            <h2 class="section-title">Performance snapshots per route</h2>
-            <p class="section-body">
-              From <strong>performance_samples</strong>, CavBot tracks LCP, TTFB, CLS, and FID
-              per page and device, so slow-but-important pages float to the top.
-            </p>
-<br> 
-            <div class="perf-metric-row">
-              <div class="perf-pill">
-                <div class="perf-label">Average LCP (desktop)</div>
-                <div class="perf-value"><span data-metric="avg-lcp">1,980 ms</span></div>
-                <div class="perf-status">Across all monitored paths.</div>
-              </div>
-              <div class="perf-pill">
-                <div class="perf-label">Average TTFB</div>
-                <div class="perf-value">210 ms</div>
-                <div class="perf-status">Origins within target budget.</div>
-              </div>
+            <div style="margin-top:10px;">
+              <span class="console-pill">CavBot Analytics v5</span>
+              <span class="console-pill">CavCore Console</span>
+              <span class="console-pill">Future assist layer</span>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <div class="perf-metric-row" style="margin-top:8px;">
-              <div class="perf-pill">
-                <div class="perf-label">Pages above LCP budget</div>
-                <div class="perf-value">5</div>
-                <div class="perf-status">Flagged for insight <em>slow_critical_page</em>.</div>
-              </div>
-              <div class="perf-pill">
-                <div class="perf-label">Pages with unstable layout</div>
-                <div class="perf-value">2</div>
-                <div class="perf-status">CLS &gt; 0.1 on mobile.</div>
-              </div>
+    <!-- =======================
+         BRAND TRUST STRIP
+         ======================= -->
+    <section class="section brand-trust" aria-label="Companies powered by CavCore">
+      <div class="brand-trust-panel">
+        <div>
+          <div class="brand-trust-eyebrow">Powered by CavCore</div>
+          <h2 class="brand-trust-title">Early pilots in the glass case</h2>
+          <p class="brand-trust-copy">
+            A small set of teams are already running CavBot in production — treating their
+            deployments like artifacts in a control-room museum while we continue hardening
+            the system behind them.
+          </p>
+        </div>
+        <br>
+        <div class="brand-gallery" aria-label="Brand gallery">
+          <button class="brand-gallery-nav brand-gallery-nav--prev" type="button" aria-label="Previous pilot brand">
+            ←
+          </button>
+          <div class="brand-gallery-track">
+            <div class="brand-gallery-card">
+              <div class="brand-gallery-name">ACME CLOUD</div>
+              <div class="brand-gallery-meta">Multi-tenant SaaS · Client portals</div>
             </div>
-          </article>
-
-          <!-- STRUCTURE / MAP -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Structure &amp; internal links</div>
-            <h2 class="section-title">Canonical map &amp; weak routes</h2>
-            <p class="section-body">
-              CavBot uses the <strong>pages</strong> table, internal referrers,
-              and sitemap data to detect <em>orphan</em> and <em>under-linked</em> pages.
-            </p>
-<br> 
-<br>
-<br>
-<br>
-
-            <div class="structure-pill-grid">
-              <div class="structure-pill">
-                <div class="perf-label">Orphan pages</div>
-                <div class="perf-value">3</div>
-                <div class="perf-status">Appear in sitemap, but never linked internally.</div>
-              </div>
-              <div class="structure-pill">
-                <div class="perf-label">Weakly linked routes</div>
-                <div class="perf-value">7</div>
-                <div class="perf-status">Important pages with &lt; 3 internal links.</div>
-              </div>
-              <div class="structure-pill">
-                <div class="perf-label">Sitemap mismatches</div>
-                <div class="perf-value">4</div>
-                <div class="perf-status">404 when visited from sitemap.xml.</div>
-              </div>
-              <div class="structure-pill">
-                <div class="perf-label">High-value funnels</div>
-                <div class="perf-value">2</div>
-                <div class="perf-status">Tagged with importance_score &gt; 0.8.</div>
-              </div>
+            <div class="brand-gallery-card">
+              <div class="brand-gallery-name">ALPHA STACK</div>
+              <div class="brand-gallery-meta">Developer tooling · On-call teams</div>
             </div>
-
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              This is where CavBot earns its “guardian angel” role: flagging pages that
-              <em>should</em> carry more structural weight.
-            </p>
-          </article>
-        </section>
-<br>
-<br>
-<br>
-<br>
-        <!-- =======================
-             BOTTOM: REFERRERS / CAMPAIGNS + INSIGHTS
-             ======================= -->
-        <section class="console-bottom-row" aria-label="Referrers, campaigns, and insights">
-          <!-- REFERRERS & CAMPAIGNS -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Referrers &amp; campaigns</div>
-            <h2 class="section-title">Who sends traffic into broken routes</h2>
-            <p class="section-body">
-              CavBot’s <strong>referrer_aggregates</strong> table rolls up
-              traffic by domain and UTM campaign — highlighting sources that over-index
-              on 404s or thin pages.
-            </p>
-<br>
-            <div class="ref-table" aria-label="Top external referrers">
-              <div class="ref-table-header">
-                <div>Referrer</div>
-                <div>Sessions</div>
-                <div>404 hits</div>
-                <div>404 rate</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">google.com</div>
-                <div>8,921</div>
-                <div>143</div>
-                <div class="ref-rate-ok">1.6%</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">linkedin.com</div>
-                <div>1,284</div>
-                <div>57</div>
-                <div class="ref-rate-bad">4.4%</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">newsletter.cavbot.dev</div>
-                <div>622</div>
-                <div>2</div>
-                <div class="ref-rate-ok">0.3%</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">unknown / direct</div>
-                <div>5,131</div>
-                <div>190</div>
-                <div class="ref-rate-bad">3.7%</div>
-              </div>
+            <div class="brand-gallery-card">
+              <div class="brand-gallery-name">VECTOR RAIL</div>
+              <div class="brand-gallery-meta">Logistics · Real-time tracking</div>
             </div>
-
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              Campaign health is computed the same way — aggregating UTM source / medium /
-              campaign with error rates and top landing pages for each.
-            </p>
-<br>
-            <div class="campaign-graph" aria-label="Campaign 404 performance">
-              <div class="campaign-graph-header">
-                <div class="campaign-graph-title">Campaign 404 performance</div>
-                <div class="campaign-graph-window">Last 30 days · utm_campaign</div>
-              </div>
-
-              <div class="campaign-row" style="--percent:72%;">
-                <div class="campaign-row-header">
-                  <div class="campaign-name">launch_rinasce_collection</div>
-                  <div class="campaign-meta">
-                    sessions 2,184 · 404 rate <span class="ref-rate-ok">1.2%</span>
-                  </div>
-                </div>
-                <div class="campaign-bar-track">
-                  <div class="campaign-bar-fill"></div>
-                </div>
-              </div>
-
-              <div class="campaign-row" style="--percent:48%;">
-                <div class="campaign-row-header">
-                  <div class="campaign-name">newsletter_november_rollout</div>
-                  <div class="campaign-meta">
-                    sessions 1,046 · 404 rate <span class="ref-rate-ok">0.9%</span>
-                  </div>
-                </div>
-                <div class="campaign-bar-track">
-                  <div class="campaign-bar-fill"></div>
-                </div>
-              </div>
-
-              <div class="campaign-row" style="--percent:33%;">
-                <div class="campaign-row-header">
-                  <div class="campaign-name">linkedin_brand_awareness</div>
-                  <div class="campaign-meta">
-                    sessions 712 · 404 rate <span class="ref-rate-bad">3.8%</span>
-                  </div>
-                </div>
-                <div class="campaign-bar-track">
-                  <div class="campaign-bar-fill"></div>
-                </div>
-              </div>
-
-              <p class="campaign-footnote">
-                Bars show relative traffic volume per campaign. Color intensity and badges reuse
-                the same <strong>referrer_aggregates</strong> and <strong>insights</strong> schema
-                as the table above, so CavBot can talk about which campaigns are healthiest — or
-                sending visitors into dead ends.
-              </p>
+            <div class="brand-gallery-card">
+              <div class="brand-gallery-name">ORBIT DATA</div>
+              <div class="brand-gallery-meta">Analytics · Customer journeys</div>
             </div>
-          </article>
-
-          <!-- INSIGHTS & ALERTS -->
-          <article class="panel panel-roomy" aria-label="Guardian insights">
-            <div class="eyebrow">Guardian insights</div>
-            <h2 class="section-title">Issues CavBot is watching</h2>
-            <p class="section-body">
-              The <strong>insights</strong> table stores typed, severity-ranked findings
-              that future AI layers can “read” and talk about — each with structured context.
-            </p>
-<br>
-            <div class="insights-list">
-              <div class="insight-row">
-                <div class="insight-row-header">
-                  <div class="insight-type">404_spike</div>
-                  <div class="insight-severity insight-severity--high">High</div>
-                </div>
-                <div class="insight-title">404 spike after last deploy on /blog</div>
-                <div class="insight-meta">
-                  312 cavbot_404_view events in 24h · mostly from internal links on <code>/blog</code>.
-                  Suspected: missing redirect for an older article slug.
-                </div>
-                <div class="insight-tag-row">
-                  <span class="insight-tag">page_type: 404-control-room</span>
-                  <span class="insight-tag">component: core-tracking</span>
-                  <span class="insight-tag">status: open</span>
-                </div>
-              </div>
-
-              <div class="insight-row">
-                <div class="insight-row-header">
-                  <div class="insight-type">seo_missing_meta</div>
-                  <div class="insight-severity insight-severity--medium">Medium</div>
-                </div>
-                <div class="insight-title">Key marketing page without meta description</div>
-                <div class="insight-meta">
-                  <code>/pricing</code> appears in top 10 landing pages but has no meta description.
-                  Derived from latest <strong>seo_snapshots</strong>.
-                </div>
-                <div class="insight-tag-row">
-                  <span class="insight-tag">seo</span>
-                  <span class="insight-tag">high-traffic</span>
-                  <span class="insight-tag">status: open</span>
-                </div>
-              </div>
-
-              <div class="insight-row">
-                <div class="insight-row-header">
-                  <div class="insight-type">slow_critical_page</div>
-                  <div class="insight-severity insight-severity--medium">Medium</div>
-                </div>
-                <div class="insight-title">Onboarding route is slower than budget</div>
-                <div class="insight-meta">
-                  Average LCP 2,420ms on <code>/onboard</code> with high importance_score.
-                  Based on <strong>performance_samples</strong> aggregates.
-                </div>
-                <div class="insight-tag-row">
-                  <span class="insight-tag">performance</span>
-                  <span class="insight-tag">importance &gt; 0.8</span>
-                  <span class="insight-tag">status: open</span>
-                </div>
-              </div>
+            <div class="brand-gallery-card">
+              <div class="brand-gallery-name">NEBULA LABS</div>
+              <div class="brand-gallery-meta">Fintech · High-value routes</div>
             </div>
-<br>
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              Alerts for these insights (webhook, email, dashboard banners) are stored in the
-              <strong>alerts</strong> table, keeping a clean history of when teams were notified.
-            </p>
-          </article>
-        </section>
-<br>
-<br>
-<br>
-<br>
-        <!-- =======================
-             DEPLOY MARKERS / DATA HEALTH
-             ======================= -->
-        <section class="deploy-row" aria-label="Deploy markers and data health">
-          <!-- DEPLOY MARKERS -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Deploy markers</div>
-            <h2 class="section-title">Align incidents with releases</h2>
-            <p class="section-body">
-              CavBot’s <strong>deploy_markers</strong> table helps you line up 404 spikes,
-              SEO regressions, and perf changes against your own deploy timeline.
-            </p>
-<br>
-            <div class="deploy-timeline">
-              <div class="deploy-item">
-                <div class="deploy-dot"></div>
-                <div>
-                  <div><strong>Deploy #127 — Blog routing refactor</strong></div>
-                  <div class="deploy-meta">2025-11-28 · 404 spike detected on /blog within 2h of deploy.</div>
-                </div>
-              </div>
-              <div class="deploy-item">
-                <div class="deploy-dot" style="background: var(--lime); box-shadow: 0 0 8px rgba(185,200,90,0.7);"></div>
-                <div>
-                  <div><strong>Deploy #126 — 404 control room update</strong></div>
-                  <div class="deploy-meta">2025-11-24 · Catch rate improved by 11.3% after UX change.</div>
-                </div>
-              </div>
-              <div class="deploy-item">
-                <div class="deploy-dot" style="background: var(--blue-soft); box-shadow: 0 0 8px rgba(78,168,255,0.7);"></div>
-                <div>
-                  <div><strong>Deploy #125 — Image optimizations</strong></div>
-                  <div class="deploy-meta">2025-11-19 · LCP on /home dropped from 2,380ms to 1,740ms.</div>
-                </div>
-              </div>
-            </div>
-          </article>
+          </div>
+          <button class="brand-gallery-nav brand-gallery-nav--next" type="button" aria-label="Next pilot brand">
+            →
+          </button>
+        </div>
+      </div>
+    </section>
 
-          <!-- DATA / PRIVACY HEALTH -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Data &amp; privacy health</div>
-            <h2 class="section-title">Event-first, privacy-respectful</h2>
-            <p class="section-body">
-              CavBot’s analytics layer is designed to be safe for real production websites:
-              no emails, no names, no long-term IP storage — only coarse, anonymous signal.
-            </p>
-<br>
-            <ul class="data-health-list" aria-label="Privacy posture">
-              <li><strong>Anonymous visitors only:</strong> CavBot uses project-scoped anonymousId, never raw user IDs.</li>
-              <li><strong>No PII in payloads:</strong> Events avoid emails, names, or custom identifiers by default.</li>
-              <li><strong>IP handling:</strong> Optional, truncated, and used only for aggregated geography if enabled.</li>
-              <li><strong>Append-only events:</strong> Raw <code>events</code> can be archived after N days, while
-                daily aggregates and insights are retained longer.</li>
+    <!-- =======================
+         CAVBOT STATUS / IN DEVELOPMENT
+         ======================= -->
+    <section class="section cavbot-status" aria-label="CavBot development status">
+      <div class="cavbot-status-panel">
+        <header class="section-header" style="margin-bottom:10px;">
+          <div class="eyebrow">Actively engineered</div>
+          <h2 class="section-title" style="font-size:18px;">CavBot is still in the lab</h2>
+          <p class="section-body">
+            CavBot is not a static mascot. It is a living control-plane brainline that
+            CavCore evolves through small, disciplined releases — the same way serious
+            infrastructure teams ship runtimes and edge networks.
+          </p>
+        </header>
+        <br>
+
+        <div class="cavbot-status-grid">
+          <div>
+            <div class="section-404-subtitle">Current brain · Fieldline IV</div>
+            <ul class="section-404-list">
+              <li>Production-tested across 404s, fragile routes, and high-value funnels.</li>
+              <li>Path, fault, and feel signals streamed into session-level scoring.</li>
+              <li>CavCore Console views for recovery, exits, SEO health, and journey feel.</li>
             </ul>
-<br>
-            <div class="data-health-metrics" aria-label="Data health meters">
-              <div class="data-health-metric" style="--percent:12%;">
-                <div class="data-health-label">PII risk</div>
-                <div class="data-health-bar-track">
-                  <div class="data-health-bar-fill"></div>
-                </div>
-                <div class="data-health-caption">
-                  Low — payload schema excludes names, emails, and raw IPs by design.
-                </div>
-              </div>
-              <div class="data-health-metric" style="--percent:86%;">
-                <div class="data-health-label">Aggregation coverage</div>
-                <div class="data-health-bar-track">
-                  <div class="data-health-bar-fill"></div>
-                </div>
-                <div class="data-health-caption">
-                  Most metrics come from <code>daily_page_aggregates</code> and <code>referrer_aggregates</code>, not raw events.
-                </div>
-              </div>
-              <div class="data-health-metric" style="--percent:64%;">
-                <div class="data-health-label">Retention horizon</div>
-                <div class="data-health-bar-track">
-                  <div class="data-health-bar-fill"></div>
-                </div>
-                <div class="data-health-caption">
-                  Raw event retention tuned to 90 days with longer-lived, anonymised rollups.
-                </div>
-              </div>
-            </div>
-<br>
-
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              This project view is intentionally structured so a future CavBot assistant can
-              sit on top of <strong>events</strong>, <strong>seo_snapshots</strong>,
-              <strong>performance_samples</strong>, and <strong>insights</strong> — without
-              ever needing to see personal identities.
+          </div>
+          <div>
+            <div class="section-404-subtitle">What CavCore is building next</div>
+            <p class="section-body" style="font-size:12px;">
+              Upcoming generations focus on deeper journey timelines, richer cross-session
+              patterns, and tighter links to the observability tools teams already use.
+              CavBot’s roadmap is conservative on purpose: new capabilities ship only when
+              they materially improve reliability, not just to headline a launch.
             </p>
-          </article>
-        </section>
-      </section>
-    </main>
+          </div>
+        </div>
+        <br>
+        <p class="section-404-metric-footnote">
+          As CavCore evolves, the same robot on this page will quietly gain new instincts —
+          without breaking the sessions it already protects today.
+        </p>
+      </div>
+    </section>
+  </main>
 
-    <!-- ===========================
-         FOOTER (unified)
-         ========================== -->
-    <!-- FOOTER -->
+ <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
 
@@ -2243,80 +3114,42 @@
 
   </div>
 </footer>
-  </div>
-
-<!-- CavCore Console demo metrics (no backend needed yet) -->
-<script>
-  (function () {
-    function hydrateMetrics(data) {
-      if (!data || !data.metrics) return;
-      const metrics = data.metrics;
-
-      // 1) Sessions under guard
-      const pageViewsEl = document.querySelector('[data-metric="page-views"]');
-      if (pageViewsEl) {
-        const v = metrics.pageViews24h || 0;
-        pageViewsEl.textContent = v.toLocaleString();
-      }
-
-      // 2) Average LCP
-      const avgLcpEl = document.querySelector('[data-metric="avg-lcp"]');
-      if (avgLcpEl) {
-        const raw = metrics.avgLcpMs;
-        if (raw == null) {
-          avgLcpEl.textContent = "—";
-        } else {
-          const n = Math.round(Number(raw));
-          avgLcpEl.textContent = n.toLocaleString() + " ms";
-        }
-      }
-
-      // 3) Top route
-      const topRouteEl = document.querySelector('[data-metric="top-route"]');
-      if (topRouteEl) {
-        const routes = Array.isArray(metrics.topRoutes) ? metrics.topRoutes : [];
-        if (!routes.length) {
-          topRouteEl.textContent = "No dominant route yet";
-        } else {
-          const top = routes[0] || {};
-          const path = top.route_path || "/";
-          const views = top.views || 0;
-          topRouteEl.textContent = path + " · " + views.toLocaleString() + " views";
-        }
-      }
-    }
-
-    // 🔹 DEMO DATA – change these to whatever you want for the portfolio
-    const demoData = {
-      metrics: {
-        pageViews24h: 43210,
-        avgLcpMs: 1450,
-        topRoutes: [
-          { route_path: "/blog", views: 987 }
-        ]
-      }
-    };
-
-    // Hydrate immediately on load with demo data
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      hydrateMetrics(demoData);
-    } else {
-      document.addEventListener("DOMContentLoaded", function () {
-        hydrateMetrics(demoData);
-      });
-    }
-
-    // NOTE: when your real API is ready, we can swap this demo block
-    // back to a fetch(...) version that calls your backend.
-  })();
-</script>
-
 <!-- Analytics bridge (window.cavbotAnalytics.track) -->
 <script src="/cavbotcore/cavbot-analytics.js"></script>
-  <!-- Unified brain script -->
-  <script src="cavbotcore/cavbotbrain.js" defer></script>
-  <!-- CavBot header-footer + nav toggle -->
+  <!-- CavBot brain + nav toggle -->
+  <script src="cavbotcore/cavbotbrain.js"></script>
+    <!-- CavBot header-footer + nav toggle -->
   <script src="headerfooter.js"></script>
+  <script>
+   
+ // Simple brand gallery scroll (no extra UI/controls)
+      const track = document.querySelector('.brand-gallery-track');
+      const cards = track ? track.querySelectorAll('.brand-gallery-card') : [];
+      const prevBtn = document.querySelector('.brand-gallery-nav--prev');
+      const nextBtn = document.querySelector('.brand-gallery-nav--next');
+
+      if (track && cards.length && prevBtn && nextBtn) {
+        let index = 0;
+        const cardWidth = cards[0].offsetWidth + 14;
+
+        function scrollToIndex() {
+          track.scrollTo({
+            left: index * cardWidth,
+            behavior: 'smooth'
+          });
+        }
+
+        prevBtn.addEventListener('click', function () {
+          index = Math.max(0, index - 1);
+          scrollToIndex();
+        });
+
+        nextBtn.addEventListener('click', function () {
+          index = Math.min(cards.length - 1, index + 1);
+          scrollToIndex();
+        });
+      }
+
   </script>
 </body>
 </html>
