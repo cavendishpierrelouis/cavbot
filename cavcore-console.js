@@ -1,163 +1,135 @@
 // cavcore-console.js
 // Wires CavCore Console UI to the live summary API.
-// Reads metrics (pageViews24h, avgLcpMs, etc.) and paints them into the DOM.
+// Reads metrics like pageViews24h, avgLcpMs, topRoutes and paints them into the DOM.
 
 (function () {
   const SUMMARY_URL = "https://api.cavbot.io/v1/projects/1/summary";
   const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
-  const REFRESH_MS = 60_000; // refresh every 60s
+  const REFRESH_MS = 60_000; // refresh every 60s so it doesn't feel static
 
-  // ---- Helpers ----------------------------------------------------------
+  // ---------- Helpers ----------------------------------------------------
 
-  function getMetricsFromResponse(data) {
+  function pickMetricsPayload(data) {
     if (!data || typeof data !== "object") return {};
-
-    // Expected from your Worker:
+    // Expected shape from your Worker:
     // { project: {...}, window: {...}, metrics: {...} }
     if (data.metrics && typeof data.metrics === "object") return data.metrics;
-
-    if (Array.isArray(data.projects) && data.projects.length > 0) {
-      const p = data.projects[0];
-      if (p.metrics && typeof p.metrics === "object") return p.metrics;
-    }
-
+    if (data.project && data.project.metrics) return data.project.metrics;
     // Fallback: treat root as metrics
     return data;
   }
 
-  function resolvePath(obj, path) {
-    if (!obj) return undefined;
-    const parts = String(path).split(".");
-    let cur = obj;
-    for (const key of parts) {
-      if (cur && Object.prototype.hasOwnProperty.call(cur, key)) {
-        cur = cur[key];
-      } else {
-        return undefined;
-      }
-    }
-    return cur;
-  }
-
   function formatNumber(value) {
-    const n = Number(value);
-    if (!isFinite(n)) return "—";
-    return n.toLocaleString();
-  }
-
-  function formatInteger(value) {
-    const n = Math.round(Number(value));
-    if (!isFinite(n)) return "—";
-    return n.toLocaleString();
+    if (value == null || isNaN(value)) return "—";
+    return Number(value).toLocaleString();
   }
 
   function formatMs(value) {
-    const n = Math.round(Number(value));
-    if (!isFinite(n)) return "—";
-    return n.toLocaleString() + " ms";
+    if (value == null || isNaN(value)) return "—";
+    return Math.round(Number(value)).toLocaleString() + " ms";
   }
 
-  function formatPercent(value) {
-    const n = Number(value);
-    if (!isFinite(n)) return "—";
-    return n.toLocaleString(undefined, { maximumFractionDigits: 1 }) + "%";
+  function markConsoleLoaded() {
+    document.documentElement.classList.add("cavcore-console-loaded");
   }
 
-  // ---- Metric application -----------------------------------------------
+  // ---------- Renderers --------------------------------------------------
 
-  function applyScalarMetrics(metrics) {
-    const nodes = document.querySelectorAll("[data-metric]");
+  // Total events / page views (24h) – wired to your "Total events" tile
+  function renderPageViews(metrics) {
+    // IMPORTANT: this matches your HTML exactly:
+    // <div class="metric-value" data-metric="pageviews-24h">284,930</div>
+    const el = document.querySelector('[data-metric="pageviews-24h"]');
+    if (!el) return;
 
-    nodes.forEach(function (el) {
-      const key = el.getAttribute("data-metric");
-      const format = el.getAttribute("data-format") || "number";
+    const value = metrics.pageViews24h;
+    if (typeof value === "number") {
+      el.textContent = formatNumber(value);
+    }
+    // If it's missing, we just leave whatever was there (no "—" overwrite)
+  }
 
-      // Special: percent-bar only drives CSS var, not text
-      if (format === "percent-bar") {
-        const raw = resolvePath(metrics, key);
-        if (raw == null || isNaN(raw)) return;
-        const n = Number(raw);
-        el.style.setProperty("--percent", n + "%");
-        return;
-      }
+  // Average LCP (desktop) – wired to:
+  // <div class="perf-value" data-metric="avg-lcp-ms">1,980 ms</div>
+  function renderAvgLcp(metrics) {
+    const el = document.querySelector('[data-metric="avg-lcp-ms"]');
+    if (!el) return;
 
-      const raw = resolvePath(metrics, key);
-      if (raw == null || (typeof raw === "number" && !isFinite(raw))) return;
+    const value = metrics.avgLcpMs;
+    if (typeof value === "number") {
+      el.textContent = formatMs(value);
+    }
+  }
 
-      let text;
-      switch (format) {
-        case "ms":
-          text = formatMs(raw);
-          break;
-        case "integer":
-          text = formatInteger(raw);
-          break;
-        case "percent":
-          text = formatPercent(raw);
-          break;
-        case "number":
-        default:
-          text = formatNumber(raw);
-          break;
-      }
+  // Optional: top routes list if you add:
+  // <ul class="mini-list" data-metric="top-routes-list"></ul>
+  function renderTopRoutes(metrics) {
+    const list = document.querySelector('[data-metric="top-routes-list"]');
+    if (!list) return;
 
-      el.textContent = text;
+    const routes = Array.isArray(metrics.topRoutes) ? metrics.topRoutes : [];
+    list.innerHTML = "";
+
+    if (!routes.length) {
+      const li = document.createElement("li");
+      li.textContent = "No recent route data yet.";
+      list.appendChild(li);
+      return;
+    }
+
+    routes.slice(0, 5).forEach((route) => {
+      const li = document.createElement("li");
+      const path =
+        route.route_path || route.path || route.url || "(unknown route)";
+      const views =
+        typeof route.views === "number"
+          ? route.views
+          : typeof route.count === "number"
+          ? route.count
+          : 0;
+
+      li.textContent = `${path} — ${formatNumber(views)} views (24h)`;
+      list.appendChild(li);
     });
-
-    // Composite: catches / misses
-    const catchMissEl = document.querySelector(".key-stat-value--catch-miss");
-    if (catchMissEl) {
-      const catches = resolvePath(metrics, "catchCount30d");
-      const misses = resolvePath(metrics, "missCount30d");
-      if (typeof catches === "number" && typeof misses === "number") {
-        catchMissEl.textContent =
-          formatInteger(catches) + " / " + formatInteger(misses);
-      }
-    }
-
-    // Composite: idle events L1 / L2
-    const idleEl = document.querySelector(".key-stat-value--idle-levels");
-    if (idleEl) {
-      const l1 = resolvePath(metrics, "idleL1Count30d");
-      const l2 = resolvePath(metrics, "idleL2Count30d");
-      if (typeof l1 === "number" && typeof l2 === "number") {
-        idleEl.textContent = formatInteger(l1) + " / " + formatInteger(l2);
-      }
-    }
   }
 
-  // ---- Fetch + refresh --------------------------------------------------
+  // ---------- Loader -----------------------------------------------------
 
-  function fetchAndApply() {
-    fetch(SUMMARY_URL, {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "X-Project-Key": PROJECT_KEY
-      },
-      credentials: "omit"
-    })
-      .then(function (res) {
-        if (!res.ok) {
-          throw new Error("Bad response from CavBot API: " + res.status);
-        }
-        return res.json();
-      })
-      .then(function (data) {
-        const metrics = getMetricsFromResponse(data) || {};
-        console.debug("CavCore Console summary payload:", metrics);
-        applyScalarMetrics(metrics);
-        document.documentElement.classList.add("cavcore-console-loaded");
-      })
-      .catch(function (err) {
-        console.error("CavBot metrics fetch failed:", err);
-        // On failure, demo numbers stay; no hard "—" everywhere.
+  async function loadSummaryOnce() {
+    try {
+      const res = await fetch(SUMMARY_URL, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "X-Project-Key": PROJECT_KEY, // must match your Worker
+        },
+        credentials: "omit",
       });
+
+      if (!res.ok) {
+        throw new Error(`Bad response from summary API: ${res.status}`);
+      }
+
+      const data = await res.json();
+      const metrics = pickMetricsPayload(data);
+
+      console.debug("CavCore Console summary payload:", metrics);
+
+      renderPageViews(metrics);
+      renderAvgLcp(metrics);
+      renderTopRoutes(metrics);
+
+      markConsoleLoaded();
+    } catch (err) {
+      console.error("CavCore Console: failed to load summary", err);
+      // We DON'T wipe your numbers to "—" here to avoid fake static feel.
+    }
   }
 
   function boot() {
-    fetchAndApply();
-    setInterval(fetchAndApply, REFRESH_MS);
+    loadSummaryOnce();
+    // Keep it feeling alive: refresh every minute
+    setInterval(loadSummaryOnce, REFRESH_MS);
   }
 
   if (document.readyState === "loading") {
