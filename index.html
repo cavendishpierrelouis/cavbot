@@ -3118,48 +3118,11 @@
 <script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- CavBot brain + nav toggle -->
   <script src="cavbotcore/cavbotbrain.js"></script>
+    <!-- CavBot brain + nav toggle -->
+  <script src="headerfooter.js"></script>
   <script>
-    (function () {
-      const toggle = document.querySelector('.nav-menu-toggle');
-      const overlay = document.querySelector('.nav-overlay');
-      const closeBtn = overlay ? overlay.querySelector('.nav-overlay-close') : null;
-      const backdrop = overlay ? overlay.querySelector('.nav-overlay-backdrop') : null;
-      const links = overlay ? overlay.querySelectorAll('.nav-overlay-link') : [];
-
-      if (!toggle || !overlay) return;
-
-      function openMenu() {
-        overlay.classList.add('is-open');
-        toggle.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeMenu() {
-        overlay.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      }
-
-      toggle.addEventListener('click', function () {
-        const isOpen = overlay.classList.contains('is-open');
-        if (isOpen) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
-
-      if (closeBtn) {
-        closeBtn.addEventListener('click', closeMenu);
-      }
-      if (backdrop) {
-        backdrop.addEventListener('click', closeMenu);
-      }
-      links.forEach(function (link) {
-        link.addEventListener('click', closeMenu);
-      });
-
-      // Simple brand gallery scroll (no extra UI/controls)
+   
+ // Simple brand gallery scroll (no extra UI/controls)
       const track = document.querySelector('.brand-gallery-track');
       const cards = track ? track.querySelectorAll('.brand-gallery-card') : [];
       const prevBtn = document.querySelector('.brand-gallery-nav--prev');
@@ -3186,21 +3149,6 @@
           scrollToIndex();
         });
       }
-    })();
-
-  // FOOTER ACCORDION (mobile)
-  (function () {
-    var toggles = document.querySelectorAll('.footer-column-toggle');
-    if (!toggles.length) return;
-
-    toggles.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var col = btn.closest('.footer-column');
-        if (!col) return;
-        col.classList.toggle('is-open');
-      });
-    });
-  })();
 
   </script>
 </body>
