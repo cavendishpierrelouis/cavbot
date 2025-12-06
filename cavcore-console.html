@@ -1536,7 +1536,7 @@
                   </div>
                   <div class="console-hero-metric">
                     <div class="console-hero-metric-label">sessions under guard</div>
-                    <div class="console-hero-metric-value">19,286</div>
+                    <div class="console-hero-metric-value"><span data-metric="page-views">19,286</span></div>
                     <div class="console-hero-metric-footnote">From sessions table, last 30 days.</div>
                   </div>
                   <div class="console-hero-metric">
@@ -1696,7 +1696,7 @@
 
               <p class="trend-footnote">
                 CavBot never stores PII — trends are built from anonymousId, sessionKey,
-                route, and component, not from user accounts.
+                route, and component, not from user accounts. <span data-metric="top-route">/</span> is currently the most-viewed route in the last 24h.
               </p>
             </div>
           </div>
@@ -1837,7 +1837,7 @@
             <div class="perf-metric-row">
               <div class="perf-pill">
                 <div class="perf-label">Average LCP (desktop)</div>
-                <div class="perf-value">1,980 ms</div>
+                <div class="perf-value"><span data-metric="avg-lcp">1,980 ms</span></div>
                 <div class="perf-status">Across all monitored paths.</div>
               </div>
               <div class="perf-pill">
@@ -2244,6 +2244,83 @@
   </div>
 </footer>
   </div>
+
+<!-- CavCore Console live metrics -->
+<script>
+  (function () {
+    const ENDPOINT = "https://api.cavbot.io/v1/projects/1/summary";
+    const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
+
+    function hydrateMetrics(data) {
+      if (!data || !data.metrics) return;
+      const metrics = data.metrics;
+
+      // 1) Sessions under guard <- pageViews24h
+      const pageViewsEl = document.querySelector('[data-metric="page-views"]');
+      if (pageViewsEl) {
+        const v = metrics.pageViews24h || 0;
+        pageViewsEl.textContent = v.toLocaleString();
+      }
+
+      // 2) Average LCP
+      const avgLcpEl = document.querySelector('[data-metric="avg-lcp"]');
+      if (avgLcpEl) {
+        const raw = metrics.avgLcpMs;
+        if (raw == null) {
+          avgLcpEl.textContent = "—";
+        } else {
+          const n = Math.round(Number(raw));
+          avgLcpEl.textContent = n.toLocaleString() + " ms";
+        }
+      }
+
+      // 3) Top route string
+      const topRouteEl = document.querySelector('[data-metric="top-route"]');
+      if (topRouteEl) {
+        const routes = Array.isArray(metrics.topRoutes) ? metrics.topRoutes : [];
+        if (!routes.length) {
+          topRouteEl.textContent = "No dominant route yet";
+        } else {
+          const top = routes[0] || {};
+          const path = top.route_path || "/";
+          const views = top.views || 0;
+          topRouteEl.textContent = path + " · " + views.toLocaleString() + " views";
+        }
+      }
+    }
+
+    function fetchMetrics() {
+      fetch(ENDPOINT, {
+        headers: {
+          "X-Project-Key": PROJECT_KEY
+        }
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Metrics request failed: " + response.status);
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          console.log("CavCore Console metrics:", data);
+          hydrateMetrics(data);
+        })
+        .catch(function (err) {
+          console.error("CavCore Console metrics error", err);
+        });
+    }
+
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      fetchMetrics();
+    } else {
+      document.addEventListener("DOMContentLoaded", fetchMetrics);
+    }
+
+    // Optional auto-refresh:
+    // setInterval(fetchMetrics, 60000);
+  })();
+</script>
+
 <!-- Analytics bridge (window.cavbotAnalytics.track) -->
 <script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script -->
