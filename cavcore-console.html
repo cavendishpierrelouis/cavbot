@@ -2245,17 +2245,14 @@
 </footer>
   </div>
 
-<!-- CavCore Console live metrics -->
+<!-- CavCore Console demo metrics (no backend needed yet) -->
 <script>
   (function () {
-    const ENDPOINT = "https://api.cavbot.io/v1/projects/1/summary";
-    const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
-
     function hydrateMetrics(data) {
       if (!data || !data.metrics) return;
       const metrics = data.metrics;
 
-      // 1) Sessions under guard <- pageViews24h
+      // 1) Sessions under guard
       const pageViewsEl = document.querySelector('[data-metric="page-views"]');
       if (pageViewsEl) {
         const v = metrics.pageViews24h || 0;
@@ -2274,7 +2271,7 @@
         }
       }
 
-      // 3) Top route string
+      // 3) Top route
       const topRouteEl = document.querySelector('[data-metric="top-route"]');
       if (topRouteEl) {
         const routes = Array.isArray(metrics.topRoutes) ? metrics.topRoutes : [];
@@ -2289,35 +2286,28 @@
       }
     }
 
-    function fetchMetrics() {
-      fetch(ENDPOINT, {
-        headers: {
-          "X-Project-Key": PROJECT_KEY
-        }
-      })
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error("Metrics request failed: " + response.status);
-          }
-          return response.json();
-        })
-        .then(function (data) {
-          console.log("CavCore Console metrics:", data);
-          hydrateMetrics(data);
-        })
-        .catch(function (err) {
-          console.error("CavCore Console metrics error", err);
-        });
-    }
+    // 🔹 DEMO DATA – change these to whatever you want for the portfolio
+    const demoData = {
+      metrics: {
+        pageViews24h: 43210,
+        avgLcpMs: 1450,
+        topRoutes: [
+          { route_path: "/blog", views: 987 }
+        ]
+      }
+    };
 
+    // Hydrate immediately on load with demo data
     if (document.readyState === "complete" || document.readyState === "interactive") {
-      fetchMetrics();
+      hydrateMetrics(demoData);
     } else {
-      document.addEventListener("DOMContentLoaded", fetchMetrics);
+      document.addEventListener("DOMContentLoaded", function () {
+        hydrateMetrics(demoData);
+      });
     }
 
-    // Optional auto-refresh:
-    // setInterval(fetchMetrics, 60000);
+    // NOTE: when your real API is ready, we can swap this demo block
+    // back to a fetch(...) version that calls your backend.
   })();
 </script>
 
