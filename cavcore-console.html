@@ -690,7 +690,7 @@
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.16);
       background:
-        radial-gradient(circle at top left, rgba(185,200,90,0.14), transparent 60%),
+        radial-gradient(circle at top left, rgba(185,200,90,0.14), transparent 60%)
         rgba(3,7,20,0.98);
       padding: 10px 11px;
       display: grid;
@@ -1527,22 +1527,22 @@
               <div class="console-hero-metrics-grid">
                 <div class="console-hero-metric">
                   <div class="console-hero-metric-label">404 recovery rate</div>
-                  <div class="console-hero-metric-value">92.4%</div>
+                  <div class="console-hero-metric-value" data-metric="recoveryRate404" data-format="percent">92.4%</div>
                   <div class="console-hero-metric-footnote">From events where page_type = 404-control-room.</div>
                 </div>
                 <div class="console-hero-metric">
                   <div class="console-hero-metric-label">unique visitors</div>
-                  <div class="console-hero-metric-value">8,104</div>
+                  <div class="console-hero-metric-value" data-metric="uniqueVisitors30d" data-format="number">8,104</div>
                   <div class="console-hero-metric-footnote">Distinct anonymousId per project.</div>
                 </div>
                 <div class="console-hero-metric">
                   <div class="console-hero-metric-label">sessions under guard</div>
-                  <div class="console-hero-metric-value">19,286</div>
+                  <div class="console-hero-metric-value" data-metric="sessionsUnderGuard30d" data-format="number">19,286</div>
                   <div class="console-hero-metric-footnote">From sessions table, last 30 days.</div>
                 </div>
                 <div class="console-hero-metric">
                   <div class="console-hero-metric-label">routes monitored</div>
-                  <div class="console-hero-metric-value">143</div>
+                  <div class="console-hero-metric-value" data-metric="routesMonitored" data-format="number">143</div>
                   <div class="console-hero-metric-footnote">From pages table, is_active = true.</div>
                 </div>
               </div>
@@ -1652,44 +1652,8 @@
               </div>
             </div>
 
-            <div class="trend-chart">
-              <!-- Dummy bars – wire up later with real heights -->
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions"></div>
-                <div class="trend-bar trend-bar--404"></div>
-                <div class="trend-day-label">D1</div>
-              </div>
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions" style="height:70%;"></div>
-                <div class="trend-bar trend-bar--404" style="height:32%;"></div>
-                <div class="trend-day-label">D2</div>
-              </div>
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions" style="height:60%;"></div>
-                <div class="trend-bar trend-bar--404" style="height:22%;"></div>
-                <div class="trend-day-label">D3</div>
-              </div>
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions" style="height:78%;"></div>
-                <div class="trend-bar trend-bar--404" style="height:45%;"></div>
-                <div class="trend-day-label">D4</div>
-              </div>
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions" style="height:66%;"></div>
-                <div class="trend-bar trend-bar--404" style="height:28%;"></div>
-                <div class="trend-day-label">D5</div>
-              </div>
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions" style="height:72%;"></div>
-                <div class="trend-bar trend-bar--404" style="height:36%;"></div>
-                <div class="trend-day-label">D6</div>
-              </div>
-              <div class="trend-bar-group">
-                <div class="trend-bar trend-bar--sessions" style="height:59%;"></div>
-                <div class="trend-bar trend-bar--404" style="height:21%;"></div>
-                <div class="trend-day-label">D7</div>
-              </div>
-            </div>
+            <!-- Trend chart is hydrated by cavcore-console.js using metrics.trend7d -->
+            <div class="trend-chart" id="trend-chart"></div>
 
             <p class="trend-footnote">
               CavBot never stores PII — trends are built from anonymousId, sessionKey,
@@ -1722,8 +1686,15 @@
             </div>
             <div class="key-stat">
               <div class="key-stat-label">Catches / Misses</div>
-              <div class="key-stat-value key-stat-value--catch-miss">4,112 / 2,102</div>
-              <div class="key-stat-note">Catch rate: 66.3%</div>
+              <div class="key-stat-value key-stat-value--catch-miss">
+                <span data-metric="catches30d" data-format="number">4,112</span>
+                 /
+                <span data-metric="misses30d" data-format="number">2,102</span>
+              </div>
+              <div class="key-stat-note">
+                Catch rate:
+                <span data-metric="recoveryRate404" data-format="percent">66.3%</span>
+              </div>
             </div>
             <div class="key-stat">
               <div class="key-stat-label">Idle events (L1 / L2)</div>
@@ -2240,7 +2211,6 @@
 
     </div>
   </footer>
-  </div>
 
   <!-- Analytics bridge (window.cavbotAnalytics.track) -->
   <script src="/cavbotcore/cavbot-analytics.js"></script>
@@ -2248,7 +2218,7 @@
   <script src="cavbotcore/cavbotbrain.js" defer></script>
   <!-- CavBot header-footer + nav toggle -->
   <script src="headerfooter.js"></script>
- <!-- CavCore Console live metrics -->
+  <!-- CavCore Console live metrics -->
   <script src="cavcore-console.js" defer></script>
 </body>
 </html>
