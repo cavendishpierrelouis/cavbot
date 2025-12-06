@@ -9,8 +9,8 @@
   <!-- TYPEFACE (unified with index) -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
- <!-- CavCore header-footer styles -->
-   <link rel="stylesheet" href="header-footer.css" />
+  <!-- CavCore header-footer styles -->
+  <link rel="stylesheet" href="header-footer.css" />
   <!-- Unified CavBot head + brain styles -->
   <link rel="stylesheet" href="cavbotcore/head.css"/>
   <!-- CavCore badge styles (same bundle as index, harmless even if unused here) -->
@@ -1259,60 +1259,61 @@
       font-size: 10px;
       color: var(--ink-subtle);
     }
+
     /* ==============================
        RESPONSIVE
        ============================== */
 
-  @media (max-width: 960px) {
-  .page-inner {
-    padding-top: var(--space-lg);
-  }
+    @media (max-width: 960px) {
+      .page-inner {
+        padding-top: var(--space-lg);
+      }
 
-  .console-top-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .console-top-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .console-hero-panel {
-    order: -1;
-  }
+      .console-hero-panel {
+        order: -1;
+      }
 
-  .console-filters-panel-inner {
-    grid-template-columns: minmax(0, 1fr);
-    align-items: flex-start;
-  }
+      .console-filters-panel-inner {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: flex-start;
+      }
 
-  .console-filters-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+      .console-filters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-  .console-overview {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .console-overview {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .console-middle-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .console-middle-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .console-bottom-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .console-bottom-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .deploy-row {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .deploy-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .metric-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+      .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-  .guardian-health-card {
-    grid-template-columns: minmax(0, 1fr);
-  }
+      .guardian-health-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
 
-  .guardian-score-shell {
-    justify-self: center;
-  }
-}
+      .guardian-score-shell {
+        justify-self: center;
+      }
+    }
 
     @media (max-width: 720px) {
       .site-header-inner {
@@ -1358,898 +1359,959 @@
 <body class="page-shell"
       data-cavbot-page-type="cavcore-console"
       data-cavbot-component="cavcore-console-shell">
-    <!-- ===========================
-         HEADER / NAV (unified)
-         ========================== -->
-    <header class="site-header">
-      <div class="site-header-inner">
-       <div class="brand-lockup">
-  <a href="index.html" class="brand-logo">
-    <img src="assets/cavbotwordmark.svg" alt="CavBot" class="brand-logo-img">
-  </a>
-</div>
+  <!-- ===========================
+       HEADER / NAV (unified)
+       ========================== -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="brand-lockup">
+        <a href="index.html" class="brand-logo">
+          <img src="assets/cavbotwordmark.svg" alt="CavBot" class="brand-logo-img">
+        </a>
+      </div>
 
-        <nav class="nav-main">
-          <div class="nav-links">
-            <a href="product.html" class="nav-link">Product</a>
-            <a href="how-it-works.html" class="nav-link">How it Works</a>
-            <a href="#pricing" class="nav-link">Pricing</a>
-            <a href="#arcade" class="nav-link">404 Arcade Lab</a>
-            <a href="cavcore-console.html" class="nav-link nav-link--active">Console</a>
-          </div>
-          <div class="nav-cta-row">
-            <a href="#" class="nav-login">Log in</a>
-            <button type="button" class="btn btn-primary">Start free trial</button>
-          </div>
-        </nav>
-        <!-- Mobile menu toggle (3x3 dot icon, no background circle) -->
+      <nav class="nav-main">
+        <div class="nav-links">
+          <a href="product.html" class="nav-link">Product</a>
+          <a href="how-it-works.html" class="nav-link">How it Works</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+          <a href="#arcade" class="nav-link">404 Arcade Lab</a>
+          <a href="cavcore-console.html" class="nav-link nav-link--active">Console</a>
+        </div>
+        <div class="nav-cta-row">
+          <a href="#" class="nav-login">Log in</a>
+          <button type="button" class="btn btn-primary">Start free trial</button>
+        </div>
+      </nav>
+      <!-- Mobile menu toggle (3x3 dot icon, no background circle) -->
+      <button
+        type="button"
+        class="nav-menu-toggle"
+        aria-label="Open CavBot menu"
+        aria-expanded="false"
+        aria-controls="nav-overlay"
+      >
+        <span class="nav-menu-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile lightbox menu -->
+  <div class="nav-overlay" id="nav-overlay" hidden>
+    <div class="nav-overlay-backdrop"></div>
+    <div class="nav-overlay-panel">
+      <div class="nav-overlay-header">
         <button
           type="button"
-          class="nav-menu-toggle"
-          aria-label="Open CavBot menu"
-          aria-expanded="false"
-          aria-controls="nav-overlay"
+          class="nav-overlay-close"
+          aria-label="Close menu"
         >
-          <span class="nav-menu-icon" aria-hidden="true">
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-            <span></span><span></span><span></span>
-          </span>
+          ✕
         </button>
       </div>
-    </header>
-
-    <!-- Mobile lightbox menu -->
-    <div class="nav-overlay" id="nav-overlay" hidden>
-      <div class="nav-overlay-backdrop"></div>
-      <div class="nav-overlay-panel">
-        <div class="nav-overlay-header">
-          <button
-            type="button"
-            class="nav-overlay-close"
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
+      <nav class="nav-overlay-body">
+        <a href="product.html" class="nav-overlay-link">Product</a>
+        <a href="how-it-works.html" class="nav-overlay-link">How it Works</a>
+        <a href="#pricing" class="nav-overlay-link">Pricing</a>
+        <a href="#arcade" class="nav-overlay-link">404 Arcade Lab</a>
+        <a href="cavcore-console.html" class="nav-overlay-link nav-overlay-link--active">Console</a>
+        <div class="nav-overlay-cta">
+          <a href="#" class="nav-overlay-login">Log in</a>
+          <button type="button" class="btn btn-primary">Start free trial</button>
         </div>
-        <nav class="nav-overlay-body">
-          <a href="product.html" class="nav-overlay-link">Product</a>
-          <a href="how-it-works.html" class="nav-overlay-link">How it Works</a>
-          <a href="#pricing" class="nav-overlay-link">Pricing</a>
-          <a href="#arcade" class="nav-overlay-link">404 Arcade Lab</a>
-          <a href="cavcore-console.html" class="nav-overlay-link nav-overlay-link--active">Console</a>
-          <div class="nav-overlay-cta">
-            <a href="#" class="nav-overlay-login">Log in</a>
-            <button type="button" class="btn btn-primary">Start free trial</button>
-          </div>
-        </nav>
-      </div>
+      </nav>
     </div>
+  </div>
 
-    <!-- ===========================
-         MAIN
-         ========================== -->
-    <main class="page-inner">
-      <section class="console-shell" aria-label="CavCore Console overview">
+  <!-- ===========================
+       MAIN
+       ========================== -->
+  <main class="page-inner">
+    <section class="console-shell" aria-label="CavCore Console overview">
 
-        <!-- =======================
-             TOP: HERO + LIVE BOT PANEL
-             ======================= -->
-        <div class="console-top-row">
-          <div class="console-hero-copy">
-            <div class="console-hero-kicker">CavCore console · CavBot analytics</div>
-            <h1 class="console-hero-title">Guardian view of your routes &amp; SEO</h1>
-            <p class="console-hero-subtitle">
-              CavCore Console is the dashboard behind CavBot — an event-first map of
-              pageviews, 404 recoveries, SEO structure, referrers, and runtime feel.
-              Every card on this screen is backed by append-only events and derived
-              tables ready for a future AI layer.
-            </p>
+      <!-- =======================
+           TOP: HERO + LIVE BOT PANEL
+           ======================= -->
+      <div class="console-top-row">
+        <div class="console-hero-copy">
+          <div class="console-hero-kicker">CavCore console · CavBot analytics</div>
+          <h1 class="console-hero-title">Guardian view of your routes &amp; SEO</h1>
+          <p class="console-hero-subtitle">
+            CavCore Console is the dashboard behind CavBot — an event-first map of
+            pageviews, 404 recoveries, SEO structure, referrers, and runtime feel.
+            Every card on this screen is backed by append-only events and derived
+            tables ready for a future AI layer.
+          </p>
 
-            <div class="console-hero-meta-row">
-              <span>Backing tables: <strong>events</strong>, <strong>daily_page_aggregates</strong>, <strong>seo_snapshots</strong>, <strong>performance_samples</strong>, <strong>insights</strong>.</span>
-            </div>
-
-            <div class="console-filter-row">
-              <div class="console-filter-chip">
-                Project
-                <strong>cavendishpierrelouis.com</strong>
-              </div>
-              <div class="console-filter-chip">
-                Window
-                <strong>Last 30 days</strong>
-              </div>
-              <div class="console-filter-chip">
-                Focus
-                <strong>All components</strong>
-              </div>
-            </div>
+          <div class="console-hero-meta-row">
+            <span>Backing tables: <strong>events</strong>, <strong>daily_page_aggregates</strong>, <strong>seo_snapshots</strong>, <strong>performance_samples</strong>, <strong>insights</strong>.</span>
           </div>
 
-          <!-- Hero Bot + key stats -->
-          <aside class="console-hero-panel" aria-label="Live CavBot project signal">
-            <div class="console-hero-panel-top">
-              <div>Project scope: multi-tenant · event-first</div>
-              <div class="console-hero-live">
-                <span class="console-live-dot"></span>
-                <span>Guard active</span>
-              </div>
+          <div class="console-filter-row">
+            <div class="console-filter-chip">
+              Project
+              <strong>cavendishpierrelouis.com</strong>
             </div>
-            <div class="console-hero-main">
-              <div class="console-hero-bot-wrap">
-                <!-- CavBot head instance -->
-                <div class="cavbot-head-avatar" data-cavbot-head data-variant="core">
-                  <div class="cavbot-head-avatar-inner">
-                    <div class="cavbot-antenna">
-                      <div class="cavbot-antenna-tip"></div>
-                    </div>
+            <div class="console-filter-chip">
+              Window
+              <strong>Last 30 days</strong>
+            </div>
+            <div class="console-filter-chip">
+              Focus
+              <strong>All components</strong>
+            </div>
+          </div>
+        </div>
 
-                    <div class="cavbot-head">
-                      <div class="cavbot-face">
-                        <div class="cavbot-eyes-row">
-                          <div class="cavbot-eye">
-                            <div class="cavbot-eye-inner">
-                              <div class="cavbot-eye-track">
-                                <div class="cavbot-eye-pupil" data-eye="left"></div>
-                              </div>
+        <!-- Hero Bot + key stats -->
+        <aside class="console-hero-panel" aria-label="Live CavBot project signal">
+          <div class="console-hero-panel-top">
+            <div>Project scope: multi-tenant · event-first</div>
+            <div class="console-hero-live">
+              <span class="console-live-dot"></span>
+              <span>Guard active</span>
+            </div>
+          </div>
+          <div class="console-hero-main">
+            <div class="console-hero-bot-wrap">
+              <!-- CavBot head instance -->
+              <div class="cavbot-head-avatar" data-cavbot-head data-variant="core">
+                <div class="cavbot-head-avatar-inner">
+                  <div class="cavbot-antenna">
+                    <div class="cavbot-antenna-tip"></div>
+                  </div>
+
+                  <div class="cavbot-head">
+                    <div class="cavbot-face">
+                      <div class="cavbot-eyes-row">
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="left"></div>
                             </div>
-                            <div class="cavbot-eye-glow"></div>
-                            <div class="cavbot-blink"></div>
                           </div>
-                          <div class="cavbot-eye">
-                            <div class="cavbot-eye-inner">
-                              <div class="cavbot-eye-track">
-                                <div class="cavbot-eye-pupil" data-eye="right"></div>
-                              </div>
-                            </div>
-                            <div class="cavbot-eye-glow"></div>
-                            <div class="cavbot-blink"></div>
-                          </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
                         </div>
-
-                        <div class="cavbot-scan" aria-hidden="true">
-                          <div class="cavbot-scan-bar"></div>
-                          <div class="cavbot-scan-dots">
-                            <span>CAV</span>
-                            <span>BOT</span>
-                            <span>404</span>
+                        <div class="cavbot-eye">
+                          <div class="cavbot-eye-inner">
+                            <div class="cavbot-eye-track">
+                              <div class="cavbot-eye-pupil" data-eye="right"></div>
+                            </div>
                           </div>
+                          <div class="cavbot-eye-glow"></div>
+                          <div class="cavbot-blink"></div>
+                        </div>
+                      </div>
+
+                      <div class="cavbot-scan" aria-hidden="true">
+                        <div class="cavbot-scan-bar"></div>
+                        <div class="cavbot-scan-dots">
+                          <span>CAV</span>
+                          <span>BOT</span>
+                          <span>404</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="console-hero-metrics">
-                <div class="console-hero-metrics-label">Event-first project health</div>
-                <div class="console-hero-metrics-grid">
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">404 recovery rate</div>
-                    <div class="console-hero-metric-value">92.4%</div>
-                    <div class="console-hero-metric-footnote">From events where page_type = 404-control-room.</div>
-                  </div>
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">unique visitors</div>
-                    <div class="console-hero-metric-value">8,104</div>
-                    <div class="console-hero-metric-footnote">Distinct anonymousId per project.</div>
-                  </div>
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">sessions under guard</div>
-                    <div class="console-hero-metric-value">19,286</div>
-                    <div class="console-hero-metric-footnote">From sessions table, last 30 days.</div>
-                  </div>
-                  <div class="console-hero-metric">
-                    <div class="console-hero-metric-label">routes monitored</div>
-                    <div class="console-hero-metric-value">143</div>
-                    <div class="console-hero-metric-footnote">From pages table, is_active = true.</div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </aside>
-        </div>
-<br>
-<br>
-<br>
-<br>
 
-        <!-- =======================
-             FILTERS PANEL
-             ======================= -->
-        <section class="console-filters-panel" aria-label="Project filters">
-          <div class="panel panel-tight console-filters-panel-inner">
-            <div>
-              <div class="eyebrow">Filters</div>
-              <p class="section-body" style="font-size:12px; margin-top:6px; max-width:32rem;">
-                Choose which project, window, and signal CavBot should show here. These knobs
-                drive every card on the console — from 404 density and SEO to referrers and deploy markers.
-              </p>
-            </div>
-            <div>
-              <div class="console-filters-grid">
-                <div class="console-filter-group">
-                  <label for="filter-project" class="filter-label">Project</label>
-                  <select id="filter-project" class="filter-select">
-                    <option>cavendishpierrelouis.com</option>
-                    <option>mireliano.com</option>
-                    <option>demo.cavbot.dev</option>
-                  </select>
+            <div class="console-hero-metrics">
+              <div class="console-hero-metrics-label">Event-first project health</div>
+              <div class="console-hero-metrics-grid">
+                <div class="console-hero-metric">
+                  <div class="console-hero-metric-label">404 recovery rate</div>
+                  <div class="console-hero-metric-value">92.4%</div>
+                  <div class="console-hero-metric-footnote">From events where page_type = 404-control-room.</div>
                 </div>
-                <div class="console-filter-group">
-                  <label for="filter-window" class="filter-label">Window</label>
-                  <select id="filter-window" class="filter-select">
-                    <option>Last 7 days</option>
-                    <option selected>Last 30 days</option>
-                    <option>Last 90 days</option>
-                  </select>
+                <div class="console-hero-metric">
+                  <div class="console-hero-metric-label">unique visitors</div>
+                  <div class="console-hero-metric-value">8,104</div>
+                  <div class="console-hero-metric-footnote">Distinct anonymousId per project.</div>
                 </div>
-                <div class="console-filter-group">
-                  <label for="filter-focus" class="filter-label">View</label>
-                  <select id="filter-focus" class="filter-select">
-                    <option selected>All components</option>
-                    <option>404 &amp; routing</option>
-                    <option>SEO &amp; structure</option>
-                    <option>Performance</option>
-                    <option>Referrers &amp; campaigns</option>
-                  </select>
+                <div class="console-hero-metric">
+                  <div class="console-hero-metric-label">sessions under guard</div>
+                  <div class="console-hero-metric-value">19,286</div>
+                  <div class="console-hero-metric-footnote">From sessions table, last 30 days.</div>
                 </div>
-              </div>
-           <br>   <div class="filter-toggle-row">
-                <span class="filter-toggle-label">Quick focus</span>
-                <button type="button" class="btn-pill">404 density</button>
-                <button type="button" class="btn-pill">SEO issues</button>
-                <button type="button" class="btn-pill">Slow pages</button>
+                <div class="console-hero-metric">
+                  <div class="console-hero-metric-label">routes monitored</div>
+                  <div class="console-hero-metric-value">143</div>
+                  <div class="console-hero-metric-footnote">From pages table, is_active = true.</div>
+                </div>
               </div>
             </div>
           </div>
-        </section>
-<br>
-<br>
-<br>
-<br>
-        <!-- =======================
-             OVERVIEW: METRICS + TREND
-             ======================= -->
-        <section class="console-overview" aria-label="CavBot overview metrics">
-          <div>
-            <header class="section-header" style="margin-bottom: var(--space-sm);">
-              <div class="eyebrow">Overview</div>
-              <h2 class="section-title">Sessions, events, and 404 density</h2>
-              <p class="section-body">
-                A clean roll-up of CavBot’s event stream for this project — every
-                number on this row comes directly from <strong>events</strong>,
-                <strong>sessions</strong>, and <strong>daily_page_aggregates</strong>.
-              </p>
-            </header>
-<br> 
-            <div class="metric-grid" aria-label="Key summary metrics">
-              <article class="metric-card">
-                <div class="metric-label">Total events</div>
-                <div class="metric-value">284,930</div>
-                <div class="metric-subtext">All components · last 30d.</div>
-              </article>
-              <article class="metric-card">
-                <div class="metric-label">Sessions</div>
-                <div class="metric-value">19,286</div>
-                <div class="metric-subtext">Distinct session_key per project.</div>
-              </article>
-              <article class="metric-card">
-                <div class="metric-label">404 sessions</div>
-                <div class="metric-value">1,042</div>
-                <div class="metric-subtext">Sessions containing 404-control-room events.</div>
-              </article>
-              <article class="metric-card">
-                <div class="metric-label">Badge interactions</div>
-                <div class="metric-value">3,117</div>
-                <div class="metric-subtext">cavbot_badge_click / hover events.</div>
-              </article>
-            </div>
-
-            <div class="trend-panel" aria-label="404 vs sessions trend">
-              <div class="trend-header-row">
-                <div class="trend-title">30-day route &amp; 404 trend</div>
-                <div class="trend-legend">
-                  <span><span class="trend-dot trend-dot--sessions"></span> Sessions</span>
-                  <span><span class="trend-dot trend-dot--404"></span> 404 views</span>
-                </div>
-              </div>
-
-              <div class="trend-chart">
-                <!-- Dummy bars – wire up later with real heights -->
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions"></div>
-                  <div class="trend-bar trend-bar--404"></div>
-                  <div class="trend-day-label">D1</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:70%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:32%;"></div>
-                  <div class="trend-day-label">D2</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:60%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:22%;"></div>
-                  <div class="trend-day-label">D3</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:78%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:45%;"></div>
-                  <div class="trend-day-label">D4</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:66%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:28%;"></div>
-                  <div class="trend-day-label">D5</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:72%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:36%;"></div>
-                  <div class="trend-day-label">D6</div>
-                </div>
-                <div class="trend-bar-group">
-                  <div class="trend-bar trend-bar--sessions" style="height:59%;"></div>
-                  <div class="trend-bar trend-bar--404" style="height:21%;"></div>
-                  <div class="trend-day-label">D7</div>
-                </div>
-              </div>
-
-              <p class="trend-footnote">
-                CavBot never stores PII — trends are built from anonymousId, sessionKey,
-                route, and component, not from user accounts.
-              </p>
-            </div>
-          </div>
-
-          <!-- 404 CONTROL ROOM SUMMARY -->
-          <aside class="panel panel-roomy" aria-label="404 control room summary">
-            <div class="panel-subtitle">404 control room · Guardian slice</div>
-            <h2 class="section-title">How CavBot handles broken routes</h2>
-           <br>  <p class="section-body">
-              This block is driven by events where <strong>page_type = 404-control-room</strong>
-              and <strong>component = "404-game"</strong>. It shows where dead ends were
-              caught, missed, or left idle.
-            </p>
- <br> 
-            <div class="key-stat-row">
-              <div class="key-stat">
-                <div class="key-stat-label">404 views</div>
-                <div class="key-stat-value">3,987</div>
-                <div class="key-stat-note">events.event_name = cavbot_404_view</div>
-              </div>
-              <div class="key-stat">
-                <div class="key-stat-label">Game interactions</div>
-                <div class="key-stat-value">6,214</div>
-                <div class="key-stat-note">cavbot_catch + cavbot_miss</div>
-              </div>
-              <div class="key-stat">
-                <div class="key-stat-label">Catches / Misses</div>
-                <div class="key-stat-value">4,112 / 2,102</div>
-                <div class="key-stat-note">Catch rate: 66.3%</div>
-              </div>
-              <div class="key-stat">
-                <div class="key-stat-label">Idle events (L1 / L2)</div>
-                <div class="key-stat-value">389 / 84</div>
-                <div class="key-stat-note">Sessions that stall in the control room.</div>
-              </div>
-            </div>
-<br> 
-            <p class="section-body" style="font-size:11px; margin-top:10px;">
-              Under the hood: this summary composes
-              <strong>daily_page_aggregates</strong>,
-              <strong>referrer_aggregates</strong>, and
-              insight types like <em>404_spike</em> and
-              <em>campaign_lands_on_404</em> — all derived from the append-only
-              <code>events</code> table.
-            </p>
-
-            <!-- Guardian Health block -->
-            <div class="guardian-health-card" aria-label="Guardian health summary">
-              <div class="guardian-score-shell">
-                <div class="guardian-score-ring">
-                  <div class="guardian-score-bubble">
-                    <div class="guardian-score-label">Guardian score</div>
-                    <div class="guardian-score-value">92</div>
-                    <div class="guardian-score-scale">/ 100</div>
-                  </div>
-                </div>
-              </div>
-              <div class="guardian-health-body">
-                <div class="guardian-pill-row">
-                  <div class="guardian-pill guardian-pill--strong">
-                    <div class="guardian-pill-label">Routes &amp; 404s</div>
-                    <div class="guardian-pill-value">A</div>
-                    <div class="guardian-pill-note">Dead ends are caught quickly and recovered cleanly.</div>
-                  </div>
-                  <div class="guardian-pill">
-                    <div class="guardian-pill-label">SEO surface</div>
-                    <div class="guardian-pill-value">B+</div>
-                    <div class="guardian-pill-note">A few critical pages still need meta and canonical fixes.</div>
-                  </div>
-                </div>
-                <div class="guardian-pill-row">
-                  <div class="guardian-pill">
-                    <div class="guardian-pill-label">Performance</div>
-                    <div class="guardian-pill-value">A-</div>
-                    <div class="guardian-pill-note">Most routes land inside LCP budget with room to tighten.</div>
-                  </div>
-                  <div class="guardian-pill">
-                    <div class="guardian-pill-label">Experience</div>
-                    <div class="guardian-pill-value">B</div>
-                    <div class="guardian-pill-note">Badge engagement is healthy; onboarding flow can be smoother.</div>
-                  </div>
-                </div>
-                <p class="guardian-health-copy">
-                  This score is designed to come straight from <strong>seo_snapshots</strong>,
-                  <strong>performance_samples</strong>, <strong>insights</strong>, and a future
-                  CavBot brain that reads your event stream in real time.
-                </p>
-              </div>
-            </div>
-          </aside>
-        </section>
-<br> 
-<br> 
-<br> 
-<br> 
-        <!-- =======================
-             MIDDLE: SEO / PERFORMANCE / STRUCTURE
-             ======================= -->
-        <section class="console-middle-row" aria-label="SEO, performance, and structure overview">
-          <!-- SEO SNAPSHOTS -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">SEO &amp; indexability</div>
-            <h2 class="section-title">Route-level SEO snapshots</h2>
-            <p class="section-body">
-              CavBot takes periodic <strong>seo_snapshots</strong> per page — title,
-              description, canonical, indexable flags, headings, word count, and social tags.
-            </p>
-<br> 
-            <div class="seo-badges">
-              <span class="seo-badge">Total pages · 143</span>
-              <span class="seo-badge">Indexed pages · 127</span>
-              <span class="seo-badge seo-badge--critical">Pages with critical SEO issues · 9</span>
-              <span class="seo-badge">Pages with minor issues · 24</span>
-            </div>
-<br> 
-            <ul class="mini-list" aria-label="Common SEO issues">
-              <li>Duplicate titles detected on 3 blog posts.</li>
-              <li>Missing or thin meta descriptions on 6 marketing pages.</li>
-              <li>Canonical mismatch on <code>/404</code> variant — points to outdated route.</li>
-              <li>2 high-traffic pages marked <code>noindex</code> unintentionally.</li>
-            </ul>
-<br> 
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              These rows feed insight types like <em>seo_missing_meta</em>,
-              <em>duplicate_title</em>, and <em>non_indexable_critical_page</em>.
-            </p>
-          </article>
-
-          <!-- PERFORMANCE -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Runtime feel</div>
-            <h2 class="section-title">Performance snapshots per route</h2>
-            <p class="section-body">
-              From <strong>performance_samples</strong>, CavBot tracks LCP, TTFB, CLS, and FID
-              per page and device, so slow-but-important pages float to the top.
-            </p>
-<br> 
-            <div class="perf-metric-row">
-              <div class="perf-pill">
-                <div class="perf-label">Average LCP (desktop)</div>
-                <div class="perf-value">1,980 ms</div>
-                <div class="perf-status">Across all monitored paths.</div>
-              </div>
-              <div class="perf-pill">
-                <div class="perf-label">Average TTFB</div>
-                <div class="perf-value">210 ms</div>
-                <div class="perf-status">Origins within target budget.</div>
-              </div>
-            </div>
-
-            <div class="perf-metric-row" style="margin-top:8px;">
-              <div class="perf-pill">
-                <div class="perf-label">Pages above LCP budget</div>
-                <div class="perf-value">5</div>
-                <div class="perf-status">Flagged for insight <em>slow_critical_page</em>.</div>
-              </div>
-              <div class="perf-pill">
-                <div class="perf-label">Pages with unstable layout</div>
-                <div class="perf-value">2</div>
-                <div class="perf-status">CLS &gt; 0.1 on mobile.</div>
-              </div>
-            </div>
-          </article>
-
-          <!-- STRUCTURE / MAP -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Structure &amp; internal links</div>
-            <h2 class="section-title">Canonical map &amp; weak routes</h2>
-            <p class="section-body">
-              CavBot uses the <strong>pages</strong> table, internal referrers,
-              and sitemap data to detect <em>orphan</em> and <em>under-linked</em> pages.
-            </p>
-<br> 
-<br>
-<br>
-<br>
-
-            <div class="structure-pill-grid">
-              <div class="structure-pill">
-                <div class="perf-label">Orphan pages</div>
-                <div class="perf-value">3</div>
-                <div class="perf-status">Appear in sitemap, but never linked internally.</div>
-              </div>
-              <div class="structure-pill">
-                <div class="perf-label">Weakly linked routes</div>
-                <div class="perf-value">7</div>
-                <div class="perf-status">Important pages with &lt; 3 internal links.</div>
-              </div>
-              <div class="structure-pill">
-                <div class="perf-label">Sitemap mismatches</div>
-                <div class="perf-value">4</div>
-                <div class="perf-status">404 when visited from sitemap.xml.</div>
-              </div>
-              <div class="structure-pill">
-                <div class="perf-label">High-value funnels</div>
-                <div class="perf-value">2</div>
-                <div class="perf-status">Tagged with importance_score &gt; 0.8.</div>
-              </div>
-            </div>
-
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              This is where CavBot earns its “guardian angel” role: flagging pages that
-              <em>should</em> carry more structural weight.
-            </p>
-          </article>
-        </section>
-<br>
-<br>
-<br>
-<br>
-        <!-- =======================
-             BOTTOM: REFERRERS / CAMPAIGNS + INSIGHTS
-             ======================= -->
-        <section class="console-bottom-row" aria-label="Referrers, campaigns, and insights">
-          <!-- REFERRERS & CAMPAIGNS -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Referrers &amp; campaigns</div>
-            <h2 class="section-title">Who sends traffic into broken routes</h2>
-            <p class="section-body">
-              CavBot’s <strong>referrer_aggregates</strong> table rolls up
-              traffic by domain and UTM campaign — highlighting sources that over-index
-              on 404s or thin pages.
-            </p>
-<br>
-            <div class="ref-table" aria-label="Top external referrers">
-              <div class="ref-table-header">
-                <div>Referrer</div>
-                <div>Sessions</div>
-                <div>404 hits</div>
-                <div>404 rate</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">google.com</div>
-                <div>8,921</div>
-                <div>143</div>
-                <div class="ref-rate-ok">1.6%</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">linkedin.com</div>
-                <div>1,284</div>
-                <div>57</div>
-                <div class="ref-rate-bad">4.4%</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">newsletter.cavbot.dev</div>
-                <div>622</div>
-                <div>2</div>
-                <div class="ref-rate-ok">0.3%</div>
-              </div>
-              <div class="ref-table-row">
-                <div class="ref-domain">unknown / direct</div>
-                <div>5,131</div>
-                <div>190</div>
-                <div class="ref-rate-bad">3.7%</div>
-              </div>
-            </div>
-
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              Campaign health is computed the same way — aggregating UTM source / medium /
-              campaign with error rates and top landing pages for each.
-            </p>
-<br>
-            <div class="campaign-graph" aria-label="Campaign 404 performance">
-              <div class="campaign-graph-header">
-                <div class="campaign-graph-title">Campaign 404 performance</div>
-                <div class="campaign-graph-window">Last 30 days · utm_campaign</div>
-              </div>
-
-              <div class="campaign-row" style="--percent:72%;">
-                <div class="campaign-row-header">
-                  <div class="campaign-name">launch_rinasce_collection</div>
-                  <div class="campaign-meta">
-                    sessions 2,184 · 404 rate <span class="ref-rate-ok">1.2%</span>
-                  </div>
-                </div>
-                <div class="campaign-bar-track">
-                  <div class="campaign-bar-fill"></div>
-                </div>
-              </div>
-
-              <div class="campaign-row" style="--percent:48%;">
-                <div class="campaign-row-header">
-                  <div class="campaign-name">newsletter_november_rollout</div>
-                  <div class="campaign-meta">
-                    sessions 1,046 · 404 rate <span class="ref-rate-ok">0.9%</span>
-                  </div>
-                </div>
-                <div class="campaign-bar-track">
-                  <div class="campaign-bar-fill"></div>
-                </div>
-              </div>
-
-              <div class="campaign-row" style="--percent:33%;">
-                <div class="campaign-row-header">
-                  <div class="campaign-name">linkedin_brand_awareness</div>
-                  <div class="campaign-meta">
-                    sessions 712 · 404 rate <span class="ref-rate-bad">3.8%</span>
-                  </div>
-                </div>
-                <div class="campaign-bar-track">
-                  <div class="campaign-bar-fill"></div>
-                </div>
-              </div>
-
-              <p class="campaign-footnote">
-                Bars show relative traffic volume per campaign. Color intensity and badges reuse
-                the same <strong>referrer_aggregates</strong> and <strong>insights</strong> schema
-                as the table above, so CavBot can talk about which campaigns are healthiest — or
-                sending visitors into dead ends.
-              </p>
-            </div>
-          </article>
-
-          <!-- INSIGHTS & ALERTS -->
-          <article class="panel panel-roomy" aria-label="Guardian insights">
-            <div class="eyebrow">Guardian insights</div>
-            <h2 class="section-title">Issues CavBot is watching</h2>
-            <p class="section-body">
-              The <strong>insights</strong> table stores typed, severity-ranked findings
-              that future AI layers can “read” and talk about — each with structured context.
-            </p>
-<br>
-            <div class="insights-list">
-              <div class="insight-row">
-                <div class="insight-row-header">
-                  <div class="insight-type">404_spike</div>
-                  <div class="insight-severity insight-severity--high">High</div>
-                </div>
-                <div class="insight-title">404 spike after last deploy on /blog</div>
-                <div class="insight-meta">
-                  312 cavbot_404_view events in 24h · mostly from internal links on <code>/blog</code>.
-                  Suspected: missing redirect for an older article slug.
-                </div>
-                <div class="insight-tag-row">
-                  <span class="insight-tag">page_type: 404-control-room</span>
-                  <span class="insight-tag">component: core-tracking</span>
-                  <span class="insight-tag">status: open</span>
-                </div>
-              </div>
-
-              <div class="insight-row">
-                <div class="insight-row-header">
-                  <div class="insight-type">seo_missing_meta</div>
-                  <div class="insight-severity insight-severity--medium">Medium</div>
-                </div>
-                <div class="insight-title">Key marketing page without meta description</div>
-                <div class="insight-meta">
-                  <code>/pricing</code> appears in top 10 landing pages but has no meta description.
-                  Derived from latest <strong>seo_snapshots</strong>.
-                </div>
-                <div class="insight-tag-row">
-                  <span class="insight-tag">seo</span>
-                  <span class="insight-tag">high-traffic</span>
-                  <span class="insight-tag">status: open</span>
-                </div>
-              </div>
-
-              <div class="insight-row">
-                <div class="insight-row-header">
-                  <div class="insight-type">slow_critical_page</div>
-                  <div class="insight-severity insight-severity--medium">Medium</div>
-                </div>
-                <div class="insight-title">Onboarding route is slower than budget</div>
-                <div class="insight-meta">
-                  Average LCP 2,420ms on <code>/onboard</code> with high importance_score.
-                  Based on <strong>performance_samples</strong> aggregates.
-                </div>
-                <div class="insight-tag-row">
-                  <span class="insight-tag">performance</span>
-                  <span class="insight-tag">importance &gt; 0.8</span>
-                  <span class="insight-tag">status: open</span>
-                </div>
-              </div>
-            </div>
-<br>
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              Alerts for these insights (webhook, email, dashboard banners) are stored in the
-              <strong>alerts</strong> table, keeping a clean history of when teams were notified.
-            </p>
-          </article>
-        </section>
-<br>
-<br>
-<br>
-<br>
-        <!-- =======================
-             DEPLOY MARKERS / DATA HEALTH
-             ======================= -->
-        <section class="deploy-row" aria-label="Deploy markers and data health">
-          <!-- DEPLOY MARKERS -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Deploy markers</div>
-            <h2 class="section-title">Align incidents with releases</h2>
-            <p class="section-body">
-              CavBot’s <strong>deploy_markers</strong> table helps you line up 404 spikes,
-              SEO regressions, and perf changes against your own deploy timeline.
-            </p>
-<br>
-            <div class="deploy-timeline">
-              <div class="deploy-item">
-                <div class="deploy-dot"></div>
-                <div>
-                  <div><strong>Deploy #127 — Blog routing refactor</strong></div>
-                  <div class="deploy-meta">2025-11-28 · 404 spike detected on /blog within 2h of deploy.</div>
-                </div>
-              </div>
-              <div class="deploy-item">
-                <div class="deploy-dot" style="background: var(--lime); box-shadow: 0 0 8px rgba(185,200,90,0.7);"></div>
-                <div>
-                  <div><strong>Deploy #126 — 404 control room update</strong></div>
-                  <div class="deploy-meta">2025-11-24 · Catch rate improved by 11.3% after UX change.</div>
-                </div>
-              </div>
-              <div class="deploy-item">
-                <div class="deploy-dot" style="background: var(--blue-soft); box-shadow: 0 0 8px rgba(78,168,255,0.7);"></div>
-                <div>
-                  <div><strong>Deploy #125 — Image optimizations</strong></div>
-                  <div class="deploy-meta">2025-11-19 · LCP on /home dropped from 2,380ms to 1,740ms.</div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- DATA / PRIVACY HEALTH -->
-          <article class="panel panel-roomy">
-            <div class="eyebrow">Data &amp; privacy health</div>
-            <h2 class="section-title">Event-first, privacy-respectful</h2>
-            <p class="section-body">
-              CavBot’s analytics layer is designed to be safe for real production websites:
-              no emails, no names, no long-term IP storage — only coarse, anonymous signal.
-            </p>
-<br>
-            <ul class="data-health-list" aria-label="Privacy posture">
-              <li><strong>Anonymous visitors only:</strong> CavBot uses project-scoped anonymousId, never raw user IDs.</li>
-              <li><strong>No PII in payloads:</strong> Events avoid emails, names, or custom identifiers by default.</li>
-              <li><strong>IP handling:</strong> Optional, truncated, and used only for aggregated geography if enabled.</li>
-              <li><strong>Append-only events:</strong> Raw <code>events</code> can be archived after N days, while
-                daily aggregates and insights are retained longer.</li>
-            </ul>
-<br>
-            <div class="data-health-metrics" aria-label="Data health meters">
-              <div class="data-health-metric" style="--percent:12%;">
-                <div class="data-health-label">PII risk</div>
-                <div class="data-health-bar-track">
-                  <div class="data-health-bar-fill"></div>
-                </div>
-                <div class="data-health-caption">
-                  Low — payload schema excludes names, emails, and raw IPs by design.
-                </div>
-              </div>
-              <div class="data-health-metric" style="--percent:86%;">
-                <div class="data-health-label">Aggregation coverage</div>
-                <div class="data-health-bar-track">
-                  <div class="data-health-bar-fill"></div>
-                </div>
-                <div class="data-health-caption">
-                  Most metrics come from <code>daily_page_aggregates</code> and <code>referrer_aggregates</code>, not raw events.
-                </div>
-              </div>
-              <div class="data-health-metric" style="--percent:64%;">
-                <div class="data-health-label">Retention horizon</div>
-                <div class="data-health-bar-track">
-                  <div class="data-health-bar-fill"></div>
-                </div>
-                <div class="data-health-caption">
-                  Raw event retention tuned to 90 days with longer-lived, anonymised rollups.
-                </div>
-              </div>
-            </div>
-<br>
-
-            <p class="section-body" style="font-size:11px; margin-top:8px;">
-              This project view is intentionally structured so a future CavBot assistant can
-              sit on top of <strong>events</strong>, <strong>seo_snapshots</strong>,
-              <strong>performance_samples</strong>, and <strong>insights</strong> — without
-              ever needing to see personal identities.
-            </p>
-          </article>
-        </section>
-      </section>
-    </main>
-
-    <!-- ===========================
-         FOOTER (unified)
-         ========================== -->
-    <!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-
-    <div class="footer-grid">
-      <!-- RESOURCES -->
-      <section class="footer-column">
-        <h2 class="footer-column-title">Resources</h2>
-        <button class="footer-column-toggle" type="button">
-          <span>Resources</span>
-          <span class="footer-toggle-icon">▾</span>
-        </button>
-        <ul class="footer-column-list">
-          <li><a href="cavcore-console.html" class="footer-link">Dashboard</a></li>
-          <li><a href="mailto:support@cavbot.io" class="footer-link">Help Center</a></li>
-          <li><a href="https://cavendishpierrelouis.io/blog" class="footer-link">Founders Insight</a></li>
-        </ul>
-      </section>
-
-      <!-- COMPANY -->
-      <section class="footer-column">
-        <h2 class="footer-column-title">Company</h2>
-        <button class="footer-column-toggle" type="button">
-          <span>Company</span>
-          <span class="footer-toggle-icon">▾</span>
-        </button>
-        <ul class="footer-column-list">
-          <li><a href="about.html" class="footer-link">About</a></li>
-          <li><a href="#" class="footer-link">Code of Ethics</a></li>
-          <li><a href="#" class="footer-link">Careers</a></li>
-          <li><a href="#" class="footer-link">Media Kit</a></li>
-          <li><a href="#" class="footer-link">News &amp; Press</a></li>
-        </ul>
-      </section>
-
-      <!-- LEGAL -->
-      <section class="footer-column">
-        <h2 class="footer-column-title">Legal Notices</h2>
-        <button class="footer-column-toggle" type="button">
-          <span>Legal</span>
-          <span class="footer-toggle-icon">▾</span>
-        </button>
-        <ul class="footer-column-list">
-          <li><a href="#" class="footer-link">Privacy Policy</a></li>
-          <li><a href="#" class="footer-link">Terms of Use</a></li>
-          <li><a href="#" class="footer-link">Data &amp; Security</a></li>
-        </ul>
-      </section>
-    </div>
-<br>
-<br>
-<br>
-<br>
-    <div class="footer-bottom">
-      <div class="footer-copy">
-        &copy; 2025 CavBot · CavCore Console
+        </aside>
       </div>
-    </div>
+      <br>
+      <br>
+      <br>
+      <br>
 
+      <!-- =======================
+           FILTERS PANEL
+           ======================= -->
+      <section class="console-filters-panel" aria-label="Project filters">
+        <div class="panel panel-tight console-filters-panel-inner">
+          <div>
+            <div class="eyebrow">Filters</div>
+            <p class="section-body" style="font-size:12px; margin-top:6px; max-width:32rem;">
+              Choose which project, window, and signal CavBot should show here. These knobs
+              drive every card on the console — from 404 density and SEO to referrers and deploy markers.
+            </p>
+          </div>
+          <div>
+            <div class="console-filters-grid">
+              <div class="console-filter-group">
+                <label for="filter-project" class="filter-label">Project</label>
+                <select id="filter-project" class="filter-select">
+                  <option>cavendishpierrelouis.com</option>
+                  <option>mireliano.com</option>
+                  <option>demo.cavbot.dev</option>
+                </select>
+              </div>
+              <div class="console-filter-group">
+                <label for="filter-window" class="filter-label">Window</label>
+                <select id="filter-window" class="filter-select">
+                  <option>Last 7 days</option>
+                  <option selected>Last 30 days</option>
+                  <option>Last 90 days</option>
+                </select>
+              </div>
+              <div class="console-filter-group">
+                <label for="filter-focus" class="filter-label">View</label>
+                <select id="filter-focus" class="filter-select">
+                  <option selected>All components</option>
+                  <option>404 &amp; routing</option>
+                  <option>SEO &amp; structure</option>
+                  <option>Performance</option>
+                  <option>Referrers &amp; campaigns</option>
+                </select>
+              </div>
+            </div>
+            <br>
+            <div class="filter-toggle-row">
+              <span class="filter-toggle-label">Quick focus</span>
+              <button type="button" class="btn-pill">404 density</button>
+              <button type="button" class="btn-pill">SEO issues</button>
+              <button type="button" class="btn-pill">Slow pages</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!-- =======================
+           OVERVIEW: METRICS + TREND
+           ======================= -->
+      <section class="console-overview" aria-label="CavBot overview metrics">
+        <div>
+          <header class="section-header" style="margin-bottom: var(--space-sm);">
+            <div class="eyebrow">Overview</div>
+            <h2 class="section-title">Sessions, events, and 404 density</h2>
+            <p class="section-body">
+              A clean roll-up of CavBot’s event stream for this project — every
+              number on this row comes directly from <strong>events</strong>,
+              <strong>sessions</strong>, and <strong>daily_page_aggregates</strong>.
+            </p>
+          </header>
+          <br>
+          <div class="metric-grid" aria-label="Key summary metrics">
+            <article class="metric-card">
+              <div class="metric-label">Total events</div>
+              <div class="metric-value" data-metric="pageviews-24h">284,930</div>
+              <div class="metric-subtext">All components · last 30d.</div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Sessions</div>
+              <div class="metric-value">19,286</div>
+              <div class="metric-subtext">Distinct session_key per project.</div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">404 sessions</div>
+              <div class="metric-value">1,042</div>
+              <div class="metric-subtext">Sessions containing 404-control-room events.</div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-label">Badge interactions</div>
+              <div class="metric-value">3,117</div>
+              <div class="metric-subtext">cavbot_badge_click / hover events.</div>
+            </article>
+          </div>
+
+          <div class="trend-panel" aria-label="404 vs sessions trend">
+            <div class="trend-header-row">
+              <div class="trend-title">30-day route &amp; 404 trend</div>
+              <div class="trend-legend">
+                <span><span class="trend-dot trend-dot--sessions"></span> Sessions</span>
+                <span><span class="trend-dot trend-dot--404"></span> 404 views</span>
+              </div>
+            </div>
+
+            <div class="trend-chart">
+              <!-- Dummy bars – wire up later with real heights -->
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions"></div>
+                <div class="trend-bar trend-bar--404"></div>
+                <div class="trend-day-label">D1</div>
+              </div>
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions" style="height:70%;"></div>
+                <div class="trend-bar trend-bar--404" style="height:32%;"></div>
+                <div class="trend-day-label">D2</div>
+              </div>
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions" style="height:60%;"></div>
+                <div class="trend-bar trend-bar--404" style="height:22%;"></div>
+                <div class="trend-day-label">D3</div>
+              </div>
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions" style="height:78%;"></div>
+                <div class="trend-bar trend-bar--404" style="height:45%;"></div>
+                <div class="trend-day-label">D4</div>
+              </div>
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions" style="height:66%;"></div>
+                <div class="trend-bar trend-bar--404" style="height:28%;"></div>
+                <div class="trend-day-label">D5</div>
+              </div>
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions" style="height:72%;"></div>
+                <div class="trend-bar trend-bar--404" style="height:36%;"></div>
+                <div class="trend-day-label">D6</div>
+              </div>
+              <div class="trend-bar-group">
+                <div class="trend-bar trend-bar--sessions" style="height:59%;"></div>
+                <div class="trend-bar trend-bar--404" style="height:21%;"></div>
+                <div class="trend-day-label">D7</div>
+              </div>
+            </div>
+
+            <p class="trend-footnote">
+              CavBot never stores PII — trends are built from anonymousId, sessionKey,
+              route, and component, not from user accounts.
+            </p>
+          </div>
+        </div>
+
+        <!-- 404 CONTROL ROOM SUMMARY -->
+        <aside class="panel panel-roomy" aria-label="404 control room summary">
+          <div class="panel-subtitle">404 control room · Guardian slice</div>
+          <h2 class="section-title">How CavBot handles broken routes</h2>
+          <br>
+          <p class="section-body">
+            This block is driven by events where <strong>page_type = 404-control-room</strong>
+            and <strong>component = "404-game"</strong>. It shows where dead ends were
+            caught, missed, or left idle.
+          </p>
+          <br>
+          <div class="key-stat-row">
+            <div class="key-stat">
+              <div class="key-stat-label">404 views</div>
+              <div class="key-stat-value">3,987</div>
+              <div class="key-stat-note">events.event_name = cavbot_404_view</div>
+            </div>
+            <div class="key-stat">
+              <div class="key-stat-label">Game interactions</div>
+              <div class="key-stat-value">6,214</div>
+              <div class="key-stat-note">cavbot_catch + cavbot_miss</div>
+            </div>
+            <div class="key-stat">
+              <div class="key-stat-label">Catches / Misses</div>
+              <div class="key-stat-value">4,112 / 2,102</div>
+              <div class="key-stat-note">Catch rate: 66.3%</div>
+            </div>
+            <div class="key-stat">
+              <div class="key-stat-label">Idle events (L1 / L2)</div>
+              <div class="key-stat-value">389 / 84</div>
+              <div class="key-stat-note">Sessions that stall in the control room.</div>
+            </div>
+          </div>
+          <br>
+          <p class="section-body" style="font-size:11px; margin-top:10px;">
+            Under the hood: this summary composes
+            <strong>daily_page_aggregates</strong>,
+            <strong>referrer_aggregates</strong>, and
+            insight types like <em>404_spike</em> and
+            <em>campaign_lands_on_404</em> — all derived from the append-only
+            <code>events</code> table.
+          </p>
+
+          <!-- Guardian Health block -->
+          <div class="guardian-health-card" aria-label="Guardian health summary">
+            <div class="guardian-score-shell">
+              <div class="guardian-score-ring">
+                <div class="guardian-score-bubble">
+                  <div class="guardian-score-label">Guardian score</div>
+                  <div class="guardian-score-value">92</div>
+                  <div class="guardian-score-scale">/ 100</div>
+                </div>
+              </div>
+            </div>
+            <div class="guardian-health-body">
+              <div class="guardian-pill-row">
+                <div class="guardian-pill guardian-pill--strong">
+                  <div class="guardian-pill-label">Routes &amp; 404s</div>
+                  <div class="guardian-pill-value">A</div>
+                  <div class="guardian-pill-note">Dead ends are caught quickly and recovered cleanly.</div>
+                </div>
+                <div class="guardian-pill">
+                  <div class="guardian-pill-label">SEO surface</div>
+                  <div class="guardian-pill-value">B+</div>
+                  <div class="guardian-pill-note">A few critical pages still need meta and canonical fixes.</div>
+                </div>
+              </div>
+              <div class="guardian-pill-row">
+                <div class="guardian-pill">
+                  <div class="guardian-pill-label">Performance</div>
+                  <div class="guardian-pill-value">A-</div>
+                  <div class="guardian-pill-note">Most routes land inside LCP budget with room to tighten.</div>
+                </div>
+                <div class="guardian-pill">
+                  <div class="guardian-pill-label">Experience</div>
+                  <div class="guardian-pill-value">B</div>
+                  <div class="guardian-pill-note">Badge engagement is healthy; onboarding flow can be smoother.</div>
+                </div>
+              </div>
+              <p class="guardian-health-copy">
+                This score is designed to come straight from <strong>seo_snapshots</strong>,
+                <strong>performance_samples</strong>, <strong>insights</strong>, and a future
+                CavBot brain that reads your event stream in real time.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </section>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!-- =======================
+           MIDDLE: SEO / PERFORMANCE / STRUCTURE
+           ======================= -->
+      <section class="console-middle-row" aria-label="SEO, performance, and structure overview">
+        <!-- SEO SNAPSHOTS -->
+        <article class="panel panel-roomy">
+          <div class="eyebrow">SEO &amp; indexability</div>
+          <h2 class="section-title">Route-level SEO snapshots</h2>
+          <p class="section-body">
+            CavBot takes periodic <strong>seo_snapshots</strong> per page — title,
+            description, canonical, indexable flags, headings, word count, and social tags.
+          </p>
+          <br>
+          <div class="seo-badges">
+            <span class="seo-badge">Total pages · 143</span>
+            <span class="seo-badge">Indexed pages · 127</span>
+            <span class="seo-badge seo-badge--critical">Pages with critical SEO issues · 9</span>
+            <span class="seo-badge">Pages with minor issues · 24</span>
+          </div>
+          <br>
+          <ul class="mini-list" aria-label="Common SEO issues">
+            <li>Duplicate titles detected on 3 blog posts.</li>
+            <li>Missing or thin meta descriptions on 6 marketing pages.</li>
+            <li>Canonical mismatch on <code>/404</code> variant — points to outdated route.</li>
+            <li>2 high-traffic pages marked <code>noindex</code> unintentionally.</li>
+          </ul>
+          <br>
+          <p class="section-body" style="font-size:11px; margin-top:8px;">
+            These rows feed insight types like <em>seo_missing_meta</em>,
+            <em>duplicate_title</em>, and <em>non_indexable_critical_page</em>.
+          </p>
+        </article>
+
+        <!-- PERFORMANCE -->
+        <article class="panel panel-roomy">
+          <div class="eyebrow">Runtime feel</div>
+          <h2 class="section-title">Performance snapshots per route</h2>
+          <p class="section-body">
+            From <strong>performance_samples</strong>, CavBot tracks LCP, TTFB, CLS, and FID
+            per page and device, so slow-but-important pages float to the top.
+          </p>
+          <br>
+          <div class="perf-metric-row">
+            <div class="perf-pill">
+              <div class="perf-label">Average LCP (desktop)</div>
+              <div class="perf-value" data-metric="avg-lcp-ms">1,980 ms</div>
+              <div class="perf-status">Across all monitored paths.</div>
+            </div>
+            <div class="perf-pill">
+              <div class="perf-label">Average TTFB</div>
+              <div class="perf-value">210 ms</div>
+              <div class="perf-status">Origins within target budget.</div>
+            </div>
+          </div>
+
+          <div class="perf-metric-row" style="margin-top:8px;">
+            <div class="perf-pill">
+              <div class="perf-label">Pages above LCP budget</div>
+              <div class="perf-value">5</div>
+              <div class="perf-status">Flagged for insight <em>slow_critical_page</em>.</div>
+            </div>
+            <div class="perf-pill">
+              <div class="perf-label">Pages with unstable layout</div>
+              <div class="perf-value">2</div>
+              <div class="perf-status">CLS &gt; 0.1 on mobile.</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- STRUCTURE / MAP -->
+        <article class="panel panel-roomy">
+          <div class="eyebrow">Structure &amp; internal links</div>
+          <h2 class="section-title">Canonical map &amp; weak routes</h2>
+          <p class="section-body">
+            CavBot uses the <strong>pages</strong> table, internal referrers,
+            and sitemap data to detect <em>orphan</em> and <em>under-linked</em> pages.
+          </p>
+          <br>
+          <br>
+          <br>
+          <br>
+
+          <div class="structure-pill-grid">
+            <div class="structure-pill">
+              <div class="perf-label">Orphan pages</div>
+              <div class="perf-value">3</div>
+              <div class="perf-status">Appear in sitemap, but never linked internally.</div>
+            </div>
+            <div class="structure-pill">
+              <div class="perf-label">Weakly linked routes</div>
+              <div class="perf-value">7</div>
+              <div class="perf-status">Important pages with &lt; 3 internal links.</div>
+            </div>
+            <div class="structure-pill">
+              <div class="perf-label">Sitemap mismatches</div>
+              <div class="perf-value">4</div>
+              <div class="perf-status">404 when visited from sitemap.xml.</div>
+            </div>
+            <div class="structure-pill">
+              <div class="perf-label">High-value funnels</div>
+              <div class="perf-value">2</div>
+              <div class="perf-status">Tagged with importance_score &gt; 0.8.</div>
+            </div>
+          </div>
+
+          <p class="section-body" style="font-size:11px; margin-top:8px;">
+            This is where CavBot earns its “guardian angel” role: flagging pages that
+            <em>should</em> carry more structural weight.
+          </p>
+        </article>
+      </section>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!-- =======================
+           BOTTOM: REFERRERS / CAMPAIGNS + INSIGHTS
+           ======================= -->
+      <section class="console-bottom-row" aria-label="Referrers, campaigns, and insights">
+        <!-- REFERRERS & CAMPAIGNS -->
+        <article class="panel panel-roomy">
+          <div class="eyebrow">Referrers &amp; campaigns</div>
+          <h2 class="section-title">Who sends traffic into broken routes</h2>
+          <p class="section-body">
+            CavBot’s <strong>referrer_aggregates</strong> table rolls up
+            traffic by domain and UTM campaign — highlighting sources that over-index
+            on 404s or thin pages.
+          </p>
+          <br>
+          <div class="ref-table" aria-label="Top external referrers">
+            <div class="ref-table-header">
+              <div>Referrer</div>
+              <div>Sessions</div>
+              <div>404 hits</div>
+              <div>404 rate</div>
+            </div>
+            <div class="ref-table-row">
+              <div class="ref-domain">google.com</div>
+              <div>8,921</div>
+              <div>143</div>
+              <div class="ref-rate-ok">1.6%</div>
+            </div>
+            <div class="ref-table-row">
+              <div class="ref-domain">linkedin.com</div>
+              <div>1,284</div>
+              <div>57</div>
+              <div class="ref-rate-bad">4.4%</div>
+            </div>
+            <div class="ref-table-row">
+              <div class="ref-domain">newsletter.cavbot.dev</div>
+              <div>622</div>
+              <div>2</div>
+              <div class="ref-rate-ok">0.3%</div>
+            </div>
+            <div class="ref-table-row">
+              <div class="ref-domain">unknown / direct</div>
+              <div>5,131</div>
+              <div>190</div>
+              <div class="ref-rate-bad">3.7%</div>
+            </div>
+          </div>
+
+          <p class="section-body" style="font-size:11px; margin-top:8px;">
+            Campaign health is computed the same way — aggregating UTM source / medium /
+            campaign with error rates and top landing pages for each.
+          </p>
+          <br>
+          <div class="campaign-graph" aria-label="Campaign 404 performance">
+            <div class="campaign-graph-header">
+              <div class="campaign-graph-title">Campaign 404 performance</div>
+              <div class="campaign-graph-window">Last 30 days · utm_campaign</div>
+            </div>
+
+            <div class="campaign-row" style="--percent:72%;">
+              <div class="campaign-row-header">
+                <div class="campaign-name">launch_rinasce_collection</div>
+                <div class="campaign-meta">
+                  sessions 2,184 · 404 rate <span class="ref-rate-ok">1.2%</span>
+                </div>
+              </div>
+              <div class="campaign-bar-track">
+                <div class="campaign-bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="campaign-row" style="--percent:48%;">
+              <div class="campaign-row-header">
+                <div class="campaign-name">newsletter_november_rollout</div>
+                <div class="campaign-meta">
+                  sessions 1,046 · 404 rate <span class="ref-rate-ok">0.9%</span>
+                </div>
+              </div>
+              <div class="campaign-bar-track">
+                <div class="campaign-bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="campaign-row" style="--percent:33%;">
+              <div class="campaign-row-header">
+                <div class="campaign-name">linkedin_brand_awareness</div>
+                <div class="campaign-meta">
+                  sessions 712 · 404 rate <span class="ref-rate-bad">3.8%</span>
+                </div>
+              </div>
+              <div class="campaign-bar-track">
+                <div class="campaign-bar-fill"></div>
+              </div>
+            </div>
+
+            <p class="campaign-footnote">
+              Bars show relative traffic volume per campaign. Color intensity and badges reuse
+              the same <strong>referrer_aggregates</strong> and <strong>insights</strong> schema
+              as the table above, so CavBot can talk about which campaigns are healthiest — or
+              sending visitors into dead ends.
+            </p>
+          </div>
+        </article>
+
+        <!-- INSIGHTS & ALERTS -->
+        <article class="panel panel-roomy" aria-label="Guardian insights">
+          <div class="eyebrow">Guardian insights</div>
+          <h2 class="section-title">Issues CavBot is watching</h2>
+          <p class="section-body">
+            The <strong>insights</strong> table stores typed, severity-ranked findings
+            that future AI layers can “read” and talk about — each with structured context.
+          </p>
+          <br>
+          <div class="insights-list">
+            <div class="insight-row">
+              <div class="insight-row-header">
+                <div class="insight-type">404_spike</div>
+                <div class="insight-severity insight-severity--high">High</div>
+              </div>
+              <div class="insight-title">404 spike after last deploy on /blog</div>
+              <div class="insight-meta">
+                312 cavbot_404_view events in 24h · mostly from internal links on <code>/blog</code>.
+                Suspected: missing redirect for an older article slug.
+              </div>
+              <div class="insight-tag-row">
+                <span class="insight-tag">page_type: 404-control-room</span>
+                <span class="insight-tag">component: core-tracking</span>
+                <span class="insight-tag">status: open</span>
+              </div>
+            </div>
+
+            <div class="insight-row">
+              <div class="insight-row-header">
+                <div class="insight-type">seo_missing_meta</div>
+                <div class="insight-severity insight-severity--medium">Medium</div>
+              </div>
+              <div class="insight-title">Key marketing page without meta description</div>
+              <div class="insight-meta">
+                <code>/pricing</code> appears in top 10 landing pages but has no meta description.
+                Derived from latest <strong>seo_snapshots</strong>.
+              </div>
+              <div class="insight-tag-row">
+                <span class="insight-tag">seo</span>
+                <span class="insight-tag">high-traffic</span>
+                <span class="insight-tag">status: open</span>
+              </div>
+            </div>
+
+            <div class="insight-row">
+              <div class="insight-row-header">
+                <div class="insight-type">slow_critical_page</div>
+                <div class="insight-severity insight-severity--medium">Medium</div>
+              </div>
+              <div class="insight-title">Onboarding route is slower than budget</div>
+              <div class="insight-meta">
+                Average LCP 2,420ms on <code>/onboard</code> with high importance_score.
+                Based on <strong>performance_samples</strong> aggregates.
+              </div>
+              <div class="insight-tag-row">
+                <span class="insight-tag">performance</span>
+                <span class="insight-tag">importance &gt; 0.8</span>
+                <span class="insight-tag">status: open</span>
+              </div>
+            </div>
+          </div>
+          <br>
+          <p class="section-body" style="font-size:11px; margin-top:8px;">
+            Alerts for these insights (webhook, email, dashboard banners) are stored in the
+            <strong>alerts</strong> table, keeping a clean history of when teams were notified.
+          </p>
+        </article>
+      </section>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!-- =======================
+           DEPLOY MARKERS / DATA HEALTH
+           ======================= -->
+      <section class="deploy-row" aria-label="Deploy markers and data health">
+        <!-- DEPLOY MARKERS -->
+        <article class="panel panel-roomy">
+          <div class="eyebrow">Deploy markers</div>
+          <h2 class="section-title">Align incidents with releases</h2>
+          <p class="section-body">
+            CavBot’s <strong>deploy_markers</strong> table helps you line up 404 spikes,
+            SEO regressions, and perf changes against your own deploy timeline.
+          </p>
+          <br>
+          <div class="deploy-timeline">
+            <div class="deploy-item">
+              <div class="deploy-dot"></div>
+              <div>
+                <div><strong>Deploy #127 — Blog routing refactor</strong></div>
+                <div class="deploy-meta">2025-11-28 · 404 spike detected on /blog within 2h of deploy.</div>
+              </div>
+            </div>
+            <div class="deploy-item">
+              <div class="deploy-dot" style="background: var(--lime); box-shadow: 0 0 8px rgba(185,200,90,0.7);"></div>
+              <div>
+                <div><strong>Deploy #126 — 404 control room update</strong></div>
+                <div class="deploy-meta">2025-11-24 · Catch rate improved by 11.3% after UX change.</div>
+              </div>
+            </div>
+            <div class="deploy-item">
+              <div class="deploy-dot" style="background: var(--blue-soft); box-shadow: 0 0 8px rgba(78,168,255,0.7);"></div>
+              <div>
+                <div><strong>Deploy #125 — Image optimizations</strong></div>
+                <div class="deploy-meta">2025-11-19 · LCP on /home dropped from 2,380ms to 1,740ms.</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- DATA / PRIVACY HEALTH -->
+        <article class="panel panel-roomy">
+          <div class="eyebrow">Data &amp; privacy health</div>
+          <h2 class="section-title">Event-first, privacy-respectful</h2>
+          <p class="section-body">
+            CavBot’s analytics layer is designed to be safe for real production websites:
+            no emails, no names, no long-term IP storage — only coarse, anonymous signal.
+          </p>
+          <br>
+          <ul class="data-health-list" aria-label="Privacy posture">
+            <li><strong>Anonymous visitors only:</strong> CavBot uses project-scoped anonymousId, never raw user IDs.</li>
+            <li><strong>No PII in payloads:</strong> Events avoid emails, names, or custom identifiers by default.</li>
+            <li><strong>IP handling:</strong> Optional, truncated, and used only for aggregated geography if enabled.</li>
+            <li><strong>Append-only events:</strong> Raw <code>events</code> can be archived after N days, while
+              daily aggregates and insights are retained longer.</li>
+          </ul>
+          <br>
+          <div class="data-health-metrics" aria-label="Data health meters">
+            <div class="data-health-metric" style="--percent:12%;">
+              <div class="data-health-label">PII risk</div>
+              <div class="data-health-bar-track">
+                <div class="data-health-bar-fill"></div>
+              </div>
+              <div class="data-health-caption">
+                Low — payload schema excludes names, emails, and raw IPs by design.
+              </div>
+            </div>
+            <div class="data-health-metric" style="--percent:86%;">
+              <div class="data-health-label">Aggregation coverage</div>
+              <div class="data-health-bar-track">
+                <div class="data-health-bar-fill"></div>
+              </div>
+              <div class="data-health-caption">
+                Most metrics come from <code>daily_page_aggregates</code> and <code>referrer_aggregates</code>, not raw events.
+              </div>
+            </div>
+            <div class="data-health-metric" style="--percent:64%;">
+              <div class="data-health-label">Retention horizon</div>
+              <div class="data-health-bar-track">
+                <div class="data-health-bar-fill"></div>
+              </div>
+              <div class="data-health-caption">
+                Raw event retention tuned to 90 days with longer-lived, anonymised rollups.
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <p class="section-body" style="font-size:11px; margin-top:8px;">
+            This project view is intentionally structured so a future CavBot assistant can
+            sit on top of <strong>events</strong>, <strong>seo_snapshots</strong>,
+            <strong>performance_samples</strong>, and <strong>insights</strong> — without
+            ever needing to see personal identities.
+          </p>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <!-- ===========================
+       FOOTER (unified)
+       ========================== -->
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+
+      <div class="footer-grid">
+        <!-- RESOURCES -->
+        <section class="footer-column">
+          <h2 class="footer-column-title">Resources</h2>
+          <button class="footer-column-toggle" type="button">
+            <span>Resources</span>
+            <span class="footer-toggle-icon">▾</span>
+          </button>
+          <ul class="footer-column-list">
+            <li><a href="cavcore-console.html" class="footer-link">Dashboard</a></li>
+            <li><a href="mailto:support@cavbot.io" class="footer-link">Help Center</a></li>
+            <li><a href="https://cavendishpierrelouis.io/blog" class="footer-link">Founders Insight</a></li>
+          </ul>
+        </section>
+
+        <!-- COMPANY -->
+        <section class="footer-column">
+          <h2 class="footer-column-title">Company</h2>
+          <button class="footer-column-toggle" type="button">
+            <span>Company</span>
+            <span class="footer-toggle-icon">▾</span>
+          </button>
+          <ul class="footer-column-list">
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="#" class="footer-link">Code of Ethics</a></li>
+            <li><a href="#" class="footer-link">Careers</a></li>
+            <li><a href="#" class="footer-link">Media Kit</a></li>
+            <li><a href="#" class="footer-link">News &amp; Press</a></li>
+          </ul>
+        </section>
+
+        <!-- LEGAL -->
+        <section class="footer-column">
+          <h2 class="footer-column-title">Legal Notices</h2>
+          <button class="footer-column-toggle" type="button">
+            <span>Legal</span>
+            <span class="footer-toggle-icon">▾</span>
+          </button>
+          <ul class="footer-column-list">
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#" class="footer-link">Terms of Use</a></li>
+            <li><a href="#" class="footer-link">Data &amp; Security</a></li>
+          </ul>
+        </section>
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; 2025 CavBot · CavCore Console
+        </div>
+      </div>
+
+    </div>
+  </footer>
   </div>
-</footer>
-  </div>
-<!-- Analytics bridge (window.cavbotAnalytics.track) -->
-<script src="/cavbotcore/cavbot-analytics.js"></script>
+
+  <!-- Analytics bridge (window.cavbotAnalytics.track) -->
+  <script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script -->
   <script src="cavbotcore/cavbotbrain.js" defer></script>
   <!-- CavBot header-footer + nav toggle -->
   <script src="headerfooter.js"></script>
+
+  <!-- CavCore Console live metrics -->
+  <script>
+    (function () {
+      const SUMMARY_URL = "https://api.cavbot.io/v1/projects/1/summary";
+      const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
+
+      function formatNumber(value) {
+        if (value == null || isNaN(value)) return "—";
+        return Number(value).toLocaleString();
+      }
+
+      function formatMs(value) {
+        if (value == null || isNaN(value)) return "—";
+        const num = Number(value);
+        return Math.round(num).toLocaleString() + " ms";
+      }
+
+      function applyMetrics(data) {
+        if (!data || !data.metrics) return;
+        const m = data.metrics;
+
+        // 1) Page views / total events (wired to your "Total events" tile)
+        const pageviewsEl = document.querySelector('[data-metric="pageviews-24h"]');
+        if (pageviewsEl && typeof m.pageViews24h === "number") {
+          pageviewsEl.textContent = formatNumber(m.pageViews24h);
+        }
+
+        // 2) Average LCP (desktop)
+        const lcpEl = document.querySelector('[data-metric="avg-lcp-ms"]');
+        if (lcpEl && m.avgLcpMs != null) {
+          lcpEl.textContent = formatMs(m.avgLcpMs);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch(SUMMARY_URL, {
+          headers: {
+            "X-Project-Key": PROJECT_KEY
+          }
+        })
+          .then(function (res) {
+            if (!res.ok) {
+              throw new Error("Bad response from CavBot API: " + res.status);
+            }
+            return res.json();
+          })
+          .then(applyMetrics)
+          .catch(function (err) {
+            console.error("CavBot metrics fetch failed:", err);
+            // Static demo numbers remain if API is down / not wired yet.
+          });
+      });
+    })();
   </script>
 </body>
 </html>
