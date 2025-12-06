@@ -1,8 +1,8 @@
 (function () {
   "use strict";
 
-  // === CavBot Analytics Client v2 ===
-  // Event-first, SEO-aware, performance-aware.
+  // === CavBot Analytics Client v2.1 ===
+  // Event-first, SEO-aware, performance-aware, error-aware.
 
   const API_URL =
     window.CAVBOT_API_URL || "https://api.cavbot.io/v1/events";
@@ -15,7 +15,7 @@
   const SESSION_KEY = "cavbotSessionKey";
 
   // SDK + environment markers (for backend segmentation / debugging)
-  const SDK_VERSION = "cavbot-web-js-v2";
+  const SDK_VERSION = "cavbot-web-js-v2.1";
   const ENV = window.CAVBOT_ENV || "production";
 
   // ---- ID HELPERS ---------------------------------------------------------
@@ -93,6 +93,32 @@
     return { h1Text, wordCount };
   }
 
+  function readDeviceSnapshot() {
+    try {
+      const vpW = window.innerWidth || null;
+      const vpH = window.innerHeight || null;
+
+      const scr = window.screen || {};
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
+
+      return {
+        viewportWidth: vpW,
+        viewportHeight: vpH,
+        screenWidth: scr.width || null,
+        screenHeight: scr.height || null,
+        devicePixelRatio: window.devicePixelRatio || 1,
+        language: navigator.language || null,
+        platform: navigator.platform || null,
+        hardwareConcurrency: navigator.hardwareConcurrency || null,
+        deviceMemory: navigator.deviceMemory || null,
+        connectionType: conn.effectiveType || null,
+        downlink: conn.downlink || null
+      };
+    } catch {
+      return {};
+    }
+  }
+
   function getBaseContext(overrides) {
     const o = overrides || {};
     const body = document.body || null;
@@ -122,11 +148,14 @@
 
   function buildEnvelope(eventName, payload, overrides) {
     const ctx = getBaseContext(overrides);
+    const device = readDeviceSnapshot();
+
     return {
       ...ctx,
       // Version + environment tagging for the backend
       sdkVersion: SDK_VERSION,
       env: ENV,
+      device,
       events: [
         {
           name: eventName,
@@ -199,10 +228,20 @@
     );
   }
 
+  // Explicit error tracker if you want to fire custom errors
+  function trackError(kind, details, overrides) {
+    const payload = {
+      kind: kind || "manual",
+      ...details
+    };
+    return track("cavbot_js_error", payload, overrides);
+  }
+
   window.cavbotAnalytics = {
     track,
     track404,
     trackConsole,
+    trackError,
     getBaseContext // handy if you ever want to inspect from console
   };
 
@@ -314,6 +353,44 @@
       }
     } catch {
       // ignore
+    }
+  })();
+
+  // ---- JS ERROR + PROMISE REJECTION TRACKING -----------------------------
+
+  (function installErrorTracking() {
+    try {
+      window.addEventListener("error", function (event) {
+        try {
+          trackError("window_error", {
+            message: event.message || null,
+            fileName: event.filename || null,
+            line: event.lineno || null,
+            column: event.colno || null,
+            // stack may live on event.error
+            stack: event.error && event.error.stack ? String(event.error.stack).slice(0, 2000) : null
+          });
+        } catch {
+          // never throw from handler
+        }
+      });
+
+      window.addEventListener("unhandledrejection", function (event) {
+        try {
+          const reason = event.reason || {};
+          const payload = {
+            message: reason && reason.message ? String(reason.message) : null,
+            // Some browsers put stack on reason, some on reason.error
+            stack: reason && reason.stack ? String(reason.stack).slice(0, 2000) : null,
+            type: typeof reason
+          };
+          trackError("unhandled_rejection", payload);
+        } catch {
+          // swallow
+        }
+      });
+    } catch {
+      // no-op if environment is weird
     }
   })();
 })();
