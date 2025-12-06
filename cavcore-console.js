@@ -126,13 +126,51 @@
     }
   }
 
+  // ---- Optional: Top routes list ---------------------------------------
+
+  // If you add something like:
+  //   <ul class="mini-list" data-metric="top-routes-list"></ul>
+  // or  <ul data-metric="topRoutes"></ul>
+  // this will render metrics.topRoutes into that list.
+  function renderTopRoutes(metrics) {
+    const list = document.querySelector(
+      '[data-metric="topRoutes"], [data-metric="top-routes-list"]'
+    );
+    if (!list) return;
+
+    const routes = Array.isArray(metrics.topRoutes) ? metrics.topRoutes : [];
+    list.innerHTML = "";
+
+    if (!routes.length) {
+      const li = document.createElement("li");
+      li.textContent = "No recent route data yet.";
+      list.appendChild(li);
+      return;
+    }
+
+    routes.slice(0, 5).forEach(function (route) {
+      const li = document.createElement("li");
+      const path =
+        route.route_path || route.path || route.url || "(unknown route)";
+      const views =
+        typeof route.views === "number"
+          ? route.views
+          : typeof route.count === "number"
+          ? route.count
+          : 0;
+
+      li.textContent = path + " — " + formatNumber(views) + " views (24h)";
+      list.appendChild(li);
+    });
+  }
+
   // ---- Fetch + refresh --------------------------------------------------
 
   function fetchAndApply() {
     fetch(SUMMARY_URL, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "X-Project-Key": PROJECT_KEY
       },
       credentials: "omit"
@@ -146,7 +184,10 @@
       .then(function (data) {
         const metrics = getMetricsFromResponse(data) || {};
         console.debug("CavCore Console summary payload:", metrics);
+
         applyScalarMetrics(metrics);
+        renderTopRoutes(metrics);
+
         document.documentElement.classList.add("cavcore-console-loaded");
       })
       .catch(function (err) {
