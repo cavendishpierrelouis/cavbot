@@ -1550,10 +1550,7 @@
           </div>
         </aside>
       </div>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br>
 
       <!-- =======================
            FILTERS PANEL
@@ -1606,10 +1603,7 @@
           </div>
         </div>
       </section>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br>
 
       <!-- =======================
            OVERVIEW: METRICS + TREND
@@ -1629,22 +1623,22 @@
           <div class="metric-grid" aria-label="Key summary metrics">
             <article class="metric-card">
               <div class="metric-label">Total events</div>
-              <div class="metric-value" data-metric="pageviews-24h">284,930</div>
-              <div class="metric-subtext">All components · last 30d.</div>
+              <div class="metric-value" data-metric="pageViews24h" data-format="number">284,930</div>
+              <div class="metric-subtext">All components · last 24h.</div>
             </article>
             <article class="metric-card">
               <div class="metric-label">Sessions</div>
-              <div class="metric-value">19,286</div>
+              <div class="metric-value" data-metric="sessions30d" data-format="number">19,286</div>
               <div class="metric-subtext">Distinct session_key per project.</div>
             </article>
             <article class="metric-card">
               <div class="metric-label">404 sessions</div>
-              <div class="metric-value">1,042</div>
+              <div class="metric-value" data-metric="sessions40430d" data-format="number">1,042</div>
               <div class="metric-subtext">Sessions containing 404-control-room events.</div>
             </article>
             <article class="metric-card">
               <div class="metric-label">Badge interactions</div>
-              <div class="metric-value">3,117</div>
+              <div class="metric-value" data-metric="badgeInteractions30d" data-format="number">3,117</div>
               <div class="metric-subtext">cavbot_badge_click / hover events.</div>
             </article>
           </div>
@@ -1718,22 +1712,22 @@
           <div class="key-stat-row">
             <div class="key-stat">
               <div class="key-stat-label">404 views</div>
-              <div class="key-stat-value">3,987</div>
+              <div class="key-stat-value" data-metric="views40430d" data-format="number">3,987</div>
               <div class="key-stat-note">events.event_name = cavbot_404_view</div>
             </div>
             <div class="key-stat">
               <div class="key-stat-label">Game interactions</div>
-              <div class="key-stat-value">6,214</div>
+              <div class="key-stat-value" data-metric="gameInteractions30d" data-format="number">6,214</div>
               <div class="key-stat-note">cavbot_catch + cavbot_miss</div>
             </div>
             <div class="key-stat">
               <div class="key-stat-label">Catches / Misses</div>
-              <div class="key-stat-value">4,112 / 2,102</div>
+              <div class="key-stat-value key-stat-value--catch-miss">4,112 / 2,102</div>
               <div class="key-stat-note">Catch rate: 66.3%</div>
             </div>
             <div class="key-stat">
               <div class="key-stat-label">Idle events (L1 / L2)</div>
-              <div class="key-stat-value">389 / 84</div>
+              <div class="key-stat-value key-stat-value--idle-levels">389 / 84</div>
               <div class="key-stat-note">Sessions that stall in the control room.</div>
             </div>
           </div>
@@ -1753,7 +1747,7 @@
               <div class="guardian-score-ring">
                 <div class="guardian-score-bubble">
                   <div class="guardian-score-label">Guardian score</div>
-                  <div class="guardian-score-value">92</div>
+                  <div class="guardian-score-value" data-metric="guardianScore" data-format="integer">92</div>
                   <div class="guardian-score-scale">/ 100</div>
                 </div>
               </div>
@@ -1792,10 +1786,7 @@
           </div>
         </aside>
       </section>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br>
 
       <!-- =======================
            MIDDLE: SEO / PERFORMANCE / STRUCTURE
@@ -1811,10 +1802,22 @@
           </p>
           <br>
           <div class="seo-badges">
-            <span class="seo-badge">Total pages · 143</span>
-            <span class="seo-badge">Indexed pages · 127</span>
-            <span class="seo-badge seo-badge--critical">Pages with critical SEO issues · 9</span>
-            <span class="seo-badge">Pages with minor issues · 24</span>
+            <span class="seo-badge">
+              Total pages ·
+              <span data-metric="totalPages" data-format="number">143</span>
+            </span>
+            <span class="seo-badge">
+              Indexed pages ·
+              <span data-metric="indexedPages" data-format="number">127</span>
+            </span>
+            <span class="seo-badge seo-badge--critical">
+              Pages with critical SEO issues ·
+              <span data-metric="criticalSeoPages" data-format="number">9</span>
+            </span>
+            <span class="seo-badge">
+              Pages with minor issues ·
+              <span data-metric="minorSeoPages" data-format="number">24</span>
+            </span>
           </div>
           <br>
           <ul class="mini-list" aria-label="Common SEO issues">
@@ -1842,12 +1845,12 @@
           <div class="perf-metric-row">
             <div class="perf-pill">
               <div class="perf-label">Average LCP (desktop)</div>
-              <div class="perf-value" data-metric="avg-lcp-ms">1,980 ms</div>
+              <div class="perf-value" data-metric="avgLcpMs" data-format="ms">1,980 ms</div>
               <div class="perf-status">Across all monitored paths.</div>
             </div>
             <div class="perf-pill">
               <div class="perf-label">Average TTFB</div>
-              <div class="perf-value">210 ms</div>
+              <div class="perf-value" data-metric="avgTtfbMs" data-format="ms">210 ms</div>
               <div class="perf-status">Origins within target budget.</div>
             </div>
           </div>
@@ -1855,12 +1858,12 @@
           <div class="perf-metric-row" style="margin-top:8px;">
             <div class="perf-pill">
               <div class="perf-label">Pages above LCP budget</div>
-              <div class="perf-value">5</div>
+              <div class="perf-value" data-metric="slowPagesCount" data-format="integer">5</div>
               <div class="perf-status">Flagged for insight <em>slow_critical_page</em>.</div>
             </div>
             <div class="perf-pill">
               <div class="perf-label">Pages with unstable layout</div>
-              <div class="perf-value">2</div>
+              <div class="perf-value" data-metric="unstableLayoutPages" data-format="integer">2</div>
               <div class="perf-status">CLS &gt; 0.1 on mobile.</div>
             </div>
           </div>
@@ -1874,30 +1877,27 @@
             CavBot uses the <strong>pages</strong> table, internal referrers,
             and sitemap data to detect <em>orphan</em> and <em>under-linked</em> pages.
           </p>
-          <br>
-          <br>
-          <br>
-          <br>
+          <br><br><br><br>
 
           <div class="structure-pill-grid">
             <div class="structure-pill">
               <div class="perf-label">Orphan pages</div>
-              <div class="perf-value">3</div>
+              <div class="perf-value" data-metric="orphanPages" data-format="integer">3</div>
               <div class="perf-status">Appear in sitemap, but never linked internally.</div>
             </div>
             <div class="structure-pill">
               <div class="perf-label">Weakly linked routes</div>
-              <div class="perf-value">7</div>
+              <div class="perf-value" data-metric="weakRoutes" data-format="integer">7</div>
               <div class="perf-status">Important pages with &lt; 3 internal links.</div>
             </div>
             <div class="structure-pill">
               <div class="perf-label">Sitemap mismatches</div>
-              <div class="perf-value">4</div>
+              <div class="perf-value" data-metric="sitemapMismatches" data-format="integer">4</div>
               <div class="perf-status">404 when visited from sitemap.xml.</div>
             </div>
             <div class="structure-pill">
               <div class="perf-label">High-value funnels</div>
-              <div class="perf-value">2</div>
+              <div class="perf-value" data-metric="highValueFunnels" data-format="integer">2</div>
               <div class="perf-status">Tagged with importance_score &gt; 0.8.</div>
             </div>
           </div>
@@ -1908,10 +1908,7 @@
           </p>
         </article>
       </section>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br>
 
       <!-- =======================
            BOTTOM: REFERRERS / CAMPAIGNS + INSIGHTS
@@ -2084,10 +2081,7 @@
           </p>
         </article>
       </section>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br>
 
       <!-- =======================
            DEPLOY MARKERS / DATA HEALTH
@@ -2145,7 +2139,7 @@
           </ul>
           <br>
           <div class="data-health-metrics" aria-label="Data health meters">
-            <div class="data-health-metric" style="--percent:12%;">
+            <div class="data-health-metric" data-metric="piiRiskPercent" data-format="percent-bar" style="--percent:12%;">
               <div class="data-health-label">PII risk</div>
               <div class="data-health-bar-track">
                 <div class="data-health-bar-fill"></div>
@@ -2154,7 +2148,7 @@
                 Low — payload schema excludes names, emails, and raw IPs by design.
               </div>
             </div>
-            <div class="data-health-metric" style="--percent:86%;">
+            <div class="data-health-metric" data-metric="aggregationCoveragePercent" data-format="percent-bar" style="--percent:86%;">
               <div class="data-health-label">Aggregation coverage</div>
               <div class="data-health-bar-track">
                 <div class="data-health-bar-fill"></div>
@@ -2163,7 +2157,7 @@
                 Most metrics come from <code>daily_page_aggregates</code> and <code>referrer_aggregates</code>, not raw events.
               </div>
             </div>
-            <div class="data-health-metric" style="--percent:64%;">
+            <div class="data-health-metric" data-metric="retentionHorizonPercent" data-format="percent-bar" style="--percent:64%;">
               <div class="data-health-label">Retention horizon</div>
               <div class="data-health-bar-track">
                 <div class="data-health-bar-fill"></div>
@@ -2189,7 +2183,6 @@
   <!-- ===========================
        FOOTER (unified)
        ========================== -->
-  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-inner">
 
@@ -2238,10 +2231,7 @@
           </ul>
         </section>
       </div>
-      <br>
-      <br>
-      <br>
-      <br>
+      <br><br><br><br>
       <div class="footer-bottom">
         <div class="footer-copy">
           &copy; 2025 CavBot · CavCore Console
@@ -2258,60 +2248,7 @@
   <script src="cavbotcore/cavbotbrain.js" defer></script>
   <!-- CavBot header-footer + nav toggle -->
   <script src="headerfooter.js"></script>
-
-  <!-- CavCore Console live metrics -->
-  <script>
-    (function () {
-      const SUMMARY_URL = "https://api.cavbot.io/v1/projects/1/summary";
-      const PROJECT_KEY = "cavbot_pk_web_main_01J9X0ZK3P";
-
-      function formatNumber(value) {
-        if (value == null || isNaN(value)) return "—";
-        return Number(value).toLocaleString();
-      }
-
-      function formatMs(value) {
-        if (value == null || isNaN(value)) return "—";
-        const num = Number(value);
-        return Math.round(num).toLocaleString() + " ms";
-      }
-
-      function applyMetrics(data) {
-        if (!data || !data.metrics) return;
-        const m = data.metrics;
-
-        // 1) Page views / total events (wired to your "Total events" tile)
-        const pageviewsEl = document.querySelector('[data-metric="pageviews-24h"]');
-        if (pageviewsEl && typeof m.pageViews24h === "number") {
-          pageviewsEl.textContent = formatNumber(m.pageViews24h);
-        }
-
-        // 2) Average LCP (desktop)
-        const lcpEl = document.querySelector('[data-metric="avg-lcp-ms"]');
-        if (lcpEl && m.avgLcpMs != null) {
-          lcpEl.textContent = formatMs(m.avgLcpMs);
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch(SUMMARY_URL, {
-          headers: {
-            "X-Project-Key": PROJECT_KEY
-          }
-        })
-          .then(function (res) {
-            if (!res.ok) {
-              throw new Error("Bad response from CavBot API: " + res.status);
-            }
-            return res.json();
-          })
-          .then(applyMetrics)
-          .catch(function (err) {
-            console.error("CavBot metrics fetch failed:", err);
-            // Static demo numbers remain if API is down / not wired yet.
-          });
-      });
-    })();
-  </script>
+ <!-- CavCore Console live metrics -->
+  <script src="cavcore-console.js" defer></script>
 </body>
 </html>
