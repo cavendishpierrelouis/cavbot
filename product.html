@@ -15,7 +15,7 @@
 <!-- Unified CavBot head + brain styles -->
 <link rel="stylesheet" href="cavbotcore/head.css"/>
 <!-- CavCore badge styles -->
-<link rel="stylesheet" href="cavcore/badge.css"/>
+<link rel="stylesheet" href="cavbotcore/badge.css"/>
 
 <style>
   :root {
@@ -917,8 +917,8 @@
         Event-first analytics, a 404 control room, and a site-level badge that helps you feel how your site behaves in production.
       </p>
       <div class="hero-cta-row">
-        <button type="button" class="btn btn-primary">Start free trial</button>
-        <a href="#console" class="btn btn-ghost">View CavCore Console</a>
+        <a href="#" class="btn btn-primary">Start free trial</a>
+<a href="cavcore-console.html" class="btn btn-ghost">View CavCore console</a>
       </div>
     </div>
 
@@ -1208,15 +1208,65 @@
   </section>
 </main>
 
-<!-- FOOTER -->
+ <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div>© 2025 CavBot / CavCore. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="#" class="footer-link">Privacy Policy</a>
-      <a href="#" class="footer-link">Terms of Use</a>
-      <a href="#" class="footer-link">Data &amp; Security</a>
+
+    <div class="footer-grid">
+      <!-- RESOURCES -->
+      <section class="footer-column">
+        <h2 class="footer-column-title">Resources</h2>
+        <button class="footer-column-toggle" type="button">
+          <span>Resources</span>
+          <span class="footer-toggle-icon">▾</span>
+        </button>
+        <ul class="footer-column-list">
+          <li><a href="cavcore-console.html" class="footer-link">Dashboard</a></li>
+          <li><a href="mailto:support@cavbot.io" class="footer-link">Help Center</a></li>
+          <li><a href="https://cavendishpierrelouis.io/blog" class="footer-link">Founders Insight</a></li>
+        </ul>
+      </section>
+
+      <!-- COMPANY -->
+      <section class="footer-column">
+        <h2 class="footer-column-title">Company</h2>
+        <button class="footer-column-toggle" type="button">
+          <span>Company</span>
+          <span class="footer-toggle-icon">▾</span>
+        </button>
+        <ul class="footer-column-list">
+          <li><a href="about.html" class="footer-link">About</a></li>
+          <li><a href="#" class="footer-link">Code of Ethics</a></li>
+          <li><a href="#" class="footer-link">Careers</a></li>
+          <li><a href="#" class="footer-link">Media Kit</a></li>
+          <li><a href="#" class="footer-link">News &amp; Press</a></li>
+        </ul>
+      </section>
+
+      <!-- LEGAL -->
+      <section class="footer-column">
+        <h2 class="footer-column-title">Legal Notices</h2>
+        <button class="footer-column-toggle" type="button">
+          <span>Legal</span>
+          <span class="footer-toggle-icon">▾</span>
+        </button>
+        <ul class="footer-column-list">
+          <li><a href="#" class="footer-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer-link">Terms of Use</a></li>
+          <li><a href="#" class="footer-link">Data &amp; Security</a></li>
+        </ul>
+      </section>
     </div>
+<br>
+<br>
+<br>
+<br>
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        &copy; 2025 CavBot · CavCore Console
+      </div>
+    </div>
+
   </div>
 </footer>
 
@@ -1305,6 +1355,20 @@
           top: getOffsetTop(target),
           behavior: 'smooth'
         });
+      });
+    });
+  })();
+
+  // FOOTER ACCORDION (mobile)
+  (function () {
+    var toggles = document.querySelectorAll('.footer-column-toggle');
+    if (!toggles.length) return;
+
+    toggles.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var col = btn.closest('.footer-column');
+        if (!col) return;
+        col.classList.toggle('is-open');
       });
     });
   })();
