@@ -1801,6 +1801,8 @@ Step 5 · Log into CavCore Console.
   <script src="/cavbotcore/cavbot-analytics.js"></script>
   <!-- Unified brain script -->
   <script src="cavbotcore/cavbotbrain.js" defer></script>
+  <!-- CavBot header-footer + nav toggle -->
+  <script src="headerfooter.js"></script>
 
   <!-- Modal + filter + nav-overlay logic -->
   <script>
@@ -1890,60 +1892,6 @@ Step 5 · Log into CavCore Console.
         });
       });
     })();
-
-    // NAV OVERLAY (mobile)
-    (function () {
-      var toggle = document.querySelector('.nav-menu-toggle');
-      var overlay = document.getElementById('nav-overlay');
-      if (!toggle || !overlay) return;
-
-      var closeEls = overlay.querySelectorAll('[data-nav-overlay-close]');
-
-      function openOverlay() {
-        overlay.classList.add('is-open');
-        overlay.setAttribute('aria-hidden', 'false');
-        toggle.setAttribute('aria-expanded', 'true');
-      }
-
-      function closeOverlay() {
-        overlay.classList.remove('is-open');
-        overlay.setAttribute('aria-hidden', 'true');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
-
-      toggle.addEventListener('click', function () {
-        if (overlay.classList.contains('is-open')) {
-          closeOverlay();
-        } else {
-          openOverlay();
-        }
-      });
-
-      closeEls.forEach(function (el) {
-        el.addEventListener('click', function () {
-          closeOverlay();
-        });
-      });
-
-      window.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-          closeOverlay();
-        }
-      });
-    })();
-      // FOOTER ACCORDION (mobile)
-  (function () {
-    var toggles = document.querySelectorAll('.footer-column-toggle');
-    if (!toggles.length) return;
-
-    toggles.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var col = btn.closest('.footer-column');
-        if (!col) return;
-        col.classList.toggle('is-open');
-      });
-    });
-  })();
   </script>
 </body>
 </html>
